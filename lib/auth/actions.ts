@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { getBaseUrl } from "@/lib/base-url";
 import { logError } from "@/lib/logger";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -51,7 +52,7 @@ export async function signUpAction(input: SignUpInput): Promise<ActionResult> {
     password: parsed.data.password,
     options: {
       data: { full_name: parsed.data.fullName },
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
+      emailRedirectTo: `${await getBaseUrl()}/auth/callback`,
     },
   });
 
@@ -123,7 +124,7 @@ export async function requestPasswordResetAction(input: ResetPasswordInput): Pro
 
   const supabase = await createClient();
   const { error } = await supabase.auth.resetPasswordForEmail(parsed.data.email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/reset-password/confirm`,
+    redirectTo: `${await getBaseUrl()}/auth/callback?next=/reset-password/confirm`,
   });
 
   if (error) {

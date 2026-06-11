@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getBaseUrl } from "@/lib/base-url";
 import { requireOrgRole, requireUser } from "@/lib/auth/guards";
 import { getEmailProvider } from "@/lib/email";
 import { InvitationEmail } from "@/lib/email/templates/invitation";
@@ -54,7 +55,8 @@ export async function createInvitationAction(
     .maybeSingle();
   const inviterName = profile?.full_name ?? user.email ?? "Alguém";
 
-  const acceptUrl = `${process.env.NEXT_PUBLIC_APP_URL}/aceitar-convite?token=${invitation.token}`;
+  const baseUrl = await getBaseUrl();
+  const acceptUrl = `${baseUrl}/aceitar-convite?token=${invitation.token}`;
 
   const provider = getEmailProvider();
   const result = await provider.send({

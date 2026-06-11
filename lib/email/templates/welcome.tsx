@@ -1,41 +1,94 @@
-import { Body, Container, Head, Heading, Html, Preview, Text } from "@react-email/components";
+import {
+  Body,
+  Button,
+  Container,
+  Head,
+  Heading,
+  Html,
+  Img,
+  Preview,
+  Section,
+  Text,
+} from "@react-email/components";
 
 type Props = {
   userName: string;
   appName: string;
   appUrl: string;
+  logoUrl?: string;
 };
 
-export function WelcomeEmail({ userName, appName, appUrl }: Props) {
+const DEFAULT_LOGO = "https://crm.dvmkt.com.br/logodv-verde.png";
+
+export function WelcomeEmail({ userName, appName, appUrl, logoUrl = DEFAULT_LOGO }: Props) {
   return (
     <Html>
       <Head />
       <Preview>Bem-vindo ao {appName}!</Preview>
       <Body style={body}>
         <Container style={container}>
-          <Heading style={heading}>Bem-vindo, {userName}!</Heading>
+          <Section style={logoSection}>
+            <Img src={logoUrl} alt="DV Marketing" width="130" style={logo} />
+          </Section>
+          <Heading style={heading}>Bem-vindo, {userName}! 🎉</Heading>
           <Text style={paragraph}>
             Sua conta foi criada com sucesso no <strong>{appName}</strong>.
           </Text>
           <Text style={paragraph}>
-            Para começar, acesse{" "}
-            <a href={appUrl} style={link}>
-              {appUrl}
-            </a>{" "}
-            e crie seu primeiro workspace.
+            Para começar, clique no botão abaixo e crie seu primeiro workspace.
           </Text>
-          <Text style={footer}>Se você não criou essa conta, ignore este email.</Text>
+          <Section style={btnSection}>
+            <Button href={appUrl} style={button}>
+              Acessar o CRM
+            </Button>
+          </Section>
+          <Text style={footer}>Se você não criou essa conta, ignore este e-mail.</Text>
         </Container>
       </Body>
     </Html>
   );
 }
 
-const body = { backgroundColor: "#0a0a0a", color: "#f5f5f5", fontFamily: "sans-serif" };
-const container = { maxWidth: "560px", margin: "0 auto", padding: "32px" };
-const heading = { color: "#52d12f", fontSize: "24px", fontWeight: 600 };
-const paragraph = { fontSize: "16px", lineHeight: "24px", color: "#d4d4d4" };
-const link = { color: "#52d12f" };
-const footer = { fontSize: "12px", color: "#737373", marginTop: "32px" };
+const body = {
+  backgroundColor: "#f3f1ef",
+  fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+  margin: 0,
+  padding: "24px 0",
+};
+const container = {
+  maxWidth: "520px",
+  margin: "0 auto",
+  padding: "40px",
+  backgroundColor: "#ffffff",
+  borderRadius: "16px",
+  border: "1px solid #e4e0db",
+};
+const logoSection = { textAlign: "center" as const, marginBottom: "20px" };
+const logo = { margin: "0 auto" };
+const heading = {
+  color: "#4e6055",
+  fontSize: "22px",
+  fontWeight: 700,
+  textAlign: "center" as const,
+  marginBottom: "8px",
+};
+const paragraph = { fontSize: "16px", lineHeight: "24px", color: "#4a564e" };
+const btnSection = { textAlign: "center" as const, margin: "28px 0" };
+const button = {
+  backgroundColor: "#6e8676",
+  color: "#ffffff",
+  padding: "13px 30px",
+  borderRadius: "10px",
+  textDecoration: "none",
+  fontWeight: 600,
+  fontSize: "15px",
+  display: "inline-block",
+};
+const footer = {
+  fontSize: "12px",
+  color: "#9aa69d",
+  marginTop: "28px",
+  textAlign: "center" as const,
+};
 
 export default WelcomeEmail;
