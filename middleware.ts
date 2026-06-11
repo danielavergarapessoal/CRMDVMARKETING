@@ -140,6 +140,8 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/api/webhooks/") ||
     // Cron jobs (Vercel/Easypanel) — handlers validam via CRON_SECRET bearer.
     pathname.startsWith("/api/cron/") ||
+    // Captação de leads das landing pages — handler valida via LEAD_CAPTURE_TOKEN bearer.
+    pathname.startsWith("/api/leads/") ||
     isStaticAsset(pathname);
 
   if (!user && !isPublic) {
