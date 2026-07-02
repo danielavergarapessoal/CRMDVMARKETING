@@ -13,6 +13,9 @@ export const LEAD_CAPTURE_ORG_SLUG = "crmdv";
 /** Tag de origem comum a todos os leads do funil médico. */
 const ORIGIN = "DV Médico";
 
+/** Tag de origem comum a todos os leads da vertical Saúde (DV Marketing Saúde). */
+const ORIGIN_SAUDE = "DV Saúde";
+
 export type LeadSourceConfig = {
   /** Rótulo legível (vai pras anotações do contato). */
   label: string;
@@ -49,9 +52,41 @@ export const LEAD_SOURCES: Record<string, LeadSourceConfig> = {
     label: "10 Estratégias para Crescimento Sustentável",
     tags: [ORIGIN, "10 Estratégias"],
   },
+
+  // ————— DV Marketing Saúde (vertical Saúde/longevidade) —————
+  "saude-diagnostico-maturidade": {
+    label: "Diagnóstico de Maturidade — DV Saúde",
+    tags: [ORIGIN_SAUDE, "Diagnóstico de Maturidade"],
+  },
+  "saude-ebook-marca-invisivel": {
+    label: "E-book A Marca Invisível — DV Saúde",
+    tags: [ORIGIN_SAUDE, "Marca Invisível"],
+  },
+  "saude-ebook-seis-dimensoes": {
+    label: "E-book Invisível ou Inevitável (6 Dimensões) — DV Saúde",
+    tags: [ORIGIN_SAUDE, "Seis Dimensões"],
+  },
+  "saude-ebook-reputacao-tabela": {
+    label: "E-book Reputação que Negocia Tabela — DV Saúde",
+    tags: [ORIGIN_SAUDE, "Reputação e Tabela"],
+  },
+  "saude-ebook-da-alta-ao-vinculo": {
+    label: "E-book Da Alta ao Vínculo — DV Saúde",
+    tags: [ORIGIN_SAUDE, "Da Alta ao Vínculo"],
+  },
+  "saude-ebook-primeiro-passo": {
+    label: "E-book O Primeiro Passo — DV Saúde",
+    tags: [ORIGIN_SAUDE, "Primeiro Passo"],
+  },
+  "saude-site": {
+    label: "Site DV Marketing Saúde",
+    tags: [ORIGIN_SAUDE, "Site Saúde"],
+  },
 };
 
-/** Cor da tag ao criar (Sage pra origem, Terracota pras páginas). */
+/** Cor da tag ao criar (Sage pra DV Médico, Ardósia pra DV Saúde, Terracota pras páginas). */
 export function tagColorFor(tagName: string): string {
-  return tagName === ORIGIN ? "#6e8676" : "#d4937a";
+  if (tagName === ORIGIN) return "#6e8676";
+  if (tagName === ORIGIN_SAUDE) return "#3d405b";
+  return "#d4937a";
 }
