@@ -11,9 +11,7 @@ export async function recoverStaleAutomationSteps(): Promise<{
   recovered: number;
 }> {
   const supabase = createServiceClient();
-  const cutoff = new Date(
-    Date.now() - AUTOMATION_LIMITS.STEP_RECOVERY_CUTOFF_MS,
-  ).toISOString();
+  const cutoff = new Date(Date.now() - AUTOMATION_LIMITS.STEP_RECOVERY_CUTOFF_MS).toISOString();
 
   const { data: stuckSteps, error } = await supabase
     .from("automation_run_steps")

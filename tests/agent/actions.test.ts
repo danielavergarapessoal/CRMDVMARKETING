@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   createAgentSchema,
-  updateAgentSchema,
   deleteAgentSchema,
   setChannelAgentSchema,
   toggleAgentActiveSchema,
+  updateAgentSchema,
 } from "@/lib/agent/agents/schemas";
 
 describe("agent CRUD schemas (Zod)", () => {

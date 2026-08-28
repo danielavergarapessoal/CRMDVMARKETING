@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { formatMessageTime, formatDay } from "@/lib/messaging/format/time";
+import { formatDay, formatMessageTime } from "@/lib/messaging/format/time";
 
 // Use local midnight to ensure consistent timezone behavior
 function localDate(year: number, month: number, day: number, hours = 0, minutes = 0): Date {
@@ -16,7 +16,9 @@ describe("formatMessageTime", () => {
     expect(formatMessageTime(localDate(2026, 6, 1, 10, 42), NOW)).toBe("ontem");
   });
   test("essa semana → dia abreviado", () => {
-    expect(formatMessageTime(localDate(2026, 5, 28, 10, 42), NOW)).toMatch(/^(seg|ter|qua|qui|sex|sáb|dom)$/i);
+    expect(formatMessageTime(localDate(2026, 5, 28, 10, 42), NOW)).toMatch(
+      /^(seg|ter|qua|qui|sex|sáb|dom)$/i,
+    );
   });
   test("mais antigo → dd/MM", () => {
     expect(formatMessageTime(localDate(2026, 4, 15, 10, 42), NOW)).toBe("15/04");

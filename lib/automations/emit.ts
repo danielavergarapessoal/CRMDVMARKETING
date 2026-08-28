@@ -86,26 +86,18 @@ export async function emitEvent(
             auto.trigger_config ?? {},
           );
           if (!cfgParse.success) continue;
-          if (
-            !triggerConfigMatches(
-              triggerType,
-              cfgParse.data as Record<string, unknown>,
-              payload,
-            )
-          )
+          if (!triggerConfigMatches(triggerType, cfgParse.data as Record<string, unknown>, payload))
             continue;
-          const { error: insErr } = await supabaseEarly
-            .from("automation_runs")
-            .insert({
-              organization_id: orgId,
-              automation_id: auto.id,
-              trigger_event_id: eventId,
-              trigger_payload: truncatedPayload as Json,
-              depth,
-              status: "skipped_payload_too_large",
-              finished_at: now,
-              error: `Payload do evento (${(payloadBytes / 1024).toFixed(1)}KB) excedeu o limite de ${AUTOMATION_LIMITS.MAX_TRIGGER_PAYLOAD_BYTES / 1024}KB. Evento descartado.`,
-            });
+          const { error: insErr } = await supabaseEarly.from("automation_runs").insert({
+            organization_id: orgId,
+            automation_id: auto.id,
+            trigger_event_id: eventId,
+            trigger_payload: truncatedPayload as Json,
+            depth,
+            status: "skipped_payload_too_large",
+            finished_at: now,
+            error: `Payload do evento (${(payloadBytes / 1024).toFixed(1)}KB) excedeu o limite de ${AUTOMATION_LIMITS.MAX_TRIGGER_PAYLOAD_BYTES / 1024}KB. Evento descartado.`,
+          });
           if (insErr && (insErr as { code?: string }).code !== "23505") {
             logError("automations.emit.skip-payload-too-large", insErr);
           }
@@ -149,30 +141,20 @@ export async function emitEvent(
     for (const auto of automations) {
       const triggerDefForMatch = TRIGGERS[triggerType];
       if (!triggerDefForMatch) continue;
-      const cfgParse = triggerDefForMatch.triggerConfigSchema.safeParse(
-        auto.trigger_config ?? {},
-      );
+      const cfgParse = triggerDefForMatch.triggerConfigSchema.safeParse(auto.trigger_config ?? {});
       if (!cfgParse.success) continue;
-      if (
-        !triggerConfigMatches(
-          triggerType,
-          cfgParse.data as Record<string, unknown>,
-          payload,
-        )
-      )
+      if (!triggerConfigMatches(triggerType, cfgParse.data as Record<string, unknown>, payload))
         continue;
-      const { error: insErr } = await supabase
-        .from("automation_runs")
-        .insert({
-          organization_id: orgId,
-          automation_id: auto.id,
-          trigger_event_id: eventId,
-          trigger_payload: enrichedPayload as Json,
-          depth,
-          status: "skipped_queue_full",
-          finished_at: new Date().toISOString(),
-          error: `Queue cheia (${pendingCount} pending) — evento descartado`,
-        });
+      const { error: insErr } = await supabase.from("automation_runs").insert({
+        organization_id: orgId,
+        automation_id: auto.id,
+        trigger_event_id: eventId,
+        trigger_payload: enrichedPayload as Json,
+        depth,
+        status: "skipped_queue_full",
+        finished_at: new Date().toISOString(),
+        error: `Queue cheia (${pendingCount} pending) — evento descartado`,
+      });
       if (insErr && (insErr as { code?: string }).code !== "23505") {
         logError("automations.emit.skip-queue-full", insErr);
       }
@@ -182,18 +164,10 @@ export async function emitEvent(
 
   for (const auto of automations) {
     // Filtra por triggerConfig
-    const cfgParse = triggerDef.triggerConfigSchema.safeParse(
-      auto.trigger_config ?? {},
-    );
+    const cfgParse = triggerDef.triggerConfigSchema.safeParse(auto.trigger_config ?? {});
     if (!cfgParse.success) continue;
 
-    if (
-      !triggerConfigMatches(
-        triggerType,
-        cfgParse.data as Record<string, unknown>,
-        payload,
-      )
-    )
+    if (!triggerConfigMatches(triggerType, cfgParse.data as Record<string, unknown>, payload))
       continue;
 
     const { error: insErr } = await supabase.from("automation_runs").insert({
@@ -216,9 +190,7 @@ export async function emitEvent(
   // outro `after()` aninhado e perde silenciosamente. Roda direto.
   if (opts.kickWorker) {
     const { processNextRuns } = await import("./worker");
-    processNextRuns({ limit: 5 }).catch((err) =>
-      logError("automations.emit.kick", err),
-    );
+    processNextRuns({ limit: 5 }).catch((err) => logError("automations.emit.kick", err));
   }
 }
 
@@ -239,17 +211,14 @@ function triggerConfigMatches(
     }
     const bodyContains = cfg.body_contains as string | undefined;
     if (bodyContains) {
-      const body =
-        (payload.message as { body?: string | null } | undefined)?.body ?? "";
+      const body = (payload.message as { body?: string | null } | undefined)?.body ?? "";
       if (!body.toLowerCase().includes(bodyContains.toLowerCase())) return false;
     }
   }
   if (triggerType === "deal.stage_changed") {
     const onlyNew = cfg.only_new_stage as string | undefined;
     const onlyFrom = cfg.only_from_stage as string | undefined;
-    const deal = payload.deal as
-      | { previous_stage?: string; new_stage?: string }
-      | undefined;
+    const deal = payload.deal as { previous_stage?: string; new_stage?: string } | undefined;
     if (onlyNew && deal?.new_stage !== onlyNew) return false;
     if (onlyFrom && deal?.previous_stage !== onlyFrom) return false;
   }
@@ -261,8 +230,7 @@ function triggerConfigMatches(
   if (triggerType === "contact.created") {
     const onlyWithEmail = cfg.only_with_email as boolean | undefined;
     if (onlyWithEmail) {
-      const email = (payload.contact as { email?: string | null } | undefined)
-        ?.email;
+      const email = (payload.contact as { email?: string | null } | undefined)?.email;
       if (!email) return false;
     }
   }

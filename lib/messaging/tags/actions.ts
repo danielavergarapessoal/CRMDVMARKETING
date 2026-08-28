@@ -5,21 +5,22 @@ import { requireOrgMember, requireOrgRole } from "@/lib/auth/guards";
 import { logError } from "@/lib/logger";
 import { createClient } from "@/lib/supabase/server";
 import {
-  convTagInputSchema,
-  createTagInputSchema,
-  tagIdInputSchema,
-  updateTagInputSchema,
   type ConvTagInput,
   type CreateTagInput,
+  convTagInputSchema,
+  createTagInputSchema,
   type TagIdInput,
+  tagIdInputSchema,
   type UpdateTagInput,
+  updateTagInputSchema,
 } from "./schemas";
 
 type Result<T = void> = { ok: true; data?: T } | { ok: false; error: string };
 
 export async function createTagAction(input: CreateTagInput): Promise<Result<{ id: string }>> {
   const parsed = createTagInputSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
+  if (!parsed.success)
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
   const { user, org } = await requireOrgMember({ orgSlug: parsed.data.orgSlug });
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -35,7 +36,10 @@ export async function createTagAction(input: CreateTagInput): Promise<Result<{ i
   if (error || !data) {
     const isDup = (error as { code?: string } | null)?.code === "23505";
     logError("tags.create", error);
-    return { ok: false, error: isDup ? "Já existe uma tag com esse nome." : "Não foi possível criar tag." };
+    return {
+      ok: false,
+      error: isDup ? "Já existe uma tag com esse nome." : "Não foi possível criar tag.",
+    };
   }
   revalidatePath(`/app/${parsed.data.orgSlug}/inbox`);
   revalidatePath(`/app/${parsed.data.orgSlug}/settings/tags`);
@@ -44,7 +48,8 @@ export async function createTagAction(input: CreateTagInput): Promise<Result<{ i
 
 export async function updateTagAction(input: UpdateTagInput): Promise<Result> {
   const parsed = updateTagInputSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
+  if (!parsed.success)
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
   const { org } = await requireOrgRole({ orgSlug: parsed.data.orgSlug, roles: ["owner", "admin"] });
   const supabase = await createClient();
 

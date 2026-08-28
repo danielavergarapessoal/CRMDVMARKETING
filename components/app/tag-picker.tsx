@@ -40,9 +40,7 @@ export function TagPicker({
   const [propagate, setPropagate] = useState(true);
   const [isPending, startTransition] = useTransition();
 
-  const filtered = availableTags.filter((t) =>
-    t.name.toLowerCase().includes(search.toLowerCase()),
-  );
+  const filtered = availableTags.filter((t) => t.name.toLowerCase().includes(search.toLowerCase()));
 
   const handleApply = (tag: Tag) => {
     startTransition(async () => {
@@ -68,8 +66,7 @@ export function TagPicker({
     });
   };
 
-  const showPropagationCheckbox =
-    entityType === "conversation" && !!conversationContactId;
+  const showPropagationCheckbox = entityType === "conversation" && !!conversationContactId;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -106,10 +103,7 @@ export function TagPicker({
                 disabled={isPending}
                 className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-xs hover:bg-accent disabled:opacity-50"
               >
-                <span
-                  className="h-2 w-2 rounded-full"
-                  style={{ backgroundColor: tag.color }}
-                />
+                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: tag.color }} />
                 <span className="flex-1" style={{ color: tag.color }}>
                   {tag.name}
                 </span>

@@ -19,18 +19,16 @@ export const applyTagToCompanyAction: ActionDefinition<Input, { applied: boolean
     const supabase = createServiceClient();
     await assertOrgOwns(supabase, "companies", input.company_id, ctx.orgId, "apply_tag_to_company");
     await assertOrgOwns(supabase, "tags", input.tag_id, ctx.orgId, "apply_tag_to_company");
-    const { error } = await supabase
-      .from("company_tag_links")
-      .upsert(
-        {
-          company_id: input.company_id,
-          tag_id: input.tag_id,
-          organization_id: ctx.orgId,
-          applied_by_kind: "automation",
-          applied_by: null,
-        },
-        { onConflict: "company_id,tag_id", ignoreDuplicates: true },
-      );
+    const { error } = await supabase.from("company_tag_links").upsert(
+      {
+        company_id: input.company_id,
+        tag_id: input.tag_id,
+        organization_id: ctx.orgId,
+        applied_by_kind: "automation",
+        applied_by: null,
+      },
+      { onConflict: "company_id,tag_id", ignoreDuplicates: true },
+    );
     if (error) {
       if (error.message.includes("não pode ser aplicada em company")) {
         throw new Error(

@@ -1,9 +1,9 @@
 import { logError } from "@/lib/logger";
-import { normalizeText } from "./chunking/normalize";
 import { splitBlocks } from "./chunking/blocks";
-import { splitSentences } from "./chunking/sentences";
+import { normalizeText } from "./chunking/normalize";
 import { boundaryOnlyAssemble, semanticAssemble } from "./chunking/semantic-assemble";
-import { DEFAULT_OPTS, type ChunkResult, type Sentence } from "./chunking/types";
+import { splitSentences } from "./chunking/sentences";
+import { type ChunkResult, DEFAULT_OPTS, type Sentence } from "./chunking/types";
 
 export type { ChunkResult } from "./chunking/types";
 

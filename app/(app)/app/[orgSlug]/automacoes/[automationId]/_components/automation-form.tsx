@@ -1,18 +1,18 @@
 "use client";
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
 import { PlayIcon, SaveIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import type { CompanyOption } from "@/lib/automations/action-fields";
 import {
   deleteAutomationAction,
   setAutomationStatusAction,
   updateAutomationAction,
 } from "@/lib/automations/actions.server";
-import type { CompanyOption } from "@/lib/automations/action-fields";
 import { findPlaceholderPaths } from "@/lib/automations/placeholders";
 import { ActionsSection } from "./actions-section";
 import { ConditionsSection } from "./conditions-section";
@@ -99,8 +99,7 @@ export function AutomationForm({
   };
 
   const del = () => {
-    if (!confirm("Excluir essa automação? Histórico de runs será mantido."))
-      return;
+    if (!confirm("Excluir essa automação? Histórico de runs será mantido.")) return;
     startTransition(async () => {
       const r = await deleteAutomationAction({ orgSlug, id: data.id });
       if (r.ok) router.push(`/app/${orgSlug}/automacoes`);
@@ -117,10 +116,7 @@ export function AutomationForm({
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
       <div className="space-y-6">
-        <PreActivationBanner
-          hits={placeholderHits}
-          actionLabels={actionLabelsResolved}
-        />
+        <PreActivationBanner hits={placeholderHits} actionLabels={actionLabelsResolved} />
         <Card>
           <CardHeader>
             <CardTitle>Identificação</CardTitle>
@@ -139,9 +135,7 @@ export function AutomationForm({
               <Textarea
                 id="description"
                 value={data.description ?? ""}
-                onChange={(e) =>
-                  setData({ ...data, description: e.target.value || null })
-                }
+                onChange={(e) => setData({ ...data, description: e.target.value || null })}
                 rows={2}
               />
             </div>
@@ -207,20 +201,11 @@ export function AutomationForm({
         />
 
         <div className="flex justify-between gap-2">
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={del}
-            disabled={isPending}
-          >
+          <Button variant="destructive" size="sm" onClick={del} disabled={isPending}>
             Excluir
           </Button>
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setDryRunOpen(true)}
-              disabled={isPending}
-            >
+            <Button variant="outline" onClick={() => setDryRunOpen(true)} disabled={isPending}>
               <PlayIcon className="h-4 w-4 mr-1" /> Testar
             </Button>
             <Button onClick={save} disabled={isPending}>
@@ -235,8 +220,7 @@ export function AutomationForm({
           triggerLabel={currentTrigger?.label ?? data.trigger_type}
           conditionsCount={data.conditions.length}
           actionLabels={data.actions.map(
-            (a) =>
-              actionDefs.find((ad) => ad.id === a.type)?.label ?? a.type,
+            (a) => actionDefs.find((ad) => ad.id === a.type)?.label ?? a.type,
           )}
         />
       </div>

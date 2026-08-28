@@ -326,9 +326,7 @@ export const ACTION_FIELDS: Record<string, ActionFieldMeta[]> = {
       label: "Quem atribuir",
       type: "select",
       required: true,
-      options: [
-        { value: "round_robin", label: "Round-robin entre owner/admin" },
-      ],
+      options: [{ value: "round_robin", label: "Round-robin entre owner/admin" }],
       hint: "Round-robin sorteia entre os membros owner/admin da org.",
     },
   ],

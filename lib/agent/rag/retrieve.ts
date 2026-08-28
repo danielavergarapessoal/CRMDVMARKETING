@@ -1,5 +1,5 @@
-import { createClient } from "@/lib/supabase/server";
 import { logError } from "@/lib/logger";
+import { createClient } from "@/lib/supabase/server";
 import { embedText } from "./embed";
 
 export interface RagHit {
@@ -13,11 +13,7 @@ export interface RagHit {
 /**
  * Busca top-K trechos relevantes (FAQ + chunks de docs) DO AGENTE específico.
  */
-export async function retrieveContext(
-  agentId: string,
-  query: string,
-  k = 5,
-): Promise<RagHit[]> {
+export async function retrieveContext(agentId: string, query: string, k = 5): Promise<RagHit[]> {
   if (!query.trim()) return [];
 
   let queryEmbedding: number[];

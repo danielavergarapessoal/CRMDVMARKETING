@@ -19,8 +19,12 @@ export const contactCreatedTrigger: TriggerDefinition = {
     only_with_email: z.boolean().optional(),
   }),
   variables: [
-    "{{contact.id}}", "{{contact.name}}", "{{contact.email}}", "{{contact.phone}}",
-    "{{org.name}}", "{{now.iso}}",
+    "{{contact.id}}",
+    "{{contact.name}}",
+    "{{contact.email}}",
+    "{{contact.phone}}",
+    "{{org.name}}",
+    "{{now.iso}}",
   ],
   variableLabels: {
     "contact.id": { label: "ID do contato" },
@@ -31,8 +35,15 @@ export const contactCreatedTrigger: TriggerDefinition = {
   sampleContext: {
     contact: {
       id: "00000000-0000-4000-8000-000000000005",
-      name: "João Silva", email: "joao@example.com", phone: "+5511987654321", company_id: null,
+      name: "João Silva",
+      email: "joao@example.com",
+      phone: "+5511987654321",
+      company_id: null,
     },
-    org: { id: "00000000-0000-4000-8000-000000000003", name: "Minha Empresa", slug: "minha-empresa" },
+    org: {
+      id: "00000000-0000-4000-8000-000000000003",
+      name: "Minha Empresa",
+      slug: "minha-empresa",
+    },
   },
 };

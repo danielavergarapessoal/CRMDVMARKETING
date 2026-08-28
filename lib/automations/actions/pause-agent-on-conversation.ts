@@ -8,14 +8,10 @@ const inputSchema = z.object({
 });
 type Input = z.infer<typeof inputSchema>;
 
-export const pauseAgentOnConversationAction: ActionDefinition<
-  Input,
-  { paused: true }
-> = {
+export const pauseAgentOnConversationAction: ActionDefinition<Input, { paused: true }> = {
   id: "pause_agent_on_conversation",
   label: "Pausar agente IA na conversa",
-  description:
-    "Pausa o agente IA nessa conversa específica (não pausa o agente globalmente).",
+  description: "Pausa o agente IA nessa conversa específica (não pausa o agente globalmente).",
   category: "org",
   inputSchema,
   async execute(input, ctx) {

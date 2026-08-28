@@ -9,8 +9,7 @@ function makeMockSupabase(returnData: unknown[]) {
     ilike,
   };
   // Final await: just resolve
-  builder.then = (resolve: (v: unknown) => void) =>
-    resolve({ data: returnData });
+  builder.then = (resolve: (v: unknown) => void) => resolve({ data: returnData });
   const eq = vi.fn().mockReturnValue(builder);
   const select = vi.fn().mockReturnValue({ eq });
   return {

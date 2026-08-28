@@ -1,13 +1,13 @@
 import { notFound } from "next/navigation";
 import { requireOrgMember } from "@/lib/auth/guards";
+import { markConversationReadAction } from "@/lib/messaging/conversations/actions";
 import {
   getConversationById,
   getConversationsList,
   getMessagesForConversation,
 } from "@/lib/messaging/conversations/queries";
-import { markConversationReadAction } from "@/lib/messaging/conversations/actions";
-import { ConversationList } from "../conversation-list";
 import { ContextPanel } from "../context-panel";
+import { ConversationList } from "../conversation-list";
 import { InboxShell } from "../inbox-shell";
 import { Thread } from "../thread";
 

@@ -93,25 +93,18 @@ describe("updateTagSchema", () => {
     expect(updateTagSchema.safeParse(baseValid).success).toBe(true);
   });
   test("aceita patch parcial de nome", () => {
-    expect(
-      updateTagSchema.safeParse({ ...baseValid, name: "Novo nome" }).success,
-    ).toBe(true);
+    expect(updateTagSchema.safeParse({ ...baseValid, name: "Novo nome" }).success).toBe(true);
   });
   test("aceita patch de appliesTo válido", () => {
-    expect(
-      updateTagSchema.safeParse({ ...baseValid, appliesTo: ["conversation"] })
-        .success,
-    ).toBe(true);
-  });
-  test("rejeita id não-uuid", () => {
-    expect(updateTagSchema.safeParse({ ...baseValid, id: "abc" }).success).toBe(
-      false,
+    expect(updateTagSchema.safeParse({ ...baseValid, appliesTo: ["conversation"] }).success).toBe(
+      true,
     );
   });
+  test("rejeita id não-uuid", () => {
+    expect(updateTagSchema.safeParse({ ...baseValid, id: "abc" }).success).toBe(false);
+  });
   test("rejeita appliesTo vazio quando passado", () => {
-    expect(
-      updateTagSchema.safeParse({ ...baseValid, appliesTo: [] }).success,
-    ).toBe(false);
+    expect(updateTagSchema.safeParse({ ...baseValid, appliesTo: [] }).success).toBe(false);
   });
 });
 
@@ -125,9 +118,7 @@ describe("deleteTagSchema", () => {
     ).toBe(true);
   });
   test("rejeita id não-uuid", () => {
-    expect(
-      deleteTagSchema.safeParse({ orgSlug: "minha-org", id: "abc" }).success,
-    ).toBe(false);
+    expect(deleteTagSchema.safeParse({ orgSlug: "minha-org", id: "abc" }).success).toBe(false);
   });
 });
 
@@ -141,26 +132,18 @@ describe("applyTagSchema", () => {
     expect(applyTagSchema.safeParse(baseValid).success).toBe(true);
   });
   test("aceita propagateToContact=true", () => {
-    expect(
-      applyTagSchema.safeParse({ ...baseValid, propagateToContact: true })
-        .success,
-    ).toBe(true);
+    expect(applyTagSchema.safeParse({ ...baseValid, propagateToContact: true }).success).toBe(true);
   });
   test("aceita propagateToContact=false", () => {
-    expect(
-      applyTagSchema.safeParse({ ...baseValid, propagateToContact: false })
-        .success,
-    ).toBe(true);
+    expect(applyTagSchema.safeParse({ ...baseValid, propagateToContact: false }).success).toBe(
+      true,
+    );
   });
   test("rejeita tagId não-uuid", () => {
-    expect(
-      applyTagSchema.safeParse({ ...baseValid, tagId: "abc" }).success,
-    ).toBe(false);
+    expect(applyTagSchema.safeParse({ ...baseValid, tagId: "abc" }).success).toBe(false);
   });
   test("rejeita entityId não-uuid", () => {
-    expect(
-      applyTagSchema.safeParse({ ...baseValid, entityId: "abc" }).success,
-    ).toBe(false);
+    expect(applyTagSchema.safeParse({ ...baseValid, entityId: "abc" }).success).toBe(false);
   });
 });
 
@@ -187,16 +170,12 @@ describe("promoteSuggestionSchema", () => {
     expect(promoteSuggestionSchema.safeParse(baseValid).success).toBe(true);
   });
   test("rejeita appliesTo vazio", () => {
-    expect(
-      promoteSuggestionSchema.safeParse({ ...baseValid, appliesTo: [] })
-        .success,
-    ).toBe(false);
+    expect(promoteSuggestionSchema.safeParse({ ...baseValid, appliesTo: [] }).success).toBe(false);
   });
   test("rejeita color sem #", () => {
-    expect(
-      promoteSuggestionSchema.safeParse({ ...baseValid, color: "52d12f" })
-        .success,
-    ).toBe(false);
+    expect(promoteSuggestionSchema.safeParse({ ...baseValid, color: "52d12f" }).success).toBe(
+      false,
+    );
   });
 });
 

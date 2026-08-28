@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
 import { FileTextIcon, ImageIcon } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 interface Props {

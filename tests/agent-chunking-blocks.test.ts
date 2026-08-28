@@ -40,7 +40,9 @@ describe("splitBlocks", () => {
   });
 
   test("detecta heading via linha curta (<80 chars) seguida de blank", () => {
-    const blocks = splitBlocks("Introdução\n\nEste é o conteúdo da introdução, que pode ser longo.");
+    const blocks = splitBlocks(
+      "Introdução\n\nEste é o conteúdo da introdução, que pode ser longo.",
+    );
     expect(blocks[0]?.kind).toBe("heading");
     expect(blocks[0]?.text).toBe("Introdução");
   });

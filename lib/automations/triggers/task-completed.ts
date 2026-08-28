@@ -24,8 +24,15 @@ export const taskCompletedTrigger: TriggerDefinition = {
   sampleContext: {
     task: {
       id: "00000000-0000-4000-8000-000000000030",
-      title: "Ligar pro João", assignee_id: null, contact_id: null, deal_id: null,
+      title: "Ligar pro João",
+      assignee_id: null,
+      contact_id: null,
+      deal_id: null,
     },
-    org: { id: "00000000-0000-4000-8000-000000000003", name: "Minha Empresa", slug: "minha-empresa" },
+    org: {
+      id: "00000000-0000-4000-8000-000000000003",
+      name: "Minha Empresa",
+      slug: "minha-empresa",
+    },
   },
 };

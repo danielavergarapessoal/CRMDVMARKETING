@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef, useTransition } from "react";
 import { Loader2Icon, UploadIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useRef, useTransition } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { uploadDocumentAction } from "@/lib/agent/documents/actions";
 
 const MAX_BYTES = 20 * 1024 * 1024;

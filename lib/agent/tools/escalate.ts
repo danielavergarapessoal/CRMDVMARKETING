@@ -60,9 +60,7 @@ export function makeEscalateTool(ctx: ToolContext) {
           eventId: `${convId}:${escalatedAt}:${dedupeId}`,
           payload: {
             conversation: { id: convId },
-            contact: contactId
-              ? { id: contactId, name: null, phone: null }
-              : null,
+            contact: contactId ? { id: contactId, name: null, phone: null } : null,
             channel: channelData
               ? { id: channelData.id, type: channelData.type }
               : { id: "", type: "" },

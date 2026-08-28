@@ -2,9 +2,7 @@ import { describe, expect, test, vi } from "vitest";
 import { makeCreateTaskTool } from "@/lib/agent/tools/create-task";
 
 function makeSupabase(insertResult: { id: string } | null) {
-  const single = vi
-    .fn()
-    .mockResolvedValue({ data: insertResult, error: null });
+  const single = vi.fn().mockResolvedValue({ data: insertResult, error: null });
   const select = vi.fn().mockReturnValue({ single });
   const insert = vi.fn().mockReturnValue({ select });
   return { from: vi.fn().mockReturnValue({ insert }) } as never;

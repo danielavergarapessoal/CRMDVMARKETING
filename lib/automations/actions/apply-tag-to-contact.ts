@@ -19,18 +19,16 @@ export const applyTagToContactAction: ActionDefinition<Input, { applied: boolean
     const supabase = createServiceClient();
     await assertOrgOwns(supabase, "contacts", input.contact_id, ctx.orgId, "apply_tag_to_contact");
     await assertOrgOwns(supabase, "tags", input.tag_id, ctx.orgId, "apply_tag_to_contact");
-    const { error } = await supabase
-      .from("contact_tag_links")
-      .upsert(
-        {
-          contact_id: input.contact_id,
-          tag_id: input.tag_id,
-          organization_id: ctx.orgId,
-          applied_by_kind: "automation",
-          applied_by: null,
-        },
-        { onConflict: "contact_id,tag_id", ignoreDuplicates: true },
-      );
+    const { error } = await supabase.from("contact_tag_links").upsert(
+      {
+        contact_id: input.contact_id,
+        tag_id: input.tag_id,
+        organization_id: ctx.orgId,
+        applied_by_kind: "automation",
+        applied_by: null,
+      },
+      { onConflict: "contact_id,tag_id", ignoreDuplicates: true },
+    );
     if (error) {
       if (error.message.includes("não pode ser aplicada em contact")) {
         throw new Error(

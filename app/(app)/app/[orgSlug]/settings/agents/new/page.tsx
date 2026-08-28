@@ -1,5 +1,5 @@
-import { requireOrgRole } from "@/lib/auth/guards";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireOrgRole } from "@/lib/auth/guards";
 import { NewAgentForm } from "./new-agent-form";
 
 export const metadata = { title: "Novo agente" };

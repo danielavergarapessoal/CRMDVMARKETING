@@ -19,8 +19,12 @@ interface Props {
 
 export async function ContextPanel({ orgSlug, conversation }: Props) {
   // Fetch options for the promote dialog only when needed (no contact linked yet)
-  let contactOptions: { id: string; name: string; companyId: string | null; companyName: string | null }[] =
-    [];
+  let contactOptions: {
+    id: string;
+    name: string;
+    companyId: string | null;
+    companyName: string | null;
+  }[] = [];
   let companyOptions: { id: string; name: string }[] = [];
   if (!conversation.contact_id) {
     const supabase = await createClient();

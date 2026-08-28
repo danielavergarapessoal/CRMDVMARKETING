@@ -29,10 +29,7 @@ describe("buildSystemPrompt", () => {
   });
 
   test("inclui never_do quando setado", () => {
-    const prompt = buildSystemPrompt(
-      { ...baseSettings, never_do: "nunca prometa desconto" },
-      "",
-    );
+    const prompt = buildSystemPrompt({ ...baseSettings, never_do: "nunca prometa desconto" }, "");
     expect(prompt).toContain("nunca prometa desconto");
   });
 

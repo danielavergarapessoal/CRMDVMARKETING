@@ -47,9 +47,7 @@ export default async function ChannelDetailPage({
             {channel.status}
           </Badge>
         </div>
-        {channel.last_error && (
-          <p className="text-sm text-destructive">{channel.last_error}</p>
-        )}
+        {channel.last_error && <p className="text-sm text-destructive">{channel.last_error}</p>}
       </div>
 
       <Card>

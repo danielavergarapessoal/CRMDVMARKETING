@@ -16,8 +16,7 @@ type Input = z.infer<typeof inputSchema>;
 export const sendEmailAction: ActionDefinition<Input, { email_id: string }> = {
   id: "send_email",
   label: "Enviar email",
-  description:
-    "Manda email via provider configurado (Resend em prod, Console em dev).",
+  description: "Manda email via provider configurado (Resend em prod, Console em dev).",
   category: "messaging",
   inputSchema,
   async execute(input, _ctx) {

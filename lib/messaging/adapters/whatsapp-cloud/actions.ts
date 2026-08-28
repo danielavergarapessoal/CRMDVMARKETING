@@ -1,27 +1,27 @@
 "use server";
 
 import { randomUUID } from "node:crypto";
-import { after } from "next/server";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { requireOrgRole } from "@/lib/auth/guards";
 import { logError } from "@/lib/logger";
-import { translateError } from "@/lib/messaging/errors";
 import { getChannelConfig } from "@/lib/messaging/channel-config";
+import { translateError } from "@/lib/messaging/errors";
 import { processSendOutbound } from "@/lib/messaging/router";
 import { applyTemplateSync } from "@/lib/messaging/templates/sync";
 import { createClient } from "@/lib/supabase/server";
 import "@/lib/messaging";
-import { whatsappCloudAdapter } from "./adapter";
-import {
-  channelIdInputSchema,
-  connectChannelInputSchema,
-  testSendTemplateInputSchema,
-  type ChannelIdInput,
-  type ConnectChannelInput,
-  type TestSendTemplateInput,
-} from "./action-schemas";
 import { normalizePhone } from "@/lib/messaging/normalize";
 import type { Json } from "@/types/supabase";
+import {
+  type ChannelIdInput,
+  type ConnectChannelInput,
+  channelIdInputSchema,
+  connectChannelInputSchema,
+  type TestSendTemplateInput,
+  testSendTemplateInputSchema,
+} from "./action-schemas";
+import { whatsappCloudAdapter } from "./adapter";
 
 type ActionResult<T = void> = { ok: true; data?: T } | { ok: false; error: string };
 
@@ -62,7 +62,10 @@ export async function connectWhatsappChannelAction(
 
   if (error || !data) {
     logError("whatsapp.connect", error);
-    return { ok: false, error: "Não foi possível conectar o canal. Verifique os dados e tente novamente." };
+    return {
+      ok: false,
+      error: "Não foi possível conectar o canal. Verifique os dados e tente novamente.",
+    };
   }
 
   revalidatePath(`/app/${parsed.data.orgSlug}/settings/channels`);
@@ -104,7 +107,9 @@ export async function verifyWhatsappChannelAction(
     });
 
     revalidatePath(`/app/${parsed.data.orgSlug}/settings/channels`);
-    revalidatePath(`/app/${parsed.data.orgSlug}/settings/channels/whatsapp-cloud/${parsed.data.channelId}`);
+    revalidatePath(
+      `/app/${parsed.data.orgSlug}/settings/channels/whatsapp-cloud/${parsed.data.channelId}`,
+    );
     return { ok: true, data: { templatesSynced: sync.synced } };
   } catch (err) {
     logError("whatsapp.verify", err);

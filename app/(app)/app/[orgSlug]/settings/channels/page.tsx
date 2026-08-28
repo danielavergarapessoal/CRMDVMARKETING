@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { MessageCircleIcon } from "lucide-react";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,11 +17,7 @@ const STATUS_LABEL: Record<
   disconnected: { label: "Desconectado", variant: "secondary" },
 };
 
-export default async function ChannelsPage({
-  params,
-}: {
-  params: Promise<{ orgSlug: string }>;
-}) {
+export default async function ChannelsPage({ params }: { params: Promise<{ orgSlug: string }> }) {
   const { orgSlug } = await params;
   const { org } = await requireOrgRole({ orgSlug, roles: ["owner", "admin"] });
 
@@ -38,8 +34,7 @@ export default async function ChannelsPage({
         <span className="label-mono">/ canais</span>
         <h1 className="font-semibold text-3xl tracking-tight">Canais</h1>
         <p className="text-muted-foreground text-sm">
-          Conecte WhatsApp, Telegram e outros canais pra falar com seus contatos
-          direto daqui.
+          Conecte WhatsApp, Telegram e outros canais pra falar com seus contatos direto daqui.
         </p>
       </div>
 
@@ -49,17 +44,13 @@ export default async function ChannelsPage({
 
       <Card>
         <CardHeader className="border-b border-border/60 bg-card/40 py-3">
-          <CardTitle className="label-mono text-[10px]">
-            / canais conectados
-          </CardTitle>
+          <CardTitle className="label-mono text-[10px]">/ canais conectados</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           {!channels || channels.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <MessageCircleIcon className="h-10 w-10 text-muted-foreground" />
-              <p className="mt-4 text-sm text-muted-foreground">
-                Nenhum canal conectado ainda.
-              </p>
+              <p className="mt-4 text-sm text-muted-foreground">Nenhum canal conectado ainda.</p>
             </div>
           ) : (
             <ul className="divide-y divide-border">
@@ -75,19 +66,12 @@ export default async function ChannelsPage({
                       ? `/app/${orgSlug}/settings/channels/whatsapp-evolution/${c.id}`
                       : "#";
                 return (
-                  <li
-                    key={c.id}
-                    className="flex items-center justify-between p-4"
-                  >
+                  <li key={c.id} className="flex items-center justify-between p-4">
                     <div>
                       <div className="font-medium">{c.name}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {c.type}
-                      </div>
+                      <div className="text-xs text-muted-foreground">{c.type}</div>
                       {c.last_error && (
-                        <div className="mt-1 text-xs text-destructive">
-                          {c.last_error}
-                        </div>
+                        <div className="mt-1 text-xs text-destructive">{c.last_error}</div>
                       )}
                     </div>
                     <div className="flex items-center gap-3">

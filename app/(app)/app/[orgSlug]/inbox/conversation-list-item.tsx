@@ -42,9 +42,7 @@ export function ConversationListItem({ orgSlug, c, selected }: Props) {
       href={`/app/${orgSlug}/inbox/${c.id}`}
       className={cn(
         "flex gap-3 border-b border-border/60 border-l-2 p-3 transition-colors",
-        selected
-          ? "border-l-primary bg-muted"
-          : "border-l-transparent hover:bg-muted/50",
+        selected ? "border-l-primary bg-muted" : "border-l-transparent hover:bg-muted/50",
       )}
     >
       <Avatar className="h-10 w-10">

@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  listVariablesForTrigger,
-  getVariableLabel,
-} from "@/lib/automations/variable-labels";
+import { getVariableLabel, listVariablesForTrigger } from "@/lib/automations/variable-labels";
 
 describe("variable-labels", () => {
   it("retorna lista com labels amigáveis pro trigger conversation.created", () => {

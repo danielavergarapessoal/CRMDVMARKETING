@@ -2,7 +2,9 @@
 // Auto-skip se faltarem env vars.
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-const HAS_SB = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+const HAS_SB = Boolean(
+  process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY,
+);
 const HAS_OPENAI = Boolean(process.env.OPENAI_API_KEY);
 
 const PDF_TEXT_FIXTURE = `Política de Devolução
@@ -22,7 +24,9 @@ Todos os produtos têm garantia mínima de 12 meses contra defeitos de fabricaç
 
 Suporte 24h
 
-Para emergências fora do horário comercial, ligue para 0800-123-4567. Nosso atendimento 24h está disponível todos os dias.`.repeat(3);
+Para emergências fora do horário comercial, ligue para 0800-123-4567. Nosso atendimento 24h está disponível todos os dias.`.repeat(
+  3,
+);
 
 describe.skipIf(!HAS_SB || !HAS_OPENAI)("chunking E2E", () => {
   let orgId: string;

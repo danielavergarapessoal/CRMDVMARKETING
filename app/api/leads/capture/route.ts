@@ -29,13 +29,19 @@ export async function POST(req: NextRequest) {
   const token = process.env.LEAD_CAPTURE_TOKEN;
   if (!token) {
     logError("leads.capture", new Error("LEAD_CAPTURE_TOKEN não configurado"));
-    return NextResponse.json({ ok: false, error: "Serviço indisponível" }, { status: 503, headers: CORS });
+    return NextResponse.json(
+      { ok: false, error: "Serviço indisponível" },
+      { status: 503, headers: CORS },
+    );
   }
 
   const authHeader = req.headers.get("authorization") ?? "";
   const provided = authHeader.startsWith("Bearer ") ? authHeader.slice(7).trim() : "";
   if (provided !== token) {
-    return NextResponse.json({ ok: false, error: "Não autorizado" }, { status: 401, headers: CORS });
+    return NextResponse.json(
+      { ok: false, error: "Não autorizado" },
+      { status: 401, headers: CORS },
+    );
   }
 
   let json: unknown;
@@ -47,7 +53,10 @@ export async function POST(req: NextRequest) {
 
   const parsed = bodySchema.safeParse(json);
   if (!parsed.success) {
-    return NextResponse.json({ ok: false, error: "Dados inválidos" }, { status: 400, headers: CORS });
+    return NextResponse.json(
+      { ok: false, error: "Dados inválidos" },
+      { status: 400, headers: CORS },
+    );
   }
   const { source, name, email, phone, website } = parsed.data;
 
@@ -58,7 +67,10 @@ export async function POST(req: NextRequest) {
 
   const sourceCfg = LEAD_SOURCES[source];
   if (!sourceCfg) {
-    return NextResponse.json({ ok: false, error: "Origem desconhecida" }, { status: 400, headers: CORS });
+    return NextResponse.json(
+      { ok: false, error: "Origem desconhecida" },
+      { status: 400, headers: CORS },
+    );
   }
 
   const cleanEmail = email && email.length > 0 ? email.toLowerCase() : null;
@@ -82,7 +94,10 @@ export async function POST(req: NextRequest) {
       .maybeSingle();
     if (orgErr || !org) {
       logError("leads.capture.org", orgErr);
-      return NextResponse.json({ ok: false, error: "Workspace não encontrado" }, { status: 500, headers: CORS });
+      return NextResponse.json(
+        { ok: false, error: "Workspace não encontrado" },
+        { status: 500, headers: CORS },
+      );
     }
     const orgId = org.id;
 
@@ -111,7 +126,10 @@ export async function POST(req: NextRequest) {
         .single();
       if (cErr || !created) {
         logError("leads.capture.contact", cErr);
-        return NextResponse.json({ ok: false, error: "Erro ao salvar contato" }, { status: 500, headers: CORS });
+        return NextResponse.json(
+          { ok: false, error: "Erro ao salvar contato" },
+          { status: 500, headers: CORS },
+        );
       }
       contactId = created.id;
     }

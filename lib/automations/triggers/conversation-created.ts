@@ -16,22 +16,30 @@ export const conversationCreatedTrigger: TriggerDefinition = {
       type: z.string(),
       name: z.string(),
     }),
-    contact: z.object({
-      id: z.string().uuid().nullable(),
-      name: z.string().nullable(),
-      phone: z.string().nullable(),
-      email: z.string().nullable(),
-    }).nullable(),
+    contact: z
+      .object({
+        id: z.string().uuid().nullable(),
+        name: z.string().nullable(),
+        phone: z.string().nullable(),
+        email: z.string().nullable(),
+      })
+      .nullable(),
     org: z.object({ id: z.string().uuid(), name: z.string(), slug: z.string() }),
   }),
   triggerConfigSchema: z.object({
     channel_type_in: z.array(z.string()).optional(),
   }),
   variables: [
-    "{{conversation.id}}", "{{conversation.external_thread_id}}", "{{conversation.display_name}}",
-    "{{channel.type}}", "{{channel.name}}",
-    "{{contact.name}}", "{{contact.phone}}", "{{contact.email}}",
-    "{{org.name}}", "{{now.iso}}",
+    "{{conversation.id}}",
+    "{{conversation.external_thread_id}}",
+    "{{conversation.display_name}}",
+    "{{channel.type}}",
+    "{{channel.name}}",
+    "{{contact.name}}",
+    "{{contact.phone}}",
+    "{{contact.email}}",
+    "{{org.name}}",
+    "{{now.iso}}",
   ],
   variableLabels: {
     "conversation.id": { label: "ID da conversa" },
@@ -55,8 +63,16 @@ export const conversationCreatedTrigger: TriggerDefinition = {
       external_thread_id: "+5511987654321",
       display_name: "Mateus Castioni",
     },
-    channel: { id: "00000000-0000-4000-8000-000000000002", type: "whatsapp_cloud", name: "WhatsApp Comercial" },
+    channel: {
+      id: "00000000-0000-4000-8000-000000000002",
+      type: "whatsapp_cloud",
+      name: "WhatsApp Comercial",
+    },
     contact: null,
-    org: { id: "00000000-0000-4000-8000-000000000003", name: "Minha Empresa", slug: "minha-empresa" },
+    org: {
+      id: "00000000-0000-4000-8000-000000000003",
+      name: "Minha Empresa",
+      slug: "minha-empresa",
+    },
   },
 };

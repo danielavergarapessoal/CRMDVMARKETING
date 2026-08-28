@@ -39,12 +39,18 @@ function isAllUppercaseToken(line: string): boolean {
 export function splitBlocks(text: string): Block[] {
   if (text.trim().length === 0) return [];
 
-  const rawBlocks = text.split(/\n{2,}/).map((b) => b.trim()).filter((b) => b.length > 0);
+  const rawBlocks = text
+    .split(/\n{2,}/)
+    .map((b) => b.trim())
+    .filter((b) => b.length > 0);
 
   const blocks: Block[] = [];
 
   for (const block of rawBlocks) {
-    const lines = block.split("\n").map((l) => l.trim()).filter((l) => l.length > 0);
+    const lines = block
+      .split("\n")
+      .map((l) => l.trim())
+      .filter((l) => l.length > 0);
     if (lines.length === 0) continue;
 
     if (lines.length === 1) {

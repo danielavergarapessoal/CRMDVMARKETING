@@ -1,4 +1,4 @@
-import { describe, expect, test, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
 vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
 vi.mock("@/lib/auth/guards", () => ({
@@ -7,12 +7,12 @@ vi.mock("@/lib/auth/guards", () => ({
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 vi.mock("next/server", () => ({ after: (fn: () => unknown) => Promise.resolve(fn()) }));
 
-import { createClient } from "@/lib/supabase/server";
 import { requireOrgRole } from "@/lib/auth/guards";
 import {
   connectWhatsappChannelAction,
   disconnectWhatsappChannelAction,
 } from "@/lib/messaging/adapters/whatsapp-cloud/actions";
+import { createClient } from "@/lib/supabase/server";
 
 const mockedCreate = createClient as unknown as ReturnType<typeof vi.fn>;
 const mockedRole = requireOrgRole as unknown as ReturnType<typeof vi.fn>;

@@ -31,7 +31,10 @@ export function interpolate(template: unknown, context: Record<string, unknown>)
   }
   if (template !== null && typeof template === "object") {
     return Object.fromEntries(
-      Object.entries(template as Record<string, unknown>).map(([k, v]) => [k, interpolate(v, context)]),
+      Object.entries(template as Record<string, unknown>).map(([k, v]) => [
+        k,
+        interpolate(v, context),
+      ]),
     );
   }
   return template;

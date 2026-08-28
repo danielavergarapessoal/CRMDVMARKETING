@@ -1,9 +1,9 @@
 import { requireOrgMember } from "@/lib/auth/guards";
-import { createClient } from "@/lib/supabase/server";
 import { getConversationsList } from "@/lib/messaging/conversations/queries";
+import { createClient } from "@/lib/supabase/server";
+import { ConversationList } from "./conversation-list";
 import { EmptyState } from "./empty-state";
 import { InboxShell } from "./inbox-shell";
-import { ConversationList } from "./conversation-list";
 
 interface Props {
   params: Promise<{ orgSlug: string }>;

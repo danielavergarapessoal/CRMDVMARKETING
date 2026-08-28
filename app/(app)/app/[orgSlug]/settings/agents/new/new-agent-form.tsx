@@ -24,7 +24,12 @@ export function NewAgentForm({ orgSlug }: { orgSlug: string }) {
       return;
     }
     start(async () => {
-      const r = await createAgentAction({ orgSlug, name: name.trim(), tone, daily_token_cap: tokenCap });
+      const r = await createAgentAction({
+        orgSlug,
+        name: name.trim(),
+        tone,
+        daily_token_cap: tokenCap,
+      });
       if (!r.ok) {
         toast.error(r.error);
         return;

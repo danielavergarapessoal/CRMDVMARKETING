@@ -1,14 +1,14 @@
-import { tool } from "ai";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { tool } from "ai";
 import type { Database } from "@/types/supabase";
-import { makeSearchKbTool } from "./search-kb";
-import { makeFindContactTool } from "./find-contact";
-import { makeListOpenDealsTool } from "./list-open-deals";
-import { makeListPendingTasksTool } from "./list-pending-tasks";
+import { makeApplyTagToConversationTool } from "./apply-tag-to-conversation";
 import { makeCreateContactTool } from "./create-contact";
 import { makeCreateTaskTool } from "./create-task";
 import { makeEscalateTool } from "./escalate";
-import { makeApplyTagToConversationTool } from "./apply-tag-to-conversation";
+import { makeFindContactTool } from "./find-contact";
+import { makeListOpenDealsTool } from "./list-open-deals";
+import { makeListPendingTasksTool } from "./list-pending-tasks";
+import { makeSearchKbTool } from "./search-kb";
 
 export interface ToolContext {
   orgId: string;

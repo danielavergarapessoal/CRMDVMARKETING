@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
 import { Loader2Icon, PaperclipIcon, XIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { uploadConversationMediaAction } from "@/lib/messaging/conversations/actions";
 
 export interface UploadedMedia {
@@ -81,7 +81,11 @@ export function AttachmentUploader({ orgSlug, conversationId, attached, onChange
         disabled={uploading}
         aria-label="Anexar"
       >
-        {uploading ? <Loader2Icon className="h-4 w-4 animate-spin" /> : <PaperclipIcon className="h-4 w-4" />}
+        {uploading ? (
+          <Loader2Icon className="h-4 w-4 animate-spin" />
+        ) : (
+          <PaperclipIcon className="h-4 w-4" />
+        )}
       </Button>
     </>
   );

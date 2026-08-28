@@ -88,8 +88,7 @@ export async function updateTaskAction(input: UpdateTaskInput): Promise<ActionRe
   if (!before) return { ok: false, error: "Tarefa não encontrada" };
 
   const previousStatus = before.status;
-  const willComplete =
-    parsed.data.status === "done" && previousStatus !== "done";
+  const willComplete = parsed.data.status === "done" && previousStatus !== "done";
 
   const { error } = await supabase
     .from("tasks")

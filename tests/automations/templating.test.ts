@@ -27,8 +27,9 @@ describe("interpolate", () => {
     expect(interpolate(["{{a}}", "{{b}}"], { a: "X", b: "Y" })).toEqual(["X", "Y"]);
   });
   test("recursão em object", () => {
-    expect(interpolate({ to: "{{phone}}", text: "Oi {{name}}" }, { phone: "+55", name: "A" }))
-      .toEqual({ to: "+55", text: "Oi A" });
+    expect(
+      interpolate({ to: "{{phone}}", text: "Oi {{name}}" }, { phone: "+55", name: "A" }),
+    ).toEqual({ to: "+55", text: "Oi A" });
   });
   test("primitivos não-string intactos", () => {
     expect(interpolate({ value: 100, enabled: true }, {})).toEqual({ value: 100, enabled: true });
@@ -37,8 +38,9 @@ describe("interpolate", () => {
     expect(interpolate("nada aqui", { x: "y" })).toBe("nada aqui");
   });
   test("objects aninhados", () => {
-    expect(interpolate({ outer: { inner: "{{x}}", n: 5 } }, { x: "ok" }))
-      .toEqual({ outer: { inner: "ok", n: 5 } });
+    expect(interpolate({ outer: { inner: "{{x}}", n: 5 } }, { x: "ok" })).toEqual({
+      outer: { inner: "ok", n: 5 },
+    });
   });
   test("chaves com dot literal NÃO são acessíveis (path splita primeiro)", () => {
     // Decisão consciente: handlebars-style dot path

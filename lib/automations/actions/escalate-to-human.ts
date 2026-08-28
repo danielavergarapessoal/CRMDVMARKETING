@@ -9,10 +9,7 @@ const inputSchema = z.object({
 });
 type Input = z.infer<typeof inputSchema>;
 
-export const escalateToHumanAction: ActionDefinition<
-  Input,
-  { task_id: string }
-> = {
+export const escalateToHumanAction: ActionDefinition<Input, { task_id: string }> = {
   id: "escalate_to_human",
   label: "Escalar pra humano",
   description:

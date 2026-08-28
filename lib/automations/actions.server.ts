@@ -13,15 +13,13 @@ import { createServiceClient } from "@/lib/supabase/service";
 import type { Json, TablesUpdate } from "@/types/supabase";
 import { enrichPayloadForRun } from "./emit";
 import { AUTOMATION_LIMITS } from "./limits";
-import { PLACEHOLDER_PATTERNS, applyTemplateAutoFill } from "./placeholders";
+import { applyTemplateAutoFill, PLACEHOLDER_PATTERNS } from "./placeholders";
 import { TRIGGERS } from "./registry";
 import { type AutomationInput, automationSchema } from "./schemas";
 import { getTemplate } from "./templates";
 import { processNextRuns } from "./worker";
 
-type ActionResult<T = void> =
-  | { ok: true; data?: T }
-  | { ok: false; error: string };
+type ActionResult<T = void> = { ok: true; data?: T } | { ok: false; error: string };
 
 const orgSlugSchema = z.string().min(1).max(80);
 
@@ -100,16 +98,13 @@ export async function updateAutomationAction(
   const supabase = await createClient();
   const patch: TablesUpdate<"automations"> = {};
   if (parsed.data.name !== undefined) patch.name = parsed.data.name;
-  if (parsed.data.description !== undefined)
-    patch.description = parsed.data.description;
-  if (parsed.data.trigger_type !== undefined)
-    patch.trigger_type = parsed.data.trigger_type;
+  if (parsed.data.description !== undefined) patch.description = parsed.data.description;
+  if (parsed.data.trigger_type !== undefined) patch.trigger_type = parsed.data.trigger_type;
   if (parsed.data.trigger_config !== undefined)
     patch.trigger_config = parsed.data.trigger_config as Json;
   if (parsed.data.conditions !== undefined)
     patch.conditions = parsed.data.conditions as unknown as Json;
-  if (parsed.data.actions !== undefined)
-    patch.actions = parsed.data.actions as unknown as Json;
+  if (parsed.data.actions !== undefined) patch.actions = parsed.data.actions as unknown as Json;
   if (parsed.data.status !== undefined) patch.status = parsed.data.status;
   const { error } = await supabase
     .from("automations")
@@ -244,8 +239,7 @@ export async function runAutomationDryRunAction(
   const trigger = TRIGGERS[auto.trigger_type];
   if (!trigger) return { ok: false, error: "Trigger desconhecido" };
 
-  const samplePayload = (parsed.data.payload ??
-    trigger.sampleContext) as Record<string, unknown>;
+  const samplePayload = (parsed.data.payload ?? trigger.sampleContext) as Record<string, unknown>;
   // Sub-H M-2: helper centralizado
   const enriched = enrichPayloadForRun(samplePayload, { depth: 0, dryRun: true });
   const eventId = `dry-run-${randomUUID()}`;
@@ -266,9 +260,7 @@ export async function runAutomationDryRunAction(
     return { ok: false, error: "Não consegui agendar a simulação." };
   }
   after(() =>
-    processNextRuns({ limit: 1 }).catch((err) =>
-      logError("automations.dry-run.kick", err),
-    ),
+    processNextRuns({ limit: 1 }).catch((err) => logError("automations.dry-run.kick", err)),
   );
   return { ok: true, data: { runId: run.id } };
 }
@@ -296,13 +288,13 @@ export async function retryRunAction(
     .maybeSingle();
   if (!old) return { ok: false, error: "Run não encontrada" };
   // Sub-H H-5: bloquear retry de dry-run pra não virar efeito real
-  const oldMeta = (old.trigger_payload as Record<string, unknown> | null)
-    ?._meta as { dry_run?: boolean } | undefined;
+  const oldMeta = (old.trigger_payload as Record<string, unknown> | null)?._meta as
+    | { dry_run?: boolean }
+    | undefined;
   if (oldMeta?.dry_run === true || old.trigger_event_id.startsWith("dry-run-")) {
     return {
       ok: false,
-      error:
-        "Não dá pra re-executar uma simulação. Use o botão Testar pra rodar uma nova.",
+      error: "Não dá pra re-executar uma simulação. Use o botão Testar pra rodar uma nova.",
     };
   }
   // Sub-H Round-2 #16: counter em vez de Date.now() pra UNIQUE bloquear duplo-click.
@@ -343,9 +335,7 @@ export async function retryRunAction(
     return { ok: false, error: "Não consegui re-executar." };
   }
   after(() =>
-    processNextRuns({ limit: 1 }).catch((err) =>
-      logError("automations.retry.kick", err),
-    ),
+    processNextRuns({ limit: 1 }).catch((err) => logError("automations.retry.kick", err)),
   );
   return { ok: true, data: { runId: newRun.id } };
 }

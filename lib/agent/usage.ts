@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 
-export async function getUsageToday(agentId: string): Promise<{ tokens: number; responses: number }> {
+export async function getUsageToday(
+  agentId: string,
+): Promise<{ tokens: number; responses: number }> {
   const supabase = await createClient();
   const today = new Date().toISOString().slice(0, 10);
   const { data } = await supabase

@@ -1,10 +1,10 @@
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { TagsSection } from "@/components/app/tags-section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TagsSection } from "@/components/app/tags-section";
 import { requireOrgMember } from "@/lib/auth/guards";
 import {
   getCompany,

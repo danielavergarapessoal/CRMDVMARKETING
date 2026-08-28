@@ -1,5 +1,5 @@
-import { recoverStaleAgents } from "@/lib/agent/recovery";
 import { recoverStaleDocuments } from "@/lib/agent/rag/ingest";
+import { recoverStaleAgents } from "@/lib/agent/recovery";
 import { AUTOMATION_LIMITS } from "@/lib/automations/limits";
 import { recoverStaleAutomationSteps } from "@/lib/automations/recovery";
 import { processNextRuns } from "@/lib/automations/worker";
@@ -37,27 +37,21 @@ export function startBackgroundJobs(): void {
   // Mensagens em 'sending' há > 60s → marca 'failed'
   intervals.push(
     setInterval(() => {
-      recoverStaleMessages().catch((err) =>
-        console.error("[jobs/messaging]", err),
-      );
+      recoverStaleMessages().catch((err) => console.error("[jobs/messaging]", err));
     }, 60_000),
   );
 
   // Documentos em 'processing' há > 5min → marca 'failed'
   intervals.push(
     setInterval(() => {
-      recoverStaleDocuments().catch((err) =>
-        console.error("[jobs/docs]", err),
-      );
+      recoverStaleDocuments().catch((err) => console.error("[jobs/docs]", err));
     }, 30_000),
   );
 
   // Conversas com agent_status='thinking' > 5min → reset 'idle' + task pro humano
   intervals.push(
     setInterval(() => {
-      recoverStaleAgents().catch((err) =>
-        console.error("[jobs/agents]", err),
-      );
+      recoverStaleAgents().catch((err) => console.error("[jobs/agents]", err));
     }, 30_000),
   );
 

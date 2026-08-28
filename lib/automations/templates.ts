@@ -77,8 +77,7 @@ export const TEMPLATES: AutomationTemplate[] = [
           config: {
             to: "{{contact.email}}",
             subject: "Bem-vindo à {{org.name}}!",
-            body:
-              "Olá {{contact.name}},\n\nQue bom ter você por aqui. Em breve um especialista entra em contato.\n\nAté breve!",
+            body: "Olá {{contact.name}},\n\nQue bom ter você por aqui. Em breve um especialista entra em contato.\n\nAté breve!",
           },
           on_error: "continue",
         },
@@ -100,8 +99,7 @@ export const TEMPLATES: AutomationTemplate[] = [
     id: "followup-proposta",
     emoji: "📤",
     name: "Follow-up de proposta enviada",
-    description:
-      "Quando um deal vai pra 'Proposta enviada', cria tarefa de follow-up em 2 dias.",
+    description: "Quando um deal vai pra 'Proposta enviada', cria tarefa de follow-up em 2 dias.",
     helpText: "Útil pra não esquecer de cobrar resposta da proposta.",
     automation: {
       name: "Follow-up de proposta enviada",
@@ -167,8 +165,7 @@ export const TEMPLATES: AutomationTemplate[] = [
     id: "integracao-zapier-ganho",
     emoji: "🌐",
     name: "Integração externa — deal ganho",
-    description:
-      "Quando um deal é marcado como Ganho, manda payload completo pra Zapier/n8n/Make.",
+    description: "Quando um deal é marcado como Ganho, manda payload completo pra Zapier/n8n/Make.",
     helpText:
       "Cole a URL do seu webhook em 'url' e defina um webhook_secret de pelo menos 16 chars pra assinar.",
     needsPreActivation: ["actions.0.config.url", "actions.0.config.webhook_secret"],

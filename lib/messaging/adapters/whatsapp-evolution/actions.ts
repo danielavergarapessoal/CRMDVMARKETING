@@ -6,14 +6,14 @@ import { requireOrgRole } from "@/lib/auth/guards";
 import { logError } from "@/lib/logger";
 import { createClient } from "@/lib/supabase/server";
 import {
-  connectEvolutionInputSchema,
-  disconnectEvolutionInputSchema,
-  reverifyEvolutionInputSchema,
-  testSendEvolutionInputSchema,
   type ConnectEvolutionInput,
+  connectEvolutionInputSchema,
   type DisconnectEvolutionInput,
+  disconnectEvolutionInputSchema,
   type ReverifyEvolutionInput,
+  reverifyEvolutionInputSchema,
   type TestSendEvolutionInput,
+  testSendEvolutionInputSchema,
 } from "./action-schemas";
 import { evolutionAdapter } from "./adapter";
 import { getJson, postJson } from "./client";
@@ -80,7 +80,10 @@ export async function connectEvolutionChannelAction(
     ownerJid = r.ownerJid;
   } catch (err) {
     logError("evolution.connect.state", err);
-    return { ok: false, error: err instanceof Error ? err.message : "Não foi possível contatar o Evolution." };
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : "Não foi possível contatar o Evolution.",
+    };
   }
   if (state !== "open") {
     return {
@@ -165,7 +168,10 @@ export async function reverifyEvolutionChannelAction(
     ownerJid = r.ownerJid;
   } catch (err) {
     logError("evolution.reverify.state", err);
-    return { ok: false, error: err instanceof Error ? err.message : "Não foi possível contatar o Evolution." };
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : "Não foi possível contatar o Evolution.",
+    };
   }
 
   const newSecret = crypto.randomBytes(32).toString("hex");

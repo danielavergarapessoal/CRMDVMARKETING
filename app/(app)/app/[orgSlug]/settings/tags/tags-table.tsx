@@ -30,8 +30,10 @@ const SCOPE_LABELS: Record<TagScope, string> = {
 
 function summarizeUsage(t: TagWithUsage): string {
   const parts: string[] = [];
-  if (t.usage.contact > 0) parts.push(`${t.usage.contact} contato${t.usage.contact > 1 ? "s" : ""}`);
-  if (t.usage.company > 0) parts.push(`${t.usage.company} empresa${t.usage.company > 1 ? "s" : ""}`);
+  if (t.usage.contact > 0)
+    parts.push(`${t.usage.contact} contato${t.usage.contact > 1 ? "s" : ""}`);
+  if (t.usage.company > 0)
+    parts.push(`${t.usage.company} empresa${t.usage.company > 1 ? "s" : ""}`);
   if (t.usage.deal > 0) parts.push(`${t.usage.deal} deal${t.usage.deal > 1 ? "s" : ""}`);
   if (t.usage.conversation > 0) {
     parts.push(`${t.usage.conversation} conversa${t.usage.conversation > 1 ? "s" : ""}`);
@@ -78,10 +80,7 @@ export function TagsTable({ orgSlug, tags }: Props) {
             <ul className="divide-y divide-border">
               {tags.map((tag) => {
                 const total =
-                  tag.usage.conversation +
-                  tag.usage.contact +
-                  tag.usage.company +
-                  tag.usage.deal;
+                  tag.usage.conversation + tag.usage.contact + tag.usage.company + tag.usage.deal;
                 return (
                   <li key={tag.id} className="flex items-center justify-between gap-3 p-4">
                     <div className="flex min-w-0 flex-1 items-center gap-3">
@@ -97,11 +96,7 @@ export function TagsTable({ orgSlug, tags }: Props) {
                       </span>
                       <div className="flex flex-wrap gap-1">
                         {tag.appliesTo.map((scope) => (
-                          <Badge
-                            key={scope}
-                            variant="outline"
-                            className="label-mono text-[9px]"
-                          >
+                          <Badge key={scope} variant="outline" className="label-mono text-[9px]">
                             {SCOPE_LABELS[scope]}
                           </Badge>
                         ))}
@@ -138,11 +133,7 @@ export function TagsTable({ orgSlug, tags }: Props) {
       </Card>
 
       {showNew && (
-        <TagFormDialog
-          orgSlug={orgSlug}
-          mode="create"
-          onClose={() => setShowNew(false)}
-        />
+        <TagFormDialog orgSlug={orgSlug} mode="create" onClose={() => setShowNew(false)} />
       )}
       {editingTag && (
         <TagFormDialog
@@ -153,10 +144,7 @@ export function TagsTable({ orgSlug, tags }: Props) {
         />
       )}
 
-      <Dialog
-        open={Boolean(deletingTag)}
-        onOpenChange={(open) => !open && setDeletingTag(null)}
-      >
+      <Dialog open={Boolean(deletingTag)} onOpenChange={(open) => !open && setDeletingTag(null)}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Remover tag?</DialogTitle>

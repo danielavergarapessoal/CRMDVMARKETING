@@ -13,11 +13,13 @@ export const messageReceivedTrigger: TriggerDefinition = {
     }),
     conversation: z.object({ id: z.string().uuid() }),
     channel: z.object({ id: z.string().uuid(), type: z.string(), name: z.string() }),
-    contact: z.object({
-      id: z.string().uuid().nullable(),
-      name: z.string().nullable(),
-      phone: z.string().nullable(),
-    }).nullable(),
+    contact: z
+      .object({
+        id: z.string().uuid().nullable(),
+        name: z.string().nullable(),
+        phone: z.string().nullable(),
+      })
+      .nullable(),
     org: z.object({ id: z.string().uuid(), name: z.string(), slug: z.string() }),
   }),
   triggerConfigSchema: z.object({
@@ -25,10 +27,14 @@ export const messageReceivedTrigger: TriggerDefinition = {
     body_contains: z.string().optional(),
   }),
   variables: [
-    "{{message.body}}", "{{message.media_type}}",
-    "{{conversation.id}}", "{{channel.type}}",
-    "{{contact.name}}", "{{contact.phone}}",
-    "{{org.name}}", "{{now.iso}}",
+    "{{message.body}}",
+    "{{message.media_type}}",
+    "{{conversation.id}}",
+    "{{channel.type}}",
+    "{{contact.name}}",
+    "{{contact.phone}}",
+    "{{org.name}}",
+    "{{now.iso}}",
   ],
   variableLabels: {
     "message.body": {
@@ -45,10 +51,22 @@ export const messageReceivedTrigger: TriggerDefinition = {
     "contact.phone": { label: "Telefone do contato", example: "+5511987654321" },
   },
   sampleContext: {
-    message: { id: "00000000-0000-4000-8000-000000000010", body: "Olá, gostaria de saber mais", media_type: null },
+    message: {
+      id: "00000000-0000-4000-8000-000000000010",
+      body: "Olá, gostaria de saber mais",
+      media_type: null,
+    },
     conversation: { id: "00000000-0000-4000-8000-000000000001" },
-    channel: { id: "00000000-0000-4000-8000-000000000002", type: "whatsapp_cloud", name: "WhatsApp Comercial" },
+    channel: {
+      id: "00000000-0000-4000-8000-000000000002",
+      type: "whatsapp_cloud",
+      name: "WhatsApp Comercial",
+    },
     contact: { id: "00000000-0000-4000-8000-000000000005", name: "João", phone: "+5511987654321" },
-    org: { id: "00000000-0000-4000-8000-000000000003", name: "Minha Empresa", slug: "minha-empresa" },
+    org: {
+      id: "00000000-0000-4000-8000-000000000003",
+      name: "Minha Empresa",
+      slug: "minha-empresa",
+    },
   },
 };

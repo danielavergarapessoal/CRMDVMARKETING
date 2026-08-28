@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
+import { useMemo } from "react";
 import { ConversationFilters } from "./conversation-filters";
 import { ConversationListItem } from "./conversation-list-item";
 
@@ -38,7 +38,8 @@ export function ConversationList({ orgSlug, conversations, selectedId }: Props) 
   const filtered = useMemo(() => {
     if (!q) return conversations;
     return conversations.filter((c) => {
-      const hay = `${c.contact?.name ?? ""} ${c.contact?.phone ?? ""} ${c.display_name ?? ""} ${c.external_thread_id} ${c.preview ?? ""}`.toLowerCase();
+      const hay =
+        `${c.contact?.name ?? ""} ${c.contact?.phone ?? ""} ${c.display_name ?? ""} ${c.external_thread_id} ${c.preview ?? ""}`.toLowerCase();
       return hay.includes(q);
     });
   }, [conversations, q]);

@@ -18,9 +18,9 @@ export function extractMessageContent(m: MetaInboundMessage): {
     return { body: m.text?.body };
   }
 
-  const mediaKey = ["image", "document", "audio", "video", "sticker"].find(
-    (k) => k === m.type,
-  ) as keyof MetaInboundMessage | undefined;
+  const mediaKey = ["image", "document", "audio", "video", "sticker"].find((k) => k === m.type) as
+    | keyof MetaInboundMessage
+    | undefined;
 
   if (mediaKey) {
     const obj = m[mediaKey] as { id?: string; mime_type?: string; caption?: string } | undefined;

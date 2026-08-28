@@ -18,8 +18,7 @@ interface Props {
 const main = {
   background: "#0a0a0a",
   color: "#d4d4d4",
-  fontFamily:
-    "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 };
 const container = { maxWidth: "560px", margin: "0 auto", padding: "32px 24px" };
 const headingStyle = {

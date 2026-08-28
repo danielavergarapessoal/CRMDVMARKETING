@@ -29,16 +29,12 @@ export default async function RunsListPage({
                 className="flex items-center justify-between p-3 hover:bg-muted/40 transition-colors"
               >
                 <div>
-                  <div className="text-xs font-mono">
-                    {r.trigger_event_id.slice(0, 48)}
-                  </div>
+                  <div className="text-xs font-mono">{r.trigger_event_id.slice(0, 48)}</div>
                   <div className="text-xs text-muted-foreground mt-0.5">
                     {new Date(r.created_at).toLocaleString("pt-BR")}
                   </div>
                   {r.error && (
-                    <div className="text-xs text-destructive mt-0.5 line-clamp-1">
-                      {r.error}
-                    </div>
+                    <div className="text-xs text-destructive mt-0.5 line-clamp-1">{r.error}</div>
                   )}
                 </div>
                 <StatusBadge status={r.status} />

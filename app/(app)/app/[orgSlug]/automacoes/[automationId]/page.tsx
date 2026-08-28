@@ -1,6 +1,6 @@
+import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { requireOrgRole } from "@/lib/auth/guards";
 import { getAutomation } from "@/lib/automations/queries";
@@ -37,11 +37,7 @@ export default async function AutomationEditorPage({
         <Button
           variant="outline"
           size="sm"
-          render={
-            <Link
-              href={`/app/${orgSlug}/automacoes/${automationId}/runs`}
-            />
-          }
+          render={<Link href={`/app/${orgSlug}/automacoes/${automationId}/runs`} />}
           nativeButton={false}
         >
           Histórico
@@ -55,10 +51,7 @@ export default async function AutomationEditorPage({
           name: automation.name,
           description: automation.description,
           trigger_type: automation.trigger_type,
-          trigger_config: (automation.trigger_config ?? {}) as Record<
-            string,
-            unknown
-          >,
+          trigger_config: (automation.trigger_config ?? {}) as Record<string, unknown>,
           conditions: (automation.conditions ?? []) as Array<{
             field: string;
             op: string;

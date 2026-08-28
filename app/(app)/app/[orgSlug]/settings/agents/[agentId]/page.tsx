@@ -2,21 +2,21 @@ import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { requireOrgRole } from "@/lib/auth/guards";
 import { getAgent } from "@/lib/agent/agents/queries";
-import { getUsageToday } from "@/lib/agent/usage";
-import { getFaqItems } from "@/lib/agent/faq/queries";
 import { getDocuments } from "@/lib/agent/documents/queries";
+import { getFaqItems } from "@/lib/agent/faq/queries";
+import { getUsageToday } from "@/lib/agent/usage";
+import { requireOrgRole } from "@/lib/auth/guards";
 import { createClient } from "@/lib/supabase/server";
 import { AgentTabs } from "./agent-tabs";
-import { ConfigForm } from "./config/config-form";
-import { UsageSummary } from "./config/usage-summary";
 import { ChannelsSection } from "./config/channels-section";
+import { ConfigForm } from "./config/config-form";
 import { DeleteAgentDialog } from "./config/delete-agent-dialog";
-import { FaqList } from "./knowledge/faq-list";
-import { NewFaqButton } from "./knowledge/new-faq-button";
+import { UsageSummary } from "./config/usage-summary";
 import { DocumentList } from "./knowledge/document-list";
 import { DocumentUploader } from "./knowledge/document-uploader";
+import { FaqList } from "./knowledge/faq-list";
+import { NewFaqButton } from "./knowledge/new-faq-button";
 import { RunsTable } from "./runs/runs-table";
 
 type Tab = "config" | "knowledge" | "runs";
@@ -60,7 +60,9 @@ export default async function AgentDetailPage({ params, searchParams }: Props) {
 
       <AgentTabs orgSlug={orgSlug} agentId={agentId} active={activeTab} />
 
-      {activeTab === "config" && <ConfigTabContent orgSlug={orgSlug} orgId={org.id} agent={agent} />}
+      {activeTab === "config" && (
+        <ConfigTabContent orgSlug={orgSlug} orgId={org.id} agent={agent} />
+      )}
       {activeTab === "knowledge" && <KnowledgeTabContent orgSlug={orgSlug} agentId={agentId} />}
       {activeTab === "runs" && <RunsTabContent orgId={org.id} agentId={agentId} />}
     </div>
@@ -123,7 +125,9 @@ async function RunsTabContent({ orgId, agentId }: { orgId: string; agentId: stri
   const supabase = await createClient();
   const { data: runs } = await supabase
     .from("agent_runs")
-    .select("id, conversation_id, status, prompt_tokens, completion_tokens, tools_called, started_at, finished_at")
+    .select(
+      "id, conversation_id, status, prompt_tokens, completion_tokens, tools_called, started_at, finished_at",
+    )
     .eq("organization_id", orgId)
     .eq("agent_id", agentId)
     .order("started_at", { ascending: false })

@@ -1,17 +1,11 @@
 "use client";
-import { useTransition } from "react";
-import { useRouter } from "next/navigation";
 import { RotateCcwIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { retryRunAction } from "@/lib/automations/actions.server";
 
-export function RetryButton({
-  orgSlug,
-  runId,
-}: {
-  orgSlug: string;
-  runId: string;
-}) {
+export function RetryButton({ orgSlug, runId }: { orgSlug: string; runId: string }) {
   const [pending, start] = useTransition();
   const router = useRouter();
   return (

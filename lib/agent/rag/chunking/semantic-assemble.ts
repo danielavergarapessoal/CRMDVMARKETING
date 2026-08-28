@@ -1,5 +1,5 @@
 import { embedMany_ } from "@/lib/agent/rag/embed";
-import type { ChunkResult, Sentence, SemanticOpts } from "./types";
+import type { ChunkResult, SemanticOpts, Sentence } from "./types";
 
 /**
  * Quebra forçada de sentence gigante (sem pontuação interna) preferindo

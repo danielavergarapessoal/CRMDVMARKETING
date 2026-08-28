@@ -109,7 +109,13 @@ describe("parseWebhook", () => {
       metaWebhookWith({
         metadata: { phone_number_id: PNI },
         messages: [
-          { from: "5511987654321", id: "wamid.M", type: "text", text: { body: "x" }, timestamp: "1700000010" },
+          {
+            from: "5511987654321",
+            id: "wamid.M",
+            type: "text",
+            text: { body: "x" },
+            timestamp: "1700000010",
+          },
         ],
         statuses: [
           { id: "wamid.S", status: "read", recipient_id: "5511987654321", timestamp: "1700000011" },

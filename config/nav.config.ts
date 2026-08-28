@@ -2,6 +2,7 @@ import {
   BriefcaseIcon,
   BuildingIcon,
   CableIcon,
+  FileCheck2Icon,
   HomeIcon,
   InboxIcon,
   LayersIcon,
@@ -18,12 +19,7 @@ import {
 /** Grupos da sidebar, na ordem em que aparecem. */
 export type NavGroup = "dia-a-dia" | "crm" | "automacao" | "configuracoes";
 
-export const navGroupOrder: NavGroup[] = [
-  "dia-a-dia",
-  "crm",
-  "automacao",
-  "configuracoes",
-];
+export const navGroupOrder: NavGroup[] = ["dia-a-dia", "crm", "automacao", "configuracoes"];
 
 export const navGroupLabels: Record<NavGroup, string> = {
   "dia-a-dia": "dia a dia",
@@ -55,6 +51,12 @@ export const navItems: NavItem[] = [
   { path: "/dashboard", label: "Início", icon: HomeIcon, group: "dia-a-dia" },
   { path: "/inbox", label: "Inbox", icon: InboxIcon, group: "dia-a-dia" },
   { path: "/tarefas", label: "Tarefas", icon: ListTodoIcon, group: "dia-a-dia" },
+  {
+    path: "/materiais-avulsos",
+    label: "Materiais avulsos",
+    icon: FileCheck2Icon,
+    group: "dia-a-dia",
+  },
 
   // CRM — entidades de negócio
   { path: "/contatos", label: "Contatos", icon: UsersIcon, group: "crm" },

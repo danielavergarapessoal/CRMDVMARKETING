@@ -15,10 +15,7 @@ export function EmptyState({ orgSlug }: { orgSlug: string }) {
           contatos direto daqui.
         </p>
         <div className="mt-6">
-          <Button
-            render={<Link href={`/app/${orgSlug}/settings/channels`} />}
-            nativeButton={false}
-          >
+          <Button render={<Link href={`/app/${orgSlug}/settings/channels`} />} nativeButton={false}>
             Conectar canal
           </Button>
         </div>

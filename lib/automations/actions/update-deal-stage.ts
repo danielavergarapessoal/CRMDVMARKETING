@@ -9,7 +9,10 @@ const inputSchema = z.object({
 });
 type Input = z.infer<typeof inputSchema>;
 
-export const updateDealStageAction: ActionDefinition<Input, { deal_id: string; new_stage: string }> = {
+export const updateDealStageAction: ActionDefinition<
+  Input,
+  { deal_id: string; new_stage: string }
+> = {
   id: "update_deal_stage",
   label: "Mover deal de estágio",
   description: "Move um deal pra outro estágio do pipeline.",
@@ -18,13 +21,7 @@ export const updateDealStageAction: ActionDefinition<Input, { deal_id: string; n
   async execute(input, ctx) {
     const supabase = createServiceClient();
     // Sub-H C-2: org isolation
-    await assertOrgOwns(
-      supabase,
-      "deals",
-      input.deal_id,
-      ctx.orgId,
-      "update_deal_stage",
-    );
+    await assertOrgOwns(supabase, "deals", input.deal_id, ctx.orgId, "update_deal_stage");
     const { error } = await supabase
       .from("deals")
       .update({ stage: input.new_stage })

@@ -26,15 +26,21 @@ describe("evolutionConfigSchema", () => {
   });
 
   test("rejeita webhookSecret <16 chars", () => {
-    expect(evolutionConfigSchema.safeParse({ ...VALID, webhookSecret: "short" }).success).toBe(false);
+    expect(evolutionConfigSchema.safeParse({ ...VALID, webhookSecret: "short" }).success).toBe(
+      false,
+    );
   });
 
   test("aceita connectedNumber opcional", () => {
-    expect(evolutionConfigSchema.safeParse({ ...VALID, connectedNumber: "+5511999990000" }).success).toBe(true);
+    expect(
+      evolutionConfigSchema.safeParse({ ...VALID, connectedNumber: "+5511999990000" }).success,
+    ).toBe(true);
     expect(evolutionConfigSchema.safeParse({ ...VALID, connectedNumber: null }).success).toBe(true);
   });
 
   test("rejeita instanceName >80 chars", () => {
-    expect(evolutionConfigSchema.safeParse({ ...VALID, instanceName: "a".repeat(81) }).success).toBe(false);
+    expect(
+      evolutionConfigSchema.safeParse({ ...VALID, instanceName: "a".repeat(81) }).success,
+    ).toBe(false);
   });
 });

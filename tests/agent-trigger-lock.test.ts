@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
-import { acquireSemaphore, _resetSemaphoreForTests } from "@/lib/agent/trigger";
+import { _resetSemaphoreForTests, acquireSemaphore } from "@/lib/agent/trigger";
 
 afterEach(() => {
   _resetSemaphoreForTests();

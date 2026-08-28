@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
 import { CheckIcon, Loader2Icon, RefreshCwIcon, Trash2Icon, XIcon } from "lucide-react";
+import { useEffect, useState, useTransition } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,9 +13,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { createClient } from "@/lib/supabase/client";
-import { toast } from "sonner";
 import { deleteDocumentAction, reprocessDocumentAction } from "@/lib/agent/documents/actions";
+import { createClient } from "@/lib/supabase/client";
 
 interface Doc {
   id: string;
@@ -56,7 +56,10 @@ function StatusBadge({ status, error }: { status: string; error: string | null }
     );
   }
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-destructive/10 px-2 py-0.5 text-[10px] text-destructive" title={error ?? undefined}>
+    <span
+      className="inline-flex items-center gap-1 rounded-full bg-destructive/10 px-2 py-0.5 text-[10px] text-destructive"
+      title={error ?? undefined}
+    >
       <XIcon className="h-3 w-3" /> falhou
     </span>
   );
@@ -121,8 +124,9 @@ function ReprocessButton({
         <DialogHeader>
           <DialogTitle>Reprocessar documento?</DialogTitle>
           <DialogDescription>
-            Vai apagar os {chunkCount} trecho{chunkCount === 1 ? "" : "s"} atual{chunkCount === 1 ? "" : "is"} e re-processar o PDF do zero.
-            Custa ~R$ 0,01 em OpenAI e leva ~30 segundos. Os trechos antigos vão sumir e novos vão aparecer.
+            Vai apagar os {chunkCount} trecho{chunkCount === 1 ? "" : "s"} atual
+            {chunkCount === 1 ? "" : "is"} e re-processar o PDF do zero. Custa ~R$ 0,01 em OpenAI e
+            leva ~30 segundos. Os trechos antigos vão sumir e novos vão aparecer.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -147,11 +151,18 @@ export function DocumentList({ orgSlug, agentId, documents }: Props) {
       .channel(`agent-docs-${agentId}`)
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "agent_documents", filter: `agent_id=eq.${agentId}` },
+        {
+          event: "*",
+          schema: "public",
+          table: "agent_documents",
+          filter: `agent_id=eq.${agentId}`,
+        },
         (payload) => {
           if (payload.eventType === "UPDATE") {
             setDocs((prev) =>
-              prev.map((d) => (d.id === (payload.new as Doc).id ? { ...d, ...(payload.new as Doc) } : d)),
+              prev.map((d) =>
+                d.id === (payload.new as Doc).id ? { ...d, ...(payload.new as Doc) } : d,
+              ),
             );
           } else if (payload.eventType === "INSERT") {
             setDocs((prev) => [payload.new as Doc, ...prev]);
@@ -197,7 +208,10 @@ export function DocumentList({ orgSlug, agentId, documents }: Props) {
               {formatSize(d.size_bytes)}
               {d.status === "ready" && <> · {d.chunk_count} chunks</>}
               {d.error_message && (
-                <> · <span className="text-destructive">{d.error_message}</span></>
+                <>
+                  {" "}
+                  · <span className="text-destructive">{d.error_message}</span>
+                </>
               )}
             </div>
           </div>

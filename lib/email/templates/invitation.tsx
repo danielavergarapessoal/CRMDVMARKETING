@@ -55,8 +55,7 @@ export function InvitationEmail({
             </Link>
           </Text>
           <Text style={footer}>
-            Esse link expira em 7 dias. Se você não esperava esse convite, pode ignorar este
-            e-mail.
+            Esse link expira em 7 dias. Se você não esperava esse convite, pode ignorar este e-mail.
           </Text>
         </Container>
       </Body>

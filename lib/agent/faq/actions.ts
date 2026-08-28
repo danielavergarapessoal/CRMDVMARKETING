@@ -1,22 +1,26 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { embedText } from "@/lib/agent/rag/embed";
 import { requireOrgRole } from "@/lib/auth/guards";
 import { logError } from "@/lib/logger";
-import { embedText } from "@/lib/agent/rag/embed";
 import { createClient } from "@/lib/supabase/server";
 import {
-  createFaqInputSchema,
-  deleteFaqInputSchema,
-  updateFaqInputSchema,
   type CreateFaqInput,
+  createFaqInputSchema,
   type DeleteFaqInput,
+  deleteFaqInputSchema,
   type UpdateFaqInput,
+  updateFaqInputSchema,
 } from "./schemas";
 
 type Result<T = void> = { ok: true; data?: T } | { ok: false; error: string };
 
-async function assertAgentInOrg(supabase: Awaited<ReturnType<typeof createClient>>, agentId: string, orgId: string) {
+async function assertAgentInOrg(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  agentId: string,
+  orgId: string,
+) {
   const { data } = await supabase
     .from("agents")
     .select("id")
@@ -28,7 +32,8 @@ async function assertAgentInOrg(supabase: Awaited<ReturnType<typeof createClient
 
 export async function createFaqItemAction(input: CreateFaqInput): Promise<Result<{ id: string }>> {
   const parsed = createFaqInputSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
+  if (!parsed.success)
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
   const { org } = await requireOrgRole({ orgSlug: parsed.data.orgSlug, roles: ["owner", "admin"] });
   const supabase = await createClient();
 
@@ -58,7 +63,8 @@ export async function createFaqItemAction(input: CreateFaqInput): Promise<Result
 
 export async function updateFaqItemAction(input: UpdateFaqInput): Promise<Result> {
   const parsed = updateFaqInputSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
+  if (!parsed.success)
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
   const { org } = await requireOrgRole({ orgSlug: parsed.data.orgSlug, roles: ["owner", "admin"] });
   const supabase = await createClient();
 

@@ -4,11 +4,7 @@ import type { Database, Json } from "@/types/supabase";
 import { evaluateConditions } from "./conditions";
 import { AUTOMATION_LIMITS } from "./limits";
 import { ACTIONS, TRIGGERS } from "./registry";
-import type {
-  AutomationAction,
-  Condition,
-  TriggerPayload,
-} from "./schemas";
+import type { AutomationAction, Condition, TriggerPayload } from "./schemas";
 import { interpolate } from "./templating";
 
 type RunStatus = Database["public"]["Tables"]["automation_runs"]["Row"]["status"];
@@ -42,10 +38,7 @@ export async function runAutomation(runId: string): Promise<void> {
     .eq("id", runId)
     .maybeSingle();
   if (runErr || !run) {
-    logError(
-      "automations.engine.read-run",
-      runErr ?? new Error(`run ${runId} não encontrada`),
-    );
+    logError("automations.engine.read-run", runErr ?? new Error(`run ${runId} não encontrada`));
     return;
   }
 
@@ -71,12 +64,7 @@ export async function runAutomation(runId: string): Promise<void> {
   }
 
   if (run.depth > AUTOMATION_LIMITS.MAX_RECURSION_DEPTH) {
-    await finishRun(
-      supabase,
-      run.id,
-      "skipped_recursion",
-      `depth=${run.depth} excede limite`,
-    );
+    await finishRun(supabase, run.id, "skipped_recursion", `depth=${run.depth} excede limite`);
     return;
   }
 
@@ -89,8 +77,10 @@ export async function runAutomation(runId: string): Promise<void> {
   // podem vir vazias na interpolação.
   const triggerDef = TRIGGERS[automation.trigger_type];
   if (triggerDef) {
-    const { _meta: _ignored, ...payloadForValidation } =
-      triggerPayload as Record<string, unknown> & { _meta?: unknown };
+    const { _meta: _ignored, ...payloadForValidation } = triggerPayload as Record<
+      string,
+      unknown
+    > & { _meta?: unknown };
     const schemaResult = triggerDef.contextSchema.safeParse(payloadForValidation);
     if (!schemaResult.success) {
       console.warn(
@@ -135,12 +125,7 @@ export async function runAutomation(runId: string): Promise<void> {
         `Action ${action.type} não existe no registry`,
       );
       if (action.on_error === "stop") {
-        await finishRun(
-          supabase,
-          run.id,
-          "failed",
-          `Action ${action.type} desconhecida`,
-        );
+        await finishRun(supabase, run.id, "failed", `Action ${action.type} desconhecida`);
         return;
       }
       stepOutputs.push(undefined);
@@ -178,12 +163,7 @@ export async function runAutomation(runId: string): Promise<void> {
       const msg = `Entrada inválida: ${parsed.error.issues[0]?.message ?? "schema fail"}`;
       await markStep(supabase, stepRow.id, "failed", null, msg);
       if (action.on_error === "stop") {
-        await finishRun(
-          supabase,
-          run.id,
-          "failed",
-          `Step ${i} (${action.type}): ${msg}`,
-        );
+        await finishRun(supabase, run.id, "failed", `Step ${i} (${action.type}): ${msg}`);
         return;
       }
       stepOutputs.push(undefined);
@@ -199,10 +179,7 @@ export async function runAutomation(runId: string): Promise<void> {
             depth: run.depth,
             runId: run.id,
           });
-      const result = await runWithTimeout(
-        promise,
-        AUTOMATION_LIMITS.STEP_TIMEOUT_MS,
-      );
+      const result = await runWithTimeout(promise, AUTOMATION_LIMITS.STEP_TIMEOUT_MS);
       await markStep(
         supabase,
         stepRow.id,
@@ -215,9 +192,7 @@ export async function runAutomation(runId: string): Promise<void> {
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       await markStep(supabase, stepRow.id, "failed", null, msg.slice(0, 1000));
-      console.warn(
-        `[automation:${run.id}] step ${i} (${action.type}) → failed: ${msg}`,
-      );
+      console.warn(`[automation:${run.id}] step ${i} (${action.type}) → failed: ${msg}`);
       if (action.on_error === "stop") {
         await finishRun(
           supabase,
@@ -236,10 +211,7 @@ export async function runAutomation(runId: string): Promise<void> {
 
 function runWithTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   return new Promise<T>((resolve, reject) => {
-    const t = setTimeout(
-      () => reject(new Error(`step timeout (${ms}ms)`)),
-      ms,
-    );
+    const t = setTimeout(() => reject(new Error(`step timeout (${ms}ms)`)), ms);
     promise.then(
       (v) => {
         clearTimeout(t);

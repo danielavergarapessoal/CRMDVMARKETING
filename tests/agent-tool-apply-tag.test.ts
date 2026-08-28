@@ -9,16 +9,12 @@ type Cfg = {
 };
 
 function makeSupabase(cfg: Cfg) {
-  const maybeSingle = vi
-    .fn()
-    .mockResolvedValue({ data: cfg.existingTag, error: null });
+  const maybeSingle = vi.fn().mockResolvedValue({ data: cfg.existingTag, error: null });
   const ilikeTags = vi.fn().mockReturnValue({ maybeSingle });
   const orgEqTags = vi.fn().mockReturnValue({ ilike: ilikeTags });
   const selectTags = vi.fn().mockReturnValue({ eq: orgEqTags });
 
-  const upsertLinks = vi
-    .fn()
-    .mockResolvedValue({ error: cfg.linkError ?? null });
+  const upsertLinks = vi.fn().mockResolvedValue({ error: cfg.linkError ?? null });
 
   const from = vi.fn((table: string) => {
     if (table === "tags") return { select: selectTags };

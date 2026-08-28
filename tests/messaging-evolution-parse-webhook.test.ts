@@ -137,12 +137,18 @@ describe("parseWebhook — robustez", () => {
   });
 
   test("connection.update retorna [] (tratado fora do parseWebhook)", () => {
-    expect(parseWebhook({ event: "connection.update", instance: "x", data: { state: "open" } })).toEqual([]);
+    expect(
+      parseWebhook({ event: "connection.update", instance: "x", data: { state: "open" } }),
+    ).toEqual([]);
   });
 
   test("messages.upsert sem data.key.id retorna []", () => {
     expect(
-      parseWebhook({ event: "messages.upsert", instance: "x", data: { message: { conversation: "x" } } }),
+      parseWebhook({
+        event: "messages.upsert",
+        instance: "x",
+        data: { message: { conversation: "x" } },
+      }),
     ).toEqual([]);
   });
 });

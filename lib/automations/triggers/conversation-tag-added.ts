@@ -14,13 +14,7 @@ export const conversationTagAddedTrigger: TriggerDefinition = {
   triggerConfigSchema: z.object({
     tag_id: z.string().uuid().optional(),
   }),
-  variables: [
-    "{{entity_id}}",
-    "{{tag_id}}",
-    "{{applied_by_kind}}",
-    "{{org.name}}",
-    "{{now.iso}}",
-  ],
+  variables: ["{{entity_id}}", "{{tag_id}}", "{{applied_by_kind}}", "{{org.name}}", "{{now.iso}}"],
   variableLabels: {
     entity_id: { label: "ID da conversa marcada" },
     tag_id: { label: "ID da tag" },

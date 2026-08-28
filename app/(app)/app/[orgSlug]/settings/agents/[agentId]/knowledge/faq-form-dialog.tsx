@@ -1,13 +1,19 @@
 "use client";
 
-import { useState, useTransition } from "react";
 import { Loader2Icon } from "lucide-react";
+import { useState, useTransition } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
 import { createFaqItemAction, updateFaqItemAction } from "@/lib/agent/faq/actions";
 
 interface Props {
@@ -46,16 +52,34 @@ export function FaqFormDialog({ orgSlug, agentId, open, onOpenChange, initial }:
         <div className="space-y-4 py-2">
           <div className="space-y-2">
             <Label htmlFor="faq-q">Pergunta</Label>
-            <Input id="faq-q" value={question} onChange={(e) => setQuestion(e.target.value)} maxLength={500} placeholder="Ex: Vocês entregam pra todo o Brasil?" />
+            <Input
+              id="faq-q"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              maxLength={500}
+              placeholder="Ex: Vocês entregam pra todo o Brasil?"
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="faq-a">Resposta</Label>
-            <Textarea id="faq-a" value={answer} onChange={(e) => setAnswer(e.target.value)} rows={6} maxLength={5000} placeholder="Resposta clara e direta. O agente vai usar isso pra responder." />
+            <Textarea
+              id="faq-a"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              rows={6}
+              maxLength={5000}
+              placeholder="Resposta clara e direta. O agente vai usar isso pra responder."
+            />
           </div>
         </div>
         <DialogFooter>
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancelar</Button>
-          <Button onClick={submit} disabled={pending || question.length === 0 || answer.length === 0}>
+          <Button variant="ghost" onClick={() => onOpenChange(false)}>
+            Cancelar
+          </Button>
+          <Button
+            onClick={submit}
+            disabled={pending || question.length === 0 || answer.length === 0}
+          >
             {pending && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
             {initial ? "Salvar" : "Criar"}
           </Button>

@@ -48,16 +48,22 @@ describe("connectEvolutionInputSchema", () => {
 
 describe("disconnectEvolutionInputSchema", () => {
   test("aceita channelId UUID", () => {
-    expect(disconnectEvolutionInputSchema.safeParse({ orgSlug: "x", channelId: UID }).success).toBe(true);
+    expect(disconnectEvolutionInputSchema.safeParse({ orgSlug: "x", channelId: UID }).success).toBe(
+      true,
+    );
   });
   test("rejeita channelId não-UUID", () => {
-    expect(disconnectEvolutionInputSchema.safeParse({ orgSlug: "x", channelId: "nope" }).success).toBe(false);
+    expect(
+      disconnectEvolutionInputSchema.safeParse({ orgSlug: "x", channelId: "nope" }).success,
+    ).toBe(false);
   });
 });
 
 describe("reverifyEvolutionInputSchema", () => {
   test("aceita channelId UUID", () => {
-    expect(reverifyEvolutionInputSchema.safeParse({ orgSlug: "x", channelId: UID }).success).toBe(true);
+    expect(reverifyEvolutionInputSchema.safeParse({ orgSlug: "x", channelId: UID }).success).toBe(
+      true,
+    );
   });
 });
 

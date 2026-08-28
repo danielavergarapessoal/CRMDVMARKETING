@@ -7,20 +7,26 @@ export const agentEscalatedTrigger: TriggerDefinition = {
   description: "Dispara quando o agente IA escala uma conversa pra um humano (handoff).",
   contextSchema: z.object({
     conversation: z.object({ id: z.string().uuid() }),
-    contact: z.object({
-      id: z.string().uuid().nullable(),
-      name: z.string().nullable(),
-      phone: z.string().nullable(),
-    }).nullable(),
+    contact: z
+      .object({
+        id: z.string().uuid().nullable(),
+        name: z.string().nullable(),
+        phone: z.string().nullable(),
+      })
+      .nullable(),
     channel: z.object({ id: z.string().uuid(), type: z.string() }),
     reason: z.string().nullable(),
     org: z.object({ id: z.string().uuid(), name: z.string(), slug: z.string() }),
   }),
   triggerConfigSchema: z.object({}),
   variables: [
-    "{{conversation.id}}", "{{contact.name}}", "{{contact.phone}}",
-    "{{channel.type}}", "{{reason}}",
-    "{{org.name}}", "{{now.iso}}",
+    "{{conversation.id}}",
+    "{{contact.name}}",
+    "{{contact.phone}}",
+    "{{channel.type}}",
+    "{{reason}}",
+    "{{org.name}}",
+    "{{now.iso}}",
   ],
   variableLabels: {
     "conversation.id": { label: "ID da conversa" },
@@ -34,6 +40,10 @@ export const agentEscalatedTrigger: TriggerDefinition = {
     contact: { id: "00000000-0000-4000-8000-000000000005", name: "João", phone: "+5511987654321" },
     channel: { id: "00000000-0000-4000-8000-000000000002", type: "whatsapp_cloud" },
     reason: "Cota diária atingida",
-    org: { id: "00000000-0000-4000-8000-000000000003", name: "Minha Empresa", slug: "minha-empresa" },
+    org: {
+      id: "00000000-0000-4000-8000-000000000003",
+      name: "Minha Empresa",
+      slug: "minha-empresa",
+    },
   },
 };

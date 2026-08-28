@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Sidebar,
@@ -14,12 +15,11 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import {
+  navItems as configuredNavItems,
   type NavGroup,
   navGroupLabels,
   navGroupOrder,
-  navItems as configuredNavItems,
 } from "@/config/nav.config";
-import Link from "next/link";
 import { OrgSwitcher, type OrgSwitcherOrg } from "./org-switcher";
 
 type Props = {

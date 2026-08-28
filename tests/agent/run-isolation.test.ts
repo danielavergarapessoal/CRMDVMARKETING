@@ -3,7 +3,9 @@
 // Roda em prod-like com cleanup automático na org de teste.
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-const HAS_SB = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+const HAS_SB = Boolean(
+  process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY,
+);
 const HAS_LLM = Boolean(process.env.ANTHROPIC_API_KEY || process.env.OPENAI_API_KEY);
 
 describe.skipIf(!HAS_SB || !HAS_LLM)("runAgent isolation", () => {
@@ -28,14 +30,24 @@ describe.skipIf(!HAS_SB || !HAS_LLM)("runAgent isolation", () => {
 
     const { data: a } = await sb
       .from("agents")
-      .insert({ organization_id: orgId, name: "Agente A", persona: "PERSONA_A_MARKER", tone: "formal" })
+      .insert({
+        organization_id: orgId,
+        name: "Agente A",
+        persona: "PERSONA_A_MARKER",
+        tone: "formal",
+      })
       .select("id")
       .single();
     agentA = a!.id;
 
     const { data: b } = await sb
       .from("agents")
-      .insert({ organization_id: orgId, name: "Agente B", persona: "PERSONA_B_MARKER", tone: "amigavel" })
+      .insert({
+        organization_id: orgId,
+        name: "Agente B",
+        persona: "PERSONA_B_MARKER",
+        tone: "amigavel",
+      })
       .select("id")
       .single();
     agentB = b!.id;

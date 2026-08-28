@@ -15,7 +15,8 @@ const DEFAULT_GOAL = "Tirar dúvidas e qualificar interessados.";
 const TONE_HINTS: Record<PromptSettings["tone"], string> = {
   formal: "Use linguagem formal, sem gírias. Trate por 'senhor/senhora' quando apropriado.",
   casual: "Use tom casual e direto. Português coloquial brasileiro.",
-  amigavel: "Use tom amigável e caloroso. Pode usar emojis com moderação (1 por mensagem no máximo).",
+  amigavel:
+    "Use tom amigável e caloroso. Pode usar emojis com moderação (1 por mensagem no máximo).",
 };
 
 export function buildSystemPrompt(settings: PromptSettings, ragContext: string): string {
@@ -23,9 +24,7 @@ export function buildSystemPrompt(settings: PromptSettings, ragContext: string):
   const goal = settings.goal?.trim() || DEFAULT_GOAL;
   const toneHint = TONE_HINTS[settings.tone];
   const company = settings.company_name?.trim() || "a empresa";
-  const neverDoLine = settings.never_do?.trim()
-    ? `- ${settings.never_do.trim()}`
-    : "";
+  const neverDoLine = settings.never_do?.trim() ? `- ${settings.never_do.trim()}` : "";
 
   const ragBlock = ragContext.trim()
     ? ragContext

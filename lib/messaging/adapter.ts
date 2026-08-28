@@ -4,7 +4,13 @@
  * NÃO conhece tabelas do CRM — quem grava em DB é o router.
  */
 
-export type ChannelType = "whatsapp_cloud" | "whatsapp_evolution" | "telegram" | "instagram_dm" | "sms" | "mock";
+export type ChannelType =
+  | "whatsapp_cloud"
+  | "whatsapp_evolution"
+  | "telegram"
+  | "instagram_dm"
+  | "sms"
+  | "mock";
 
 export type MessageStatus = "queued" | "sending" | "sent" | "delivered" | "read" | "failed";
 

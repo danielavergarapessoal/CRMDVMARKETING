@@ -59,7 +59,9 @@ describe("extractFilename", () => {
     expect(extractFilename("https://exemplo.com/files/manual.pdf")).toBe("manual.pdf");
   });
   test("decoda URI components", () => {
-    expect(extractFilename("https://exemplo.com/files/contrato%20final.pdf")).toBe("contrato final.pdf");
+    expect(extractFilename("https://exemplo.com/files/contrato%20final.pdf")).toBe(
+      "contrato final.pdf",
+    );
   });
   test("URL sem filename retorna null", () => {
     expect(extractFilename("https://exemplo.com/")).toBe(null);

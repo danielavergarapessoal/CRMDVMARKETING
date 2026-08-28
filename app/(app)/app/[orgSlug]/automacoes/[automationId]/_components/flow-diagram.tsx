@@ -14,22 +14,21 @@ export function FlowDiagram({
   conditionsCount: number;
   actionLabels: string[];
 }) {
-  const nodes: { kind: "trigger" | "conditions" | "action"; label: string }[] =
-    [
-      { kind: "trigger", label: triggerLabel },
-      ...(conditionsCount > 0
-        ? [
-            {
-              kind: "conditions" as const,
-              label: `${conditionsCount} condição(ões)`,
-            },
-          ]
-        : []),
-      ...actionLabels.map((l, i) => ({
-        kind: "action" as const,
-        label: `${i + 1}. ${l}`,
-      })),
-    ];
+  const nodes: { kind: "trigger" | "conditions" | "action"; label: string }[] = [
+    { kind: "trigger", label: triggerLabel },
+    ...(conditionsCount > 0
+      ? [
+          {
+            kind: "conditions" as const,
+            label: `${conditionsCount} condição(ões)`,
+          },
+        ]
+      : []),
+    ...actionLabels.map((l, i) => ({
+      kind: "action" as const,
+      label: `${i + 1}. ${l}`,
+    })),
+  ];
   const totalHeight = nodes.length * (CARD_H + GAP) + 16;
   const width = CARD_W + 32;
   return (
@@ -49,13 +48,8 @@ export function FlowDiagram({
           {nodes.map((n, i) => {
             const y = i * (CARD_H + GAP);
             const fill =
-              n.kind === "trigger"
-                ? "#52d12f"
-                : n.kind === "conditions"
-                  ? "#7f7f7f"
-                  : "#7d8aff";
-            const label =
-              n.label.length > 30 ? `${n.label.slice(0, 28)}…` : n.label;
+              n.kind === "trigger" ? "#52d12f" : n.kind === "conditions" ? "#7f7f7f" : "#7d8aff";
+            const label = n.label.length > 30 ? `${n.label.slice(0, 28)}…` : n.label;
             return (
               <g key={`n-${i}-${n.label}`}>
                 {i > 0 && (

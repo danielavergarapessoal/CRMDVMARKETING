@@ -15,12 +15,14 @@ function extractMessage(body: unknown): string | null {
 
 export function mapEvolutionError(status: number, body: unknown): string {
   if (status === 401) return "API key inválida. Reconecte o canal.";
-  if (status === 404) return "Instância não encontrada no Evolution. Reconecte ou recrie a instância.";
+  if (status === 404)
+    return "Instância não encontrada no Evolution. Reconecte ou recrie a instância.";
   if (status === 400) {
     const msg = extractMessage(body);
     if (msg) {
       const lower = msg.toLowerCase();
-      if (lower.includes("not exist") || lower.includes("does not")) return "Número não tem WhatsApp.";
+      if (lower.includes("not exist") || lower.includes("does not"))
+        return "Número não tem WhatsApp.";
       if (lower.includes("connection") || lower.includes("disconnected")) {
         return "Instância está desconectada. Escaneie o QR no Evolution.";
       }

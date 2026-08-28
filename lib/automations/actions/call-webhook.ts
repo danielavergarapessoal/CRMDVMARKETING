@@ -89,9 +89,7 @@ export const callWebhookAction: ActionDefinition<Input, Output> = {
       );
     }
     const body = JSON.stringify(input.payload);
-    const signature = createHmac("sha256", input.webhook_secret)
-      .update(body)
-      .digest("hex");
+    const signature = createHmac("sha256", input.webhook_secret).update(body).digest("hex");
     // Sub-H Round-2 #8: rejeita TODOS control chars (RFC 7230 — visible US-ASCII
     // + space/tab são os únicos permitidos em header field-content).
     // Cobre \r, \n, \t, NUL, e demais control chars que poderiam fazer
@@ -109,10 +107,7 @@ export const callWebhookAction: ActionDefinition<Input, Output> = {
       safeHeaders[k] = strV;
     }
     const controller = new AbortController();
-    const timeout = setTimeout(
-      () => controller.abort(),
-      AUTOMATION_LIMITS.STEP_TIMEOUT_MS,
-    );
+    const timeout = setTimeout(() => controller.abort(), AUTOMATION_LIMITS.STEP_TIMEOUT_MS);
     try {
       const res = await fetch(input.url, {
         method: "POST",

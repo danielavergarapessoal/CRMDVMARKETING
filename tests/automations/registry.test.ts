@@ -1,10 +1,5 @@
 import { describe, expect, test } from "vitest";
-import {
-  ACTIONS,
-  TRIGGERS,
-  getAction,
-  getTrigger,
-} from "@/lib/automations/registry";
+import { ACTIONS, getAction, getTrigger, TRIGGERS } from "@/lib/automations/registry";
 
 describe("registry", () => {
   test("contém os 11 triggers (7 MVP + 4 de tag)", () => {
@@ -40,9 +35,7 @@ describe("registry", () => {
   test("todo trigger.sampleContext valida contra contextSchema", () => {
     for (const trigger of Object.values(TRIGGERS)) {
       const result = trigger.contextSchema.safeParse(trigger.sampleContext);
-      expect(result.success, `${trigger.id}.sampleContext deve passar`).toBe(
-        true,
-      );
+      expect(result.success, `${trigger.id}.sampleContext deve passar`).toBe(true);
     }
   });
 

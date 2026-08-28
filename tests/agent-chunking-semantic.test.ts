@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import type { Sentence, SemanticOpts } from "@/lib/agent/rag/chunking/types";
+import type { SemanticOpts, Sentence } from "@/lib/agent/rag/chunking/types";
 import { DEFAULT_OPTS } from "@/lib/agent/rag/chunking/types";
 
 // Mock embedMany_ ANTES do import do módulo testado
@@ -8,8 +8,11 @@ vi.mock("@/lib/agent/rag/embed", () => ({
   embedText: vi.fn(),
 }));
 
+import {
+  semanticAssemble,
+  splitOversizedSentence,
+} from "@/lib/agent/rag/chunking/semantic-assemble";
 import { embedMany_ } from "@/lib/agent/rag/embed";
-import { semanticAssemble, splitOversizedSentence } from "@/lib/agent/rag/chunking/semantic-assemble";
 
 const mocked = vi.mocked(embedMany_);
 
@@ -19,7 +22,9 @@ function makeSentences(texts: string[]): Sentence[] {
 
 function vec(values: number[]): number[] {
   const out = new Array(1536).fill(0);
-  values.forEach((v, i) => { out[i] = v; });
+  values.forEach((v, i) => {
+    out[i] = v;
+  });
   return out;
 }
 
@@ -75,11 +80,7 @@ describe("semanticAssemble", () => {
 
   test("overlap aplica últimas frases do chunk anterior", async () => {
     const opts: SemanticOpts = { ...DEFAULT_OPTS, targetSize: 200, minSize: 100, maxSize: 250 };
-    const sentences = makeSentences([
-      "A".repeat(120),
-      "B".repeat(120),
-      "C".repeat(120),
-    ]);
+    const sentences = makeSentences(["A".repeat(120), "B".repeat(120), "C".repeat(120)]);
     mocked.mockResolvedValue([SIM_A, SIM_B, SIM_A]);
     const result = await semanticAssemble(sentences, opts);
     expect(result.chunks.length).toBeGreaterThanOrEqual(2);

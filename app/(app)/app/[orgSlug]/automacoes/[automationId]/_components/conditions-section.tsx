@@ -47,10 +47,7 @@ export function ConditionsSection({
           </p>
         )}
         {value.map((c, idx) => (
-          <div
-            key={`cond-${idx}-${c.field}`}
-            className="flex flex-wrap items-center gap-2"
-          >
+          <div key={`cond-${idx}-${c.field}`} className="flex flex-wrap items-center gap-2">
             <Input
               className="max-w-[200px]"
               placeholder="campo (ex: contact.email)"
@@ -128,9 +125,7 @@ export function ConditionsSection({
           <Button
             variant="outline"
             size="sm"
-            onClick={() =>
-              onChange([...value, { field: "", op: "eq", value: "" }])
-            }
+            onClick={() => onChange([...value, { field: "", op: "eq", value: "" }])}
           >
             <PlusIcon className="h-4 w-4 mr-1" /> Adicionar condição
           </Button>

@@ -49,12 +49,7 @@ export function RemoveTagButton({
 
   return (
     <span className={isPending ? "opacity-50" : undefined}>
-      <TagChip
-        name={name}
-        color={color}
-        appliedByKind={appliedByKind}
-        onRemove={handleRemove}
-      />
+      <TagChip name={name} color={color} appliedByKind={appliedByKind} onRemove={handleRemove} />
     </span>
   );
 }

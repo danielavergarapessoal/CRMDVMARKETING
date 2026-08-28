@@ -74,11 +74,22 @@ export function ConfigForm({ orgSlug, agent }: { orgSlug: string; agent: Agent }
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="agent_name">Nome do agente</Label>
-            <Input id="agent_name" value={agentName} onChange={(e) => setAgentName(e.target.value)} maxLength={80} />
+            <Input
+              id="agent_name"
+              value={agentName}
+              onChange={(e) => setAgentName(e.target.value)}
+              maxLength={80}
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="company_name">Nome da empresa</Label>
-            <Input id="company_name" value={companyName} onChange={(e) => setCompanyName(e.target.value)} maxLength={120} placeholder="Ex: Loja do Zé" />
+            <Input
+              id="company_name"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              maxLength={120}
+              placeholder="Ex: Loja do Zé"
+            />
           </div>
         </div>
         <div className="space-y-2">
@@ -86,7 +97,13 @@ export function ConfigForm({ orgSlug, agent }: { orgSlug: string; agent: Agent }
           <div className="flex gap-4 text-sm">
             {(["formal", "casual", "amigavel"] as Tone[]).map((t) => (
               <label key={t} className="flex items-center gap-2">
-                <input type="radio" name="tone" value={t} checked={tone === t} onChange={() => setTone(t)} />
+                <input
+                  type="radio"
+                  name="tone"
+                  value={t}
+                  checked={tone === t}
+                  onChange={() => setTone(t)}
+                />
                 <span className="capitalize">{t}</span>
               </label>
             ))}
@@ -98,15 +115,36 @@ export function ConfigForm({ orgSlug, agent }: { orgSlug: string; agent: Agent }
         <h3 className="font-medium">Comportamento</h3>
         <div className="space-y-2">
           <Label htmlFor="persona">Persona (como ele se apresenta)</Label>
-          <Textarea id="persona" value={persona} onChange={(e) => setPersona(e.target.value)} rows={3} maxLength={2000} placeholder="Ex: Você é um atendente da Loja do Zé, especializado em..." />
+          <Textarea
+            id="persona"
+            value={persona}
+            onChange={(e) => setPersona(e.target.value)}
+            rows={3}
+            maxLength={2000}
+            placeholder="Ex: Você é um atendente da Loja do Zé, especializado em..."
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="goal">Objetivo principal</Label>
-          <Textarea id="goal" value={goal} onChange={(e) => setGoal(e.target.value)} rows={2} maxLength={2000} placeholder="Ex: Tirar dúvidas sobre produtos e agendar visita técnica." />
+          <Textarea
+            id="goal"
+            value={goal}
+            onChange={(e) => setGoal(e.target.value)}
+            rows={2}
+            maxLength={2000}
+            placeholder="Ex: Tirar dúvidas sobre produtos e agendar visita técnica."
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="never_do">Coisas que ele NUNCA deve fazer</Label>
-          <Textarea id="never_do" value={neverDo} onChange={(e) => setNeverDo(e.target.value)} rows={2} maxLength={2000} placeholder="Ex: Nunca prometa desconto sem confirmar com um humano." />
+          <Textarea
+            id="never_do"
+            value={neverDo}
+            onChange={(e) => setNeverDo(e.target.value)}
+            rows={2}
+            maxLength={2000}
+            placeholder="Ex: Nunca prometa desconto sem confirmar com um humano."
+          />
         </div>
       </section>
 
@@ -138,7 +176,9 @@ export function ConfigForm({ orgSlug, agent }: { orgSlug: string; agent: Agent }
               className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             >
               {MODELS_BY_PROVIDER[provider].map((m) => (
-                <option key={m.value} value={m.value}>{m.label}</option>
+                <option key={m.value} value={m.value}>
+                  {m.label}
+                </option>
               ))}
             </select>
           </div>
@@ -156,7 +196,16 @@ export function ConfigForm({ orgSlug, agent }: { orgSlug: string; agent: Agent }
         </div>
       </section>
 
-      <SystemPromptPreview settings={{ agent_name: agentName, company_name: companyName, persona, goal, tone, never_do: neverDo }} />
+      <SystemPromptPreview
+        settings={{
+          agent_name: agentName,
+          company_name: companyName,
+          persona,
+          goal,
+          tone,
+          never_do: neverDo,
+        }}
+      />
 
       <div className="flex justify-end">
         <Button onClick={submit} disabled={pending}>

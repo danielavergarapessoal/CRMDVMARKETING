@@ -2,12 +2,12 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireOrgRole } from "@/lib/auth/guards";
-import { createClient } from "@/lib/supabase/server";
 import { getApprovedTemplatesByChannel } from "@/lib/messaging/templates/queries";
-import { SyncButton } from "./sync-button";
-import { DisconnectButton } from "./disconnect-button";
-import { TestSendForm } from "./test-send";
+import { createClient } from "@/lib/supabase/server";
 import { AgentSelector } from "../../_components/agent-selector";
+import { DisconnectButton } from "./disconnect-button";
+import { SyncButton } from "./sync-button";
+import { TestSendForm } from "./test-send";
 
 export default async function ChannelDetailPage({
   params,
@@ -46,9 +46,7 @@ export default async function ChannelDetailPage({
             {channel.status}
           </Badge>
         </div>
-        {channel.last_error && (
-          <p className="text-sm text-destructive">{channel.last_error}</p>
-        )}
+        {channel.last_error && <p className="text-sm text-destructive">{channel.last_error}</p>}
       </div>
 
       <Card>
@@ -83,7 +81,8 @@ export default async function ChannelDetailPage({
                 <li key={t.id} className="p-4">
                   <div className="font-medium">{t.name}</div>
                   <div className="text-xs text-muted-foreground">
-                    {t.language} · {t.category} · {t.param_count} param{t.param_count === 1 ? "" : "s"}
+                    {t.language} · {t.category} · {t.param_count} param
+                    {t.param_count === 1 ? "" : "s"}
                   </div>
                 </li>
               ))}

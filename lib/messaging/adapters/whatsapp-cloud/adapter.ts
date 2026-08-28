@@ -11,13 +11,16 @@ import { MessagingError } from "@/lib/messaging/errors";
 import { graphFetch, graphFetchBinary } from "./client";
 import { toRemoteTemplate } from "./extract-message";
 import { parseWebhook } from "./parse-webhook";
-import { whatsappCloudConfigSchema, type WhatsappCloudConfig } from "./schema";
+import { type WhatsappCloudConfig, whatsappCloudConfigSchema } from "./schema";
 
 function parseCfg(config: unknown): WhatsappCloudConfig {
   return whatsappCloudConfigSchema.parse(config);
 }
 
-function getHeader(headers: Record<string, string | string[] | undefined>, key: string): string | null {
+function getHeader(
+  headers: Record<string, string | string[] | undefined>,
+  key: string,
+): string | null {
   const v = headers[key.toLowerCase()];
   if (Array.isArray(v)) return v[0] ?? null;
   return v ?? null;
@@ -70,7 +73,12 @@ export const whatsappCloudAdapter: MessagingAdapter = {
       { method: "POST", body: JSON.stringify(body) },
     );
     const id = data.messages[0]?.id;
-    if (!id) throw new MessagingError({ code: "unknown", publicMessage: "Resposta inesperada da API do WhatsApp", retriable: false });
+    if (!id)
+      throw new MessagingError({
+        code: "unknown",
+        publicMessage: "Resposta inesperada da API do WhatsApp",
+        retriable: false,
+      });
     return { externalId: id };
   },
 
@@ -86,9 +94,7 @@ export const whatsappCloudAdapter: MessagingAdapter = {
       template: {
         name: opts.templateName,
         language: { code: opts.language },
-        components: paramValues.length > 0
-          ? [{ type: "body", parameters: paramValues }]
-          : [],
+        components: paramValues.length > 0 ? [{ type: "body", parameters: paramValues }] : [],
       },
     };
 
@@ -98,7 +104,12 @@ export const whatsappCloudAdapter: MessagingAdapter = {
       { method: "POST", body: JSON.stringify(body) },
     );
     const id = data.messages[0]?.id;
-    if (!id) throw new MessagingError({ code: "unknown", publicMessage: "Resposta inesperada da API do WhatsApp", retriable: false });
+    if (!id)
+      throw new MessagingError({
+        code: "unknown",
+        publicMessage: "Resposta inesperada da API do WhatsApp",
+        retriable: false,
+      });
     return { externalId: id };
   },
 
@@ -111,8 +122,7 @@ export const whatsappCloudAdapter: MessagingAdapter = {
     if (!sig) return false;
 
     const expected =
-      "sha256=" +
-      crypto.createHmac("sha256", cfg.data.appSecret).update(req.rawBody).digest("hex");
+      "sha256=" + crypto.createHmac("sha256", cfg.data.appSecret).update(req.rawBody).digest("hex");
     try {
       return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(sig));
     } catch {
@@ -144,10 +154,7 @@ export const whatsappCloudAdapter: MessagingAdapter = {
 
   async fetchMedia(externalMediaId: string, config: unknown) {
     const cfg = parseCfg(config);
-    const meta = await graphFetch<{ url: string; mime_type: string }>(
-      cfg,
-      `/${externalMediaId}`,
-    );
+    const meta = await graphFetch<{ url: string; mime_type: string }>(cfg, `/${externalMediaId}`);
     return graphFetchBinary(cfg, meta.url);
   },
 };

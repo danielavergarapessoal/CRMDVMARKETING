@@ -47,16 +47,26 @@ export interface ActionDefinition<TInput = unknown, TOutput = unknown> {
 // ============================================================
 
 export const conditionOpSchema = z.enum([
-  "eq", "ne", "gt", "gte", "lt", "lte",
-  "contains", "not_contains",
-  "in", "not_in",
-  "is_empty", "is_not_empty",
-  "has_tag", "lacks_tag",
+  "eq",
+  "ne",
+  "gt",
+  "gte",
+  "lt",
+  "lte",
+  "contains",
+  "not_contains",
+  "in",
+  "not_in",
+  "is_empty",
+  "is_not_empty",
+  "has_tag",
+  "lacks_tag",
 ]);
 export type ConditionOp = z.infer<typeof conditionOpSchema>;
 
 export const conditionSchema = z.object({
-  field: z.string()
+  field: z
+    .string()
     .min(1, "Campo da condição não pode ser vazio.")
     .max(200, "Caminho do campo muito longo."),
   op: conditionOpSchema,
@@ -75,20 +85,25 @@ export const automationStatusSchema = z.enum(["draft", "active", "paused"]);
 export type AutomationStatus = z.infer<typeof automationStatusSchema>;
 
 export const automationSchema = z.object({
-  name: z.string()
+  name: z
+    .string()
     .min(1, "Coloca um nome pra automação.")
     .max(120, "Nome muito longo (máx 120 caracteres)."),
-  description: z.string()
+  description: z
+    .string()
     .max(500, "Descrição muito longa (máx 500 caracteres).")
     .optional()
     .nullable(),
   trigger_type: z.string().min(1, "Escolha um evento que dispara a automação."),
   trigger_config: z.record(z.string(), z.unknown()),
-  conditions: z.array(conditionSchema).max(
-    AUTOMATION_LIMITS.MAX_CONDITIONS_PER_AUTOMATION,
-    `Máximo de ${AUTOMATION_LIMITS.MAX_CONDITIONS_PER_AUTOMATION} condições por automação. Se precisar de mais filtros, crie outra automação com o mesmo trigger.`,
-  ),
-  actions: z.array(automationActionSchema)
+  conditions: z
+    .array(conditionSchema)
+    .max(
+      AUTOMATION_LIMITS.MAX_CONDITIONS_PER_AUTOMATION,
+      `Máximo de ${AUTOMATION_LIMITS.MAX_CONDITIONS_PER_AUTOMATION} condições por automação. Se precisar de mais filtros, crie outra automação com o mesmo trigger.`,
+    ),
+  actions: z
+    .array(automationActionSchema)
     .min(1, "Adiciona pelo menos uma ação.")
     .max(
       AUTOMATION_LIMITS.MAX_ACTIONS_PER_AUTOMATION,
@@ -110,7 +125,9 @@ export const triggerMetaSchema = z.object({
 });
 export type TriggerMeta = z.infer<typeof triggerMetaSchema>;
 
-export const triggerPayloadSchema = z.object({
-  _meta: triggerMetaSchema.optional(),
-}).passthrough();
+export const triggerPayloadSchema = z
+  .object({
+    _meta: triggerMetaSchema.optional(),
+  })
+  .passthrough();
 export type TriggerPayload = Record<string, unknown> & { _meta?: TriggerMeta };

@@ -42,22 +42,19 @@ export function makeApplyTagToConversationTool(ctx: ToolContext) {
           .maybeSingle();
 
         const appliesTo = (existing?.applies_to ?? []) as string[];
-        const canApplyToConversation =
-          !!existing && appliesTo.includes("conversation");
+        const canApplyToConversation = !!existing && appliesTo.includes("conversation");
 
         if (canApplyToConversation && existing) {
-          const { error: linkErr } = await ctx.supabase
-            .from("conversation_tag_links")
-            .upsert(
-              {
-                conversation_id: ctx.conversationId,
-                tag_id: existing.id,
-                organization_id: ctx.orgId,
-                applied_by_kind: "bot",
-                applied_by: null,
-              },
-              { onConflict: "conversation_id,tag_id", ignoreDuplicates: true },
-            );
+          const { error: linkErr } = await ctx.supabase.from("conversation_tag_links").upsert(
+            {
+              conversation_id: ctx.conversationId,
+              tag_id: existing.id,
+              organization_id: ctx.orgId,
+              applied_by_kind: "bot",
+              applied_by: null,
+            },
+            { onConflict: "conversation_id,tag_id", ignoreDuplicates: true },
+          );
           if (linkErr) {
             logError("tool.apply_tag_to_conversation.link", linkErr);
             return { error: "Não consegui aplicar a tag agora." };

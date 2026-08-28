@@ -1,1 +1,1 @@
-export type { ActionDefinition, ActionContext } from "../schemas";
+export type { ActionContext, ActionDefinition } from "../schemas";

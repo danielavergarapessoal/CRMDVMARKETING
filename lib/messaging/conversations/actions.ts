@@ -9,25 +9,26 @@ import { processSendOutbound } from "@/lib/messaging/router";
 import { createClient } from "@/lib/supabase/server";
 import type { Json } from "@/types/supabase";
 import {
-  assignConvInputSchema,
-  markReadInputSchema,
-  promoteContactInputSchema,
-  resolveConvInputSchema,
-  retryMessageInputSchema,
-  uploadMediaInputSchema,
   type AssignConvInput,
+  assignConvInputSchema,
   type MarkReadInput,
+  markReadInputSchema,
   type PromoteContactInput,
+  promoteContactInputSchema,
   type ResolveConvInput,
   type RetryMessageInput,
+  resolveConvInputSchema,
+  retryMessageInputSchema,
   type UploadMediaInput,
+  uploadMediaInputSchema,
 } from "./schemas";
 
 type Result<T = void> = { ok: true; data?: T } | { ok: false; error: string };
 
 export async function assignConversationAction(input: AssignConvInput): Promise<Result> {
   const parsed = assignConvInputSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
+  if (!parsed.success)
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
   const { org } = await requireOrgMember({ orgSlug: parsed.data.orgSlug });
   const supabase = await createClient();
   const { error } = await supabase
@@ -80,7 +81,9 @@ export async function markConversationReadAction(input: MarkReadInput): Promise<
   return { ok: true };
 }
 
-export async function retryMessageAction(input: RetryMessageInput): Promise<Result<{ messageId: string }>> {
+export async function retryMessageAction(
+  input: RetryMessageInput,
+): Promise<Result<{ messageId: string }>> {
   const parsed = retryMessageInputSchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: "Dados inválidos" };
   const { user, org } = await requireOrgMember({ orgSlug: parsed.data.orgSlug });
@@ -141,9 +144,7 @@ export async function uploadConversationMediaAction(
     return { ok: false, error: "Não foi possível enviar o arquivo." };
   }
 
-  const { data: signed } = await supabase.storage
-    .from("messaging")
-    .createSignedUrl(path, 3600);
+  const { data: signed } = await supabase.storage.from("messaging").createSignedUrl(path, 3600);
   if (!signed?.signedUrl) return { ok: false, error: "Não foi possível gerar URL." };
 
   return { ok: true, data: { path, signedUrl: signed.signedUrl } };
@@ -153,7 +154,8 @@ export async function promoteConversationToContactAction(
   input: PromoteContactInput,
 ): Promise<Result<{ contactId: string }>> {
   const parsed = promoteContactInputSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
+  if (!parsed.success)
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
   const { user, org } = await requireOrgMember({ orgSlug: parsed.data.orgSlug });
   const supabase = await createClient();
 

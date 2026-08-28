@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { Loader2Icon, SendIcon } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
 import { testSendTemplateAction } from "@/lib/messaging/adapters/whatsapp-cloud/actions";
 
 interface Template {
@@ -100,9 +100,7 @@ export function TestSendForm({
                     key={i}
                     placeholder={`{{${i + 1}}}`}
                     value={params[`p${i + 1}`] ?? ""}
-                    onChange={(e) =>
-                      setParams({ ...params, [`p${i + 1}`]: e.target.value })
-                    }
+                    onChange={(e) => setParams({ ...params, [`p${i + 1}`]: e.target.value })}
                   />
                 ))}
               </div>

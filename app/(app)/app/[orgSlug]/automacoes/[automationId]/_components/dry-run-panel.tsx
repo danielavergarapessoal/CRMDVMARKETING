@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useTransition } from "react";
-import { runAutomationDryRunAction } from "@/lib/automations/actions.server";
 import { Button } from "@/components/ui/button";
+import { runAutomationDryRunAction } from "@/lib/automations/actions.server";
 import { createClient } from "@/lib/supabase/client";
 import { StatusBadge } from "../../_components/status-badge";
 
@@ -95,17 +95,14 @@ export function DryRunPanel({
     <div className="fixed inset-0 z-50 bg-background/80 flex items-center justify-center p-4">
       <div className="bg-card border border-border rounded-lg w-full max-w-2xl max-h-[90vh] overflow-auto">
         <div className="p-4 border-b border-border flex items-center justify-between">
-          <h2 className="font-semibold text-lg">
-            Testar automação (simulação)
-          </h2>
+          <h2 className="font-semibold text-lg">Testar automação (simulação)</h2>
           <Button variant="ghost" size="sm" onClick={onClose}>
             Fechar
           </Button>
         </div>
         <div className="p-4 space-y-4">
           <p className="text-sm text-muted-foreground">
-            A simulação roda a automação com dados de exemplo, sem efeito
-            colateral real.
+            A simulação roda a automação com dados de exemplo, sem efeito colateral real.
           </p>
           <Button onClick={run} disabled={isPending}>
             Rodar simulação
@@ -123,21 +120,14 @@ export function DryRunPanel({
               )}
               <ol className="space-y-2">
                 {steps.map((s) => (
-                  <li
-                    key={s.id}
-                    className="rounded-md border border-border p-3"
-                  >
+                  <li key={s.id} className="rounded-md border border-border p-3">
                     <div className="flex items-center justify-between">
                       <span className="font-mono text-xs">
                         {s.step_index + 1}. {s.action_type}
                       </span>
                       <StatusBadge status={s.status} />
                     </div>
-                    {s.error && (
-                      <p className="mt-1 text-xs text-destructive">
-                        {s.error}
-                      </p>
-                    )}
+                    {s.error && <p className="mt-1 text-xs text-destructive">{s.error}</p>}
                     {s.output != null && (
                       <pre className="mt-1 overflow-x-auto rounded bg-muted p-2 text-xs">
                         {JSON.stringify(s.output, null, 2)}

@@ -12,10 +12,7 @@ const inputSchema = z.object({
 });
 type Input = z.infer<typeof inputSchema>;
 
-export const sendWhatsappTemplateAction: ActionDefinition<
-  Input,
-  { message_id: string }
-> = {
+export const sendWhatsappTemplateAction: ActionDefinition<Input, { message_id: string }> = {
   id: "send_whatsapp_template",
   label: "Enviar template no WhatsApp",
   description:

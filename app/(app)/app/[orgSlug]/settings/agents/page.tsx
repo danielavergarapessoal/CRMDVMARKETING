@@ -1,8 +1,8 @@
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { requireOrgRole } from "@/lib/auth/guards";
 import { listAgentsForDashboard } from "@/lib/agent/agents/queries";
+import { requireOrgRole } from "@/lib/auth/guards";
 import { AgentsTable } from "./agents-table";
 
 export const metadata = { title: "Agentes IA" };

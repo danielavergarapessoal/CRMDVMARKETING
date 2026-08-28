@@ -26,7 +26,9 @@ export async function RelatedDeals({ orgSlug, contactId }: Props) {
           expected_close_date: string | null;
         } | null,
     )
-    .filter((d): d is NonNullable<typeof d> => d !== null && d.stage !== "won" && d.stage !== "lost");
+    .filter(
+      (d): d is NonNullable<typeof d> => d !== null && d.stage !== "won" && d.stage !== "lost",
+    );
 
   return (
     <div className="px-4 pb-4">

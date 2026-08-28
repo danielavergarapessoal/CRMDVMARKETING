@@ -1,5 +1,5 @@
-import { createClient } from "@/lib/supabase/server";
 import { logError } from "@/lib/logger";
+import { createClient } from "@/lib/supabase/server";
 
 export interface ListFilters {
   status?: "open" | "pending" | "resolved";

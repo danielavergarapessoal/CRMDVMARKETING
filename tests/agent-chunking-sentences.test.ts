@@ -71,9 +71,10 @@ describe("splitSentences", () => {
   });
 
   test("quebra em frases mesmo com pt-BR + en misturado", () => {
-    expect(
-      splitSentences("Eu preciso de help. O cliente said yes ontem."),
-    ).toEqual(["Eu preciso de help.", "O cliente said yes ontem."]);
+    expect(splitSentences("Eu preciso de help. O cliente said yes ontem.")).toEqual([
+      "Eu preciso de help.",
+      "O cliente said yes ontem.",
+    ]);
   });
 
   test("trim resultados (sem espaços nas pontas)", () => {

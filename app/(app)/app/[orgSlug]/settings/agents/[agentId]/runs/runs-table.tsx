@@ -33,11 +33,11 @@ export function RunsTable({ runs }: { runs: Run[] }) {
             <tr key={r.id} className="border-t">
               <td className="p-2">{new Date(r.started_at).toLocaleString("pt-BR")}</td>
               <td className="p-2">
-                <Badge variant={r.status === "succeeded" ? "default" : "destructive"}>{r.status}</Badge>
+                <Badge variant={r.status === "succeeded" ? "default" : "destructive"}>
+                  {r.status}
+                </Badge>
               </td>
-              <td className="p-2">
-                {(r.prompt_tokens ?? 0) + (r.completion_tokens ?? 0)}
-              </td>
+              <td className="p-2">{(r.prompt_tokens ?? 0) + (r.completion_tokens ?? 0)}</td>
               <td className="p-2 text-muted-foreground text-xs">
                 {Array.isArray(r.tools_called)
                   ? (r.tools_called as Array<{ name: string }>).map((t) => t.name).join(", ")

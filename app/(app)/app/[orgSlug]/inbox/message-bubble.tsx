@@ -1,6 +1,6 @@
 import { SparklesIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { formatMessageTime } from "@/lib/messaging/format/time";
+import { cn } from "@/lib/utils";
 import { MessageMedia } from "./message-media";
 import { MessageStatusIcon } from "./message-status-icon";
 

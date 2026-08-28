@@ -51,7 +51,9 @@ export async function Thread({ orgSlug, conversation, messages }: Props) {
         orgSlug={orgSlug}
         conversation={{
           ...conversation,
-          channel_agent_enabled: Boolean(conversation.channel?.agent_id && conversation.channel.agent?.is_active),
+          channel_agent_enabled: Boolean(
+            conversation.channel?.agent_id && conversation.channel.agent?.is_active,
+          ),
         }}
       />
       <ThreadMessages messages={messages} />

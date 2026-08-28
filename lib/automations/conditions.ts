@@ -32,27 +32,19 @@ export async function evaluateSingleCondition(
       return fieldValue !== expected;
     case "gt":
       return (
-        typeof fieldValue === "number" &&
-        typeof expected === "number" &&
-        fieldValue > expected
+        typeof fieldValue === "number" && typeof expected === "number" && fieldValue > expected
       );
     case "gte":
       return (
-        typeof fieldValue === "number" &&
-        typeof expected === "number" &&
-        fieldValue >= expected
+        typeof fieldValue === "number" && typeof expected === "number" && fieldValue >= expected
       );
     case "lt":
       return (
-        typeof fieldValue === "number" &&
-        typeof expected === "number" &&
-        fieldValue < expected
+        typeof fieldValue === "number" && typeof expected === "number" && fieldValue < expected
       );
     case "lte":
       return (
-        typeof fieldValue === "number" &&
-        typeof expected === "number" &&
-        fieldValue <= expected
+        typeof fieldValue === "number" && typeof expected === "number" && fieldValue <= expected
       );
     case "contains":
       if (Array.isArray(fieldValue)) return fieldValue.includes(expected);

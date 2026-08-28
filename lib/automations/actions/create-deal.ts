@@ -23,21 +23,9 @@ export const createDealAction: ActionDefinition<Input, Output> = {
   async execute(input, ctx) {
     const supabase = createServiceClient();
     // Sub-H C-2: org isolation
-    await assertOrgOwns(
-      supabase,
-      "companies",
-      input.company_id,
-      ctx.orgId,
-      "create_deal",
-    );
+    await assertOrgOwns(supabase, "companies", input.company_id, ctx.orgId, "create_deal");
     if (input.contact_id) {
-      await assertOrgOwns(
-        supabase,
-        "contacts",
-        input.contact_id,
-        ctx.orgId,
-        "create_deal",
-      );
+      await assertOrgOwns(supabase, "contacts", input.contact_id, ctx.orgId, "create_deal");
     }
     const { data, error } = await supabase
       .from("deals")
@@ -52,7 +40,9 @@ export const createDealAction: ActionDefinition<Input, Output> = {
       .single();
     if (error || !data) throw new Error(`create_deal: ${error?.message ?? "no row"}`);
     if (input.contact_id) {
-      await supabase.from("deal_contacts").insert({ deal_id: data.id, contact_id: input.contact_id });
+      await supabase
+        .from("deal_contacts")
+        .insert({ deal_id: data.id, contact_id: input.contact_id });
     }
     return { deal_id: data.id };
   },

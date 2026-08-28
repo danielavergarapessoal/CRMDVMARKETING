@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { FileTextIcon, Loader2Icon, SendIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
 import { sendMessageAction } from "@/lib/messaging/actions";
 import { AttachmentUploader, type UploadedMedia } from "./attachment-uploader";
 import { TemplatePickerDialog } from "./template-picker-dialog";
@@ -103,7 +103,11 @@ export function Composer({
             <FileTextIcon className="h-4 w-4" />
           </Button>
           <Button onClick={send} disabled={sending || (!body.trim() && !attached) || outside24h}>
-            {sending ? <Loader2Icon className="h-4 w-4 animate-spin" /> : <SendIcon className="h-4 w-4" />}
+            {sending ? (
+              <Loader2Icon className="h-4 w-4 animate-spin" />
+            ) : (
+              <SendIcon className="h-4 w-4" />
+            )}
           </Button>
         </div>
       </div>

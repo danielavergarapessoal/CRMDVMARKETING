@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  ACTION_FIELDS,
-  getActionFields,
-} from "@/lib/automations/action-fields";
+import { ACTION_FIELDS, getActionFields } from "@/lib/automations/action-fields";
 
 describe("action-fields", () => {
   it("retorna fields pra create_contact", () => {

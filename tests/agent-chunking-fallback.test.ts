@@ -7,8 +7,8 @@ vi.mock("@/lib/agent/rag/embed", () => ({
   embedText: vi.fn(),
 }));
 
-import { embedMany_ } from "@/lib/agent/rag/embed";
 import { boundaryOnlyAssemble } from "@/lib/agent/rag/chunking/semantic-assemble";
+import { embedMany_ } from "@/lib/agent/rag/embed";
 
 const mocked = vi.mocked(embedMany_);
 

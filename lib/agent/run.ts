@@ -1,9 +1,9 @@
-import { generateText, stepCountIs, type ModelMessage } from "ai";
+import { generateText, type ModelMessage, stepCountIs } from "ai";
+import { after } from "next/server";
 import { getLanguageModel } from "@/lib/llm";
 import { logError } from "@/lib/logger";
-import { createServiceClient } from "@/lib/supabase/service";
 import { processSendOutbound } from "@/lib/messaging/router";
-import { after } from "next/server";
+import { createServiceClient } from "@/lib/supabase/service";
 import { buildSystemPrompt, type PromptSettings } from "./prompts/build";
 import { formatRagBlock, retrieveContext } from "./rag/retrieve";
 import { buildTools } from "./tools";
@@ -25,7 +25,9 @@ export async function runAgent({ orgId, agentId, conversationId }: RunContext): 
   // 1. Load conversation + canal + contato
   const { data: conv } = await supabase
     .from("conversations")
-    .select("id, organization_id, contact_id, external_thread_id, channel:channels!inner(id, type, name)")
+    .select(
+      "id, organization_id, contact_id, external_thread_id, channel:channels!inner(id, type, name)",
+    )
     .eq("id", conversationId)
     .maybeSingle();
   if (!conv) return;
@@ -134,9 +136,10 @@ export async function runAgent({ orgId, agentId, conversationId }: RunContext): 
             status: "succeeded",
             prompt_tokens: result.usage?.inputTokens ?? 0,
             completion_tokens: result.usage?.outputTokens ?? 0,
-            tools_called: result.steps?.flatMap((s) =>
-              (s.toolCalls ?? []).map((tc) => ({ name: tc.toolName })),
-            ) ?? [],
+            tools_called:
+              result.steps?.flatMap((s) =>
+                (s.toolCalls ?? []).map((tc) => ({ name: tc.toolName })),
+              ) ?? [],
             finished_at: new Date().toISOString(),
           })
           .eq("id", runId);
@@ -175,9 +178,10 @@ export async function runAgent({ orgId, agentId, conversationId }: RunContext): 
           status: "succeeded",
           prompt_tokens: result.usage?.inputTokens ?? 0,
           completion_tokens: result.usage?.outputTokens ?? 0,
-          tools_called: result.steps?.flatMap((s) =>
-            (s.toolCalls ?? []).map((tc) => ({ name: tc.toolName })),
-          ) ?? [],
+          tools_called:
+            result.steps?.flatMap((s) =>
+              (s.toolCalls ?? []).map((tc) => ({ name: tc.toolName })),
+            ) ?? [],
           finished_at: new Date().toISOString(),
         })
         .eq("id", runId);
@@ -196,6 +200,8 @@ export async function runAgent({ orgId, agentId, conversationId }: RunContext): 
         .eq("id", runId);
     }
   } finally {
-    console.log(`[agent.run] ${conversationId} (agent ${agentId}) took ${Date.now() - startedAt}ms`);
+    console.log(
+      `[agent.run] ${conversationId} (agent ${agentId}) took ${Date.now() - startedAt}ms`,
+    );
   }
 }

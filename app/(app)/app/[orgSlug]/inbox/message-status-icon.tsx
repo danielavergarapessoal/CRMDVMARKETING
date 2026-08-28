@@ -1,4 +1,4 @@
-import { CheckIcon, CheckCheckIcon, ClockIcon, XCircleIcon } from "lucide-react";
+import { CheckCheckIcon, CheckIcon, ClockIcon, XCircleIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function MessageStatusIcon({ status }: { status: string }) {

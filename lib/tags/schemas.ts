@@ -16,9 +16,7 @@ export const createTagSchema = z.object({
   orgSlug: z.string().min(1),
   name: tagNameSchema,
   color: tagColorSchema,
-  appliesTo: z
-    .array(tagScopeSchema)
-    .min(1, "Marca pelo menos um lugar onde a tag pode ser usada."),
+  appliesTo: z.array(tagScopeSchema).min(1, "Marca pelo menos um lugar onde a tag pode ser usada."),
 });
 export type CreateTagInput = z.infer<typeof createTagSchema>;
 

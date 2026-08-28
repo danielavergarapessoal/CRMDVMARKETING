@@ -22,13 +22,7 @@ export const updateDealFieldsAction: ActionDefinition<Input, { deal_id: string }
   async execute(input, ctx) {
     const supabase = createServiceClient();
     // Sub-H C-2: org isolation
-    await assertOrgOwns(
-      supabase,
-      "deals",
-      input.deal_id,
-      ctx.orgId,
-      "update_deal_fields",
-    );
+    await assertOrgOwns(supabase, "deals", input.deal_id, ctx.orgId, "update_deal_fields");
     const patch: DealUpdate = {};
     // Sub-H Round-2 #9: ignora strings vazias em name/notes — templating com path
     // inexistente vira "". `value` é number — null intencional é OK, não filtra.

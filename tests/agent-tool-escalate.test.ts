@@ -69,8 +69,6 @@ describe("escalate tool", () => {
           };
         }
       )._spies.insert,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({ priority: "high", status: "pending" }),
-    );
+    ).toHaveBeenCalledWith(expect.objectContaining({ priority: "high", status: "pending" }));
   });
 });

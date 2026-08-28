@@ -1,7 +1,7 @@
-import { embed, embedMany } from "ai";
 import { createOpenAI } from "@ai-sdk/openai";
+import { embed, embedMany } from "ai";
 
-const EMBED_MODEL = "text-embedding-3-small";  // 1536 dims
+const EMBED_MODEL = "text-embedding-3-small"; // 1536 dims
 
 function getEmbeddingProvider() {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -18,7 +18,7 @@ export async function embedText(text: string): Promise<number[]> {
   const provider = getEmbeddingProvider();
   const { embedding } = await embed({
     model: provider.embedding(EMBED_MODEL),
-    value: text.slice(0, 8000),  // text-embedding-3-small limite 8191 tokens; truncamos por safety
+    value: text.slice(0, 8000), // text-embedding-3-small limite 8191 tokens; truncamos por safety
   });
   return embedding;
 }

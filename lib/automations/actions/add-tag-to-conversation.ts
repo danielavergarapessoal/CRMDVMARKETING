@@ -26,18 +26,16 @@ export const addTagToConversationAction: ActionDefinition<Input, { applied: bool
       "add_tag_to_conversation",
     );
     await assertOrgOwns(supabase, "tags", input.tag_id, ctx.orgId, "add_tag_to_conversation");
-    const { error } = await supabase
-      .from("conversation_tag_links")
-      .upsert(
-        {
-          conversation_id: input.conversation_id,
-          tag_id: input.tag_id,
-          organization_id: ctx.orgId,
-          applied_by_kind: "automation",
-          applied_by: null,
-        },
-        { onConflict: "conversation_id,tag_id", ignoreDuplicates: true },
-      );
+    const { error } = await supabase.from("conversation_tag_links").upsert(
+      {
+        conversation_id: input.conversation_id,
+        tag_id: input.tag_id,
+        organization_id: ctx.orgId,
+        applied_by_kind: "automation",
+        applied_by: null,
+      },
+      { onConflict: "conversation_id,tag_id", ignoreDuplicates: true },
+    );
     if (error) {
       if (error.message.includes("não pode ser aplicada em conversation")) {
         throw new Error(

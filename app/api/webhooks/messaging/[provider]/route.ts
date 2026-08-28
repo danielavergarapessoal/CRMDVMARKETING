@@ -44,7 +44,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ provider: stri
   // Webhook request NÃO tem cookie de sessão → o cliente SSR cai em anônimo
   // e RLS bloqueia a leitura de `channels`. Usa service client (bypassa RLS)
   // — bearer/HMAC do próprio webhook autentica a request.
-  let channelConfig: unknown = undefined;
+  let channelConfig: unknown;
   if (provider === "whatsapp_cloud") {
     const phoneNumberId = extractWhatsappPhoneNumberId(rawBodyText);
     if (phoneNumberId) {
@@ -107,10 +107,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ provider: stri
   return NextResponse.json({ ok: true }, { status: 200 });
 }
 
-export async function GET(
-  req: Request,
-  ctx: { params: Promise<{ provider: string }> },
-) {
+export async function GET(req: Request, ctx: { params: Promise<{ provider: string }> }) {
   const { provider } = await ctx.params;
   if (!isChannelType(provider)) {
     return NextResponse.json({ error: "unknown provider" }, { status: 400 });
@@ -161,9 +158,7 @@ export async function GET(
 function extractWhatsappPhoneNumberId(rawBodyText: string): string | null {
   try {
     const payload = JSON.parse(rawBodyText);
-    return (
-      payload?.entry?.[0]?.changes?.[0]?.value?.metadata?.phone_number_id ?? null
-    );
+    return payload?.entry?.[0]?.changes?.[0]?.value?.metadata?.phone_number_id ?? null;
   } catch {
     return null;
   }

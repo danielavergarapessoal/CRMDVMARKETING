@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { CompanyCombobox, type CompanyOption } from "@/components/forms/company-combobox";
+import { ContactCombobox, type ContactOption } from "@/components/forms/contact-combobox";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,10 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
 import { promoteConversationToContactAction } from "@/lib/messaging/conversations/actions";
-import { ContactCombobox, type ContactOption } from "@/components/forms/contact-combobox";
-import { CompanyCombobox, type CompanyOption } from "@/components/forms/company-combobox";
 
 interface Props {
   orgSlug: string;
@@ -96,21 +96,13 @@ export function PromoteToContactDialog({
           {mode === "link" ? (
             <div className="space-y-2">
               <Label>Buscar contato</Label>
-              <ContactCombobox
-                options={contactOptions}
-                value={contactId}
-                onChange={setContactId}
-              />
+              <ContactCombobox options={contactOptions} value={contactId} onChange={setContactId} />
             </div>
           ) : (
             <>
               <div className="space-y-2">
                 <Label htmlFor="promote-name">Nome *</Label>
-                <Input
-                  id="promote-name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
+                <Input id="promote-name" value={name} onChange={(e) => setName(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="promote-email">Email</Label>
@@ -137,7 +129,9 @@ export function PromoteToContactDialog({
           )}
         </div>
         <DialogFooter>
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancelar</Button>
+          <Button variant="ghost" onClick={() => onOpenChange(false)}>
+            Cancelar
+          </Button>
           <Button
             onClick={submit}
             disabled={busy || (mode === "link" ? !contactId : name.length === 0)}

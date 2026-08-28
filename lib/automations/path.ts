@@ -8,9 +8,7 @@
  * (handlebars-style); chaves do contexto devem ser identificadores simples.
  */
 export function resolvePath(ctx: unknown, path: string): unknown {
-  const keys = path
-    .split(".")
-    .map((k) => k.trim()); // Sub-H M-5: tolerância a espaços nos dots ("a . b")
+  const keys = path.split(".").map((k) => k.trim()); // Sub-H M-5: tolerância a espaços nos dots ("a . b")
   // Sub-H Round-2 #10: path totalmente vazio OU com key vazia no meio ("a..b") retorna undefined.
   // Sem isso, "a..b" trunca silenciosamente — aluno acha que template fechou e fica difícil de
   // debugar (`a..b` poderia vir de `a.{{deep_path}}.b` com deep_path = "").

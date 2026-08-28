@@ -1,10 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import { Loader2Icon, PencilIcon, Trash2Icon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useState } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { deleteFaqItemAction } from "@/lib/agent/faq/actions";
 import { FaqFormDialog } from "./faq-form-dialog";
 
@@ -83,12 +90,12 @@ export function FaqList({ orgSlug, agentId, items }: Props) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Remover FAQ?</DialogTitle>
-            <DialogDescription>
-              {deleting?.question}
-            </DialogDescription>
+            <DialogDescription>{deleting?.question}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="ghost" onClick={() => setDeleting(null)}>Cancelar</Button>
+            <Button variant="ghost" onClick={() => setDeleting(null)}>
+              Cancelar
+            </Button>
             <Button variant="destructive" onClick={confirmDelete} disabled={busy}>
               {busy && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
               Sim, remover

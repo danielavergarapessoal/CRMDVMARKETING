@@ -59,7 +59,8 @@ export function DeleteAgentDialog({
               <DialogTitle>Apagar &quot;{agentName}&quot;?</DialogTitle>
               <DialogDescription>
                 Isso vai apagar permanentemente as FAQs, os documentos e o histórico desse agente.
-                Os canais conectados voltam pra &quot;sem agente&quot;. Esta ação não pode ser desfeita.
+                Os canais conectados voltam pra &quot;sem agente&quot;. Esta ação não pode ser
+                desfeita.
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-2">

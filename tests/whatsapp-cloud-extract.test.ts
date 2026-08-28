@@ -71,9 +71,7 @@ describe("toRemoteTemplate", () => {
       language: "pt_BR",
       category: "MARKETING",
       status: "APPROVED",
-      components: [
-        { type: "BODY", text: "Oi {{1}}, seu pedido {{2}} foi enviado." },
-      ],
+      components: [{ type: "BODY", text: "Oi {{1}}, seu pedido {{2}} foi enviado." }],
     };
     const r = toRemoteTemplate(meta);
     expect(r.paramCount).toBe(2);

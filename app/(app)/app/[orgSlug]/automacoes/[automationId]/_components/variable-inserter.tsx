@@ -1,7 +1,7 @@
 // app/(app)/app/[orgSlug]/automacoes/[automationId]/_components/variable-inserter.tsx
 "use client";
-import { useState } from "react";
 import { BracesIcon } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { listVariablesForTrigger } from "@/lib/automations/variable-labels";
 
@@ -43,9 +43,7 @@ export function VariableInserter({
                 >
                   <div className="text-sm">{v.label}</div>
                   {v.example && (
-                    <div className="text-[10px] text-muted-foreground">
-                      ex: {v.example}
-                    </div>
+                    <div className="text-[10px] text-muted-foreground">ex: {v.example}</div>
                   )}
                 </button>
               </li>

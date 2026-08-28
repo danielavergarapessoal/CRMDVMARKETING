@@ -1,27 +1,31 @@
 "use server";
 
 import { Buffer } from "node:buffer";
+import { fileTypeFromBuffer } from "file-type";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
-import { fileTypeFromBuffer } from "file-type";
+import { processDocument } from "@/lib/agent/rag/ingest";
 import { requireOrgRole } from "@/lib/auth/guards";
 import { logError } from "@/lib/logger";
-import { processDocument } from "@/lib/agent/rag/ingest";
 import { createClient } from "@/lib/supabase/server";
 import {
-  deleteDocumentInputSchema,
-  reprocessDocumentInputSchema,
-  uploadDocumentInputSchema,
   type DeleteDocumentInput,
+  deleteDocumentInputSchema,
   type ReprocessDocumentInput,
+  reprocessDocumentInputSchema,
   type UploadDocumentInput,
+  uploadDocumentInputSchema,
 } from "./schemas";
 
 type Result<T = void> = { ok: true; data?: T } | { ok: false; error: string };
 
 const MAX_BYTES = 20 * 1024 * 1024;
 
-async function assertAgentInOrg(supabase: Awaited<ReturnType<typeof createClient>>, agentId: string, orgId: string) {
+async function assertAgentInOrg(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  agentId: string,
+  orgId: string,
+) {
   const { data } = await supabase
     .from("agents")
     .select("id")
@@ -31,9 +35,12 @@ async function assertAgentInOrg(supabase: Awaited<ReturnType<typeof createClient
   return Boolean(data);
 }
 
-export async function uploadDocumentAction(input: UploadDocumentInput): Promise<Result<{ id: string }>> {
+export async function uploadDocumentAction(
+  input: UploadDocumentInput,
+): Promise<Result<{ id: string }>> {
   const parsed = uploadDocumentInputSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
+  if (!parsed.success)
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
   const { org } = await requireOrgRole({ orgSlug: parsed.data.orgSlug, roles: ["owner", "admin"] });
 
   const buf = Buffer.from(parsed.data.fileBase64, "base64");
@@ -79,10 +86,7 @@ export async function uploadDocumentAction(input: UploadDocumentInput): Promise<
     return { ok: false, error: "Não foi possível subir arquivo." };
   }
 
-  await supabase
-    .from("agent_documents")
-    .update({ storage_path: path })
-    .eq("id", doc.id);
+  await supabase.from("agent_documents").update({ storage_path: path }).eq("id", doc.id);
 
   after(() => processDocument(doc.id));
 
@@ -141,10 +145,7 @@ export async function reprocessDocumentAction(input: ReprocessDocumentInput): Pr
   }
 
   // Apaga chunks antigos
-  await supabase
-    .from("agent_document_chunks")
-    .delete()
-    .eq("document_id", parsed.data.documentId);
+  await supabase.from("agent_document_chunks").delete().eq("document_id", parsed.data.documentId);
 
   // Reset status pra pending — processDocument vai pegar via lock conditional
   const { error } = await supabase

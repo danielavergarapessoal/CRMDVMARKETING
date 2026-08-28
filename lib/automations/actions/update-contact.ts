@@ -24,22 +24,10 @@ export const updateContactAction: ActionDefinition<Input, { contact_id: string }
   async execute(input, ctx) {
     const supabase = createServiceClient();
     // Sub-H C-2: org isolation
-    await assertOrgOwns(
-      supabase,
-      "contacts",
-      input.contact_id,
-      ctx.orgId,
-      "update_contact",
-    );
+    await assertOrgOwns(supabase, "contacts", input.contact_id, ctx.orgId, "update_contact");
     // Sub-H Round-2 #4: valida que company_id (se passado) também pertence à org
     if (input.company_id) {
-      await assertOrgOwns(
-        supabase,
-        "companies",
-        input.company_id,
-        ctx.orgId,
-        "update_contact",
-      );
+      await assertOrgOwns(supabase, "companies", input.company_id, ctx.orgId, "update_contact");
     }
     const patch: ContactUpdate = {};
     // Sub-H Round-2 #9: ignora strings vazias em TODOS os campos string (não só name).

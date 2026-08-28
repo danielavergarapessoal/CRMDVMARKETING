@@ -3,7 +3,9 @@
 // Auto-skip se SUPABASE_SERVICE_ROLE_KEY não está no env.
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
-const HAS_SB = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+const HAS_SB = Boolean(
+  process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY,
+);
 
 describe.skipIf(!HAS_SB)("router dispatches correct agent", () => {
   let orgId: string;

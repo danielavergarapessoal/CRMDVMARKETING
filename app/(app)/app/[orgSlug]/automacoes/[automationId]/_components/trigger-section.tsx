@@ -15,13 +15,9 @@ export function TriggerSection({
 }: {
   triggers: TriggerLite[];
   value: { triggerType: string; triggerConfig: Record<string, unknown> };
-  onChange: (v: {
-    triggerType: string;
-    triggerConfig: Record<string, unknown>;
-  }) => void;
+  onChange: (v: { triggerType: string; triggerConfig: Record<string, unknown> }) => void;
 }) {
-  const description = triggers.find((t) => t.id === value.triggerType)
-    ?.description;
+  const description = triggers.find((t) => t.id === value.triggerType)?.description;
   return (
     <Card>
       <CardHeader>
@@ -34,9 +30,7 @@ export function TriggerSection({
             id="trigger-type"
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             value={value.triggerType}
-            onChange={(e) =>
-              onChange({ triggerType: e.target.value, triggerConfig: {} })
-            }
+            onChange={(e) => onChange({ triggerType: e.target.value, triggerConfig: {} })}
           >
             {triggers.map((t) => (
               <option key={t.id} value={t.id}>
@@ -44,17 +38,12 @@ export function TriggerSection({
               </option>
             ))}
           </select>
-          {description && (
-            <p className="mt-1 text-xs text-muted-foreground">{description}</p>
-          )}
+          {description && <p className="mt-1 text-xs text-muted-foreground">{description}</p>}
         </div>
         {(value.triggerType === "conversation.created" ||
           value.triggerType === "message.received") && (
           <ChannelTypeFilter
-            value={
-              (value.triggerConfig.channel_type_in as string[] | undefined) ??
-              []
-            }
+            value={(value.triggerConfig.channel_type_in as string[] | undefined) ?? []}
             onChange={(arr) =>
               onChange({
                 triggerType: value.triggerType,
@@ -70,10 +59,7 @@ export function TriggerSection({
           <>
             <StageFilter
               label="Só quando entra em (opcional)"
-              value={
-                (value.triggerConfig.only_new_stage as string | undefined) ??
-                ""
-              }
+              value={(value.triggerConfig.only_new_stage as string | undefined) ?? ""}
               onChange={(v) =>
                 onChange({
                   triggerType: value.triggerType,
@@ -86,10 +72,7 @@ export function TriggerSection({
             />
             <StageFilter
               label="Só quando sai de (opcional)"
-              value={
-                (value.triggerConfig.only_from_stage as string | undefined) ??
-                ""
-              }
+              value={(value.triggerConfig.only_from_stage as string | undefined) ?? ""}
               onChange={(v) =>
                 onChange({
                   triggerType: value.triggerType,
@@ -105,9 +88,7 @@ export function TriggerSection({
         {value.triggerType === "deal.created" && (
           <StageFilter
             label="Só no estágio (opcional)"
-            value={
-              (value.triggerConfig.only_stage as string | undefined) ?? ""
-            }
+            value={(value.triggerConfig.only_stage as string | undefined) ?? ""}
             onChange={(v) =>
               onChange({
                 triggerType: value.triggerType,
@@ -158,19 +139,12 @@ function ChannelTypeFilter({
       <Label>Só nestes canais (vazio = todos)</Label>
       <div className="flex flex-wrap gap-3 mt-1">
         {options.map((o) => (
-          <label
-            key={o}
-            className="flex items-center gap-1 text-xs cursor-pointer"
-          >
+          <label key={o} className="flex items-center gap-1 text-xs cursor-pointer">
             <input
               type="checkbox"
               checked={value.includes(o)}
               onChange={(e) =>
-                onChange(
-                  e.target.checked
-                    ? [...value, o]
-                    : value.filter((v) => v !== o),
-                )
+                onChange(e.target.checked ? [...value, o] : value.filter((v) => v !== o))
               }
             />
             {o}
@@ -190,15 +164,7 @@ function StageFilter({
   value: string;
   onChange: (v: string) => void;
 }) {
-  const stages = [
-    "",
-    "new",
-    "qualified",
-    "proposal_sent",
-    "negotiation",
-    "won",
-    "lost",
-  ];
+  const stages = ["", "new", "qualified", "proposal_sent", "negotiation", "won", "lost"];
   return (
     <div>
       <Label>{label}</Label>

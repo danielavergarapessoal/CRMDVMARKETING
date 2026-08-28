@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { LinkIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import type { ContactOption } from "@/components/forms/contact-combobox";
+import { useState } from "react";
 import type { CompanyOption } from "@/components/forms/company-combobox";
+import type { ContactOption } from "@/components/forms/contact-combobox";
+import { Button } from "@/components/ui/button";
 import { PromoteToContactDialog } from "./promote-to-contact-dialog";
 
 interface Props {

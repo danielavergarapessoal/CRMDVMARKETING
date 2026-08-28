@@ -6,24 +6,30 @@ import { logError } from "@/lib/logger";
 import { createClient } from "@/lib/supabase/server";
 import type { TablesUpdate } from "@/types/supabase";
 import {
-  createAgentSchema,
-  deleteAgentSchema,
-  setChannelAgentSchema,
-  toggleAgentActiveSchema,
-  updateAgentSchema,
   type CreateAgentInput,
+  createAgentSchema,
   type DeleteAgentInput,
+  deleteAgentSchema,
   type SetChannelAgentInput,
+  setChannelAgentSchema,
   type ToggleAgentActiveInput,
+  toggleAgentActiveSchema,
   type UpdateAgentInput,
+  updateAgentSchema,
 } from "./schemas";
 
 type Result<T = void> = { ok: true; data?: T } | { ok: false; error: string };
 
-export async function createAgentAction(input: CreateAgentInput): Promise<Result<{ agentId: string }>> {
+export async function createAgentAction(
+  input: CreateAgentInput,
+): Promise<Result<{ agentId: string }>> {
   const parsed = createAgentSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
-  const { user, org } = await requireOrgRole({ orgSlug: parsed.data.orgSlug, roles: ["owner", "admin"] });
+  if (!parsed.success)
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
+  const { user, org } = await requireOrgRole({
+    orgSlug: parsed.data.orgSlug,
+    roles: ["owner", "admin"],
+  });
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("agents")
@@ -48,8 +54,12 @@ export async function createAgentAction(input: CreateAgentInput): Promise<Result
 
 export async function updateAgentAction(input: UpdateAgentInput): Promise<Result> {
   const parsed = updateAgentSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
-  const { user, org } = await requireOrgRole({ orgSlug: parsed.data.orgSlug, roles: ["owner", "admin"] });
+  if (!parsed.success)
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
+  const { user, org } = await requireOrgRole({
+    orgSlug: parsed.data.orgSlug,
+    roles: ["owner", "admin"],
+  });
   const supabase = await createClient();
 
   const patch: TablesUpdate<"agents"> = {
@@ -62,7 +72,8 @@ export async function updateAgentAction(input: UpdateAgentInput): Promise<Result
   if (parsed.data.goal !== undefined) patch.goal = parsed.data.goal;
   if (parsed.data.tone !== undefined) patch.tone = parsed.data.tone;
   if (parsed.data.never_do !== undefined) patch.never_do = parsed.data.never_do;
-  if (parsed.data.daily_token_cap !== undefined) patch.daily_token_cap = parsed.data.daily_token_cap;
+  if (parsed.data.daily_token_cap !== undefined)
+    patch.daily_token_cap = parsed.data.daily_token_cap;
   if (parsed.data.llm_provider !== undefined) patch.llm_provider = parsed.data.llm_provider;
   if (parsed.data.llm_model !== undefined) patch.llm_model = parsed.data.llm_model;
 
@@ -84,11 +95,18 @@ export async function updateAgentAction(input: UpdateAgentInput): Promise<Result
 export async function toggleAgentActiveAction(input: ToggleAgentActiveInput): Promise<Result> {
   const parsed = toggleAgentActiveSchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: "Dados inválidos" };
-  const { user, org } = await requireOrgRole({ orgSlug: parsed.data.orgSlug, roles: ["owner", "admin"] });
+  const { user, org } = await requireOrgRole({
+    orgSlug: parsed.data.orgSlug,
+    roles: ["owner", "admin"],
+  });
   const supabase = await createClient();
   const { error } = await supabase
     .from("agents")
-    .update({ is_active: parsed.data.is_active, updated_at: new Date().toISOString(), updated_by: user.id })
+    .update({
+      is_active: parsed.data.is_active,
+      updated_at: new Date().toISOString(),
+      updated_by: user.id,
+    })
     .eq("id", parsed.data.agentId)
     .eq("organization_id", org.id);
   if (error) {

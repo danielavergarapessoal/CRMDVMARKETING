@@ -3,10 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  type CompanyOption,
-  getActionFields,
-} from "@/lib/automations/action-fields";
+import { type CompanyOption, getActionFields } from "@/lib/automations/action-fields";
 import { ActionConfigForm } from "./action-config-form";
 import { VariablesHelper } from "./variables-helper";
 
@@ -41,9 +38,7 @@ export function ActionConfigDialog({
   const useForm = fields !== null;
 
   const [config, setConfig] = useState<Record<string, unknown>>(action.config);
-  const [rawText, setRawText] = useState<string>(
-    JSON.stringify(action.config, null, 2),
-  );
+  const [rawText, setRawText] = useState<string>(JSON.stringify(action.config, null, 2));
   const [parseError, setParseError] = useState<string | null>(null);
 
   function save() {
@@ -64,9 +59,7 @@ export function ActionConfigDialog({
   }
 
   function insertVariable(v: string) {
-    const ta = document.getElementById(
-      "config-textarea",
-    ) as HTMLTextAreaElement | null;
+    const ta = document.getElementById("config-textarea") as HTMLTextAreaElement | null;
     if (!ta) {
       setRawText((cur) => cur + v);
       return;
@@ -86,13 +79,9 @@ export function ActionConfigDialog({
     <div className="fixed inset-0 z-50 bg-background/80 flex items-center justify-center p-4">
       <div className="bg-card border border-border rounded-lg max-w-2xl w-full max-h-[90vh] overflow-auto">
         <div className="p-4 border-b border-border">
-          <h2 className="font-semibold text-lg">
-            {actionDef?.label ?? action.type}
-          </h2>
+          <h2 className="font-semibold text-lg">{actionDef?.label ?? action.type}</h2>
           {actionDef?.description && (
-            <p className="text-sm text-muted-foreground mt-1">
-              {actionDef.description}
-            </p>
+            <p className="text-sm text-muted-foreground mt-1">{actionDef.description}</p>
           )}
         </div>
         <div className="p-4 space-y-4">
@@ -120,9 +109,7 @@ export function ActionConfigDialog({
                 }}
                 className="font-mono text-xs"
               />
-              {parseError && (
-                <p className="mt-1 text-xs text-destructive">{parseError}</p>
-              )}
+              {parseError && <p className="mt-1 text-xs text-destructive">{parseError}</p>}
               <p className="mt-1 text-xs text-muted-foreground">
                 Esta ação ainda não tem form simplificado. Edite o JSON direto.
               </p>
@@ -136,7 +123,10 @@ export function ActionConfigDialog({
                 size="sm"
                 variant={action.on_error === "stop" ? "default" : "outline"}
                 onClick={() =>
-                  onSave({ on_error: "stop", config: useForm ? config : parseConfigSafe(rawText, config) })
+                  onSave({
+                    on_error: "stop",
+                    config: useForm ? config : parseConfigSafe(rawText, config),
+                  })
                 }
               >
                 Para a automação
@@ -167,10 +157,7 @@ export function ActionConfigDialog({
   );
 }
 
-function parseConfigSafe(
-  raw: string,
-  fallback: Record<string, unknown>,
-): Record<string, unknown> {
+function parseConfigSafe(raw: string, fallback: Record<string, unknown>): Record<string, unknown> {
   try {
     const parsed = JSON.parse(raw);
     if (parsed !== null && typeof parsed === "object" && !Array.isArray(parsed)) {

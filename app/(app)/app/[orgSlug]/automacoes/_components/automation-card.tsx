@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { PencilIcon, ZapIcon } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DeleteAutomationButton } from "./delete-automation-button";
 import { ToggleAutomationStatus } from "./toggle-automation-status";

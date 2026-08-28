@@ -19,8 +19,7 @@ export function TagSuggestionsSection({ orgSlug, suggestions }: Props) {
       <Card>
         <CardHeader className="border-b border-border/60 bg-card/40 py-3">
           <CardTitle className="flex items-center gap-2 label-mono text-[10px]">
-            <SparklesIcon className="h-3 w-3" />
-            / sugeridas
+            <SparklesIcon className="h-3 w-3" />/ sugeridas
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 p-4">

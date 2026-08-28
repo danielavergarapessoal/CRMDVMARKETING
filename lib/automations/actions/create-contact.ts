@@ -22,13 +22,7 @@ export const createContactAction: ActionDefinition<Input, Output> = {
     const supabase = createServiceClient();
     // Sub-H C-2: org isolation pra FK opcional
     if (input.company_id) {
-      await assertOrgOwns(
-        supabase,
-        "companies",
-        input.company_id,
-        ctx.orgId,
-        "create_contact",
-      );
+      await assertOrgOwns(supabase, "companies", input.company_id, ctx.orgId, "create_contact");
     }
     // Idempotência: busca por phone OR email
     if (input.phone) {
@@ -64,6 +58,9 @@ export const createContactAction: ActionDefinition<Input, Output> = {
     return { contact_id: data.id, existed: false };
   },
   async simulate(input) {
-    return { contact_id: `DRY-RUN-contact-${input.phone ?? input.email ?? input.name}`, existed: false };
+    return {
+      contact_id: `DRY-RUN-contact-${input.phone ?? input.email ?? input.name}`,
+      existed: false,
+    };
   },
 };

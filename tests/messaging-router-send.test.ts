@@ -256,9 +256,7 @@ describe("processSendOutbound dispatch", () => {
 
     // Após resetModules: re-importar supabase mocks e configurá-los
     // processSendOutbound usa createServiceClient (worker context, sem cookies).
-    const { createServiceClient: freshServiceCreate } = await import(
-      "@/lib/supabase/service"
-    );
+    const { createServiceClient: freshServiceCreate } = await import("@/lib/supabase/service");
     (freshServiceCreate as ReturnType<typeof vi.fn>).mockReturnValue(sb);
 
     // Importar adaptador (auto-registra) e pegar referência do adapter

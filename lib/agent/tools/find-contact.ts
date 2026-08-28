@@ -5,8 +5,7 @@ import type { ToolContext } from "./index";
 
 export function makeFindContactTool(ctx: ToolContext) {
   return tool({
-    description:
-      "Busca contatos no CRM por nome ou email. Retorna até 5 matches.",
+    description: "Busca contatos no CRM por nome ou email. Retorna até 5 matches.",
     inputSchema: z.object({
       name: z.string().optional().describe("Nome ou parte do nome"),
       email: z.string().optional().describe("Email exato ou parte"),
@@ -28,8 +27,7 @@ export function makeFindContactTool(ctx: ToolContext) {
             name: c.name,
             email: c.email,
             phone: c.phone,
-            company_name:
-              (c.company as unknown as { name: string } | null)?.name ?? null,
+            company_name: (c.company as unknown as { name: string } | null)?.name ?? null,
           })),
         };
       } catch (err) {

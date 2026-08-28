@@ -156,9 +156,7 @@ export async function promoteSuggestionAction(
   return { ok: true, data: { tagId: tag.id } };
 }
 
-export async function ignoreSuggestionAction(
-  input: IgnoreSuggestionInput,
-): Promise<ActionResult> {
+export async function ignoreSuggestionAction(input: IgnoreSuggestionInput): Promise<ActionResult> {
   const parsed = ignoreSuggestionSchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: "Dados inválidos" };
   const { user, org } = await requireOrgRole({

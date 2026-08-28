@@ -48,7 +48,8 @@ export default async function NovaAutomacaoPage({
         <span className="label-mono">/ nova automação</span>
         <h1 className="font-semibold text-3xl tracking-tight">Quando esta automação deve rodar?</h1>
         <p className="text-muted-foreground text-sm">
-          Escolha o evento que vai disparar a automação. Você poderá adicionar condições e ações depois.
+          Escolha o evento que vai disparar a automação. Você poderá adicionar condições e ações
+          depois.
         </p>
       </div>
       <TriggerPicker triggers={triggers} onPick={create} />

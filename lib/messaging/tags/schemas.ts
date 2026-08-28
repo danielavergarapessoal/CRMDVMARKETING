@@ -8,14 +8,16 @@ export const createTagInputSchema = z.object({
   color: z.string().regex(HEX_COLOR, "Cor deve ser #RRGGBB"),
 });
 
-export const updateTagInputSchema = z.object({
-  orgSlug: z.string().min(1).max(80),
-  tagId: z.string().guid(),
-  name: z.string().min(1).max(40).optional(),
-  color: z.string().regex(HEX_COLOR, "Cor deve ser #RRGGBB").optional(),
-}).refine((v) => v.name !== undefined || v.color !== undefined, {
-  message: "Forneça name ou color",
-});
+export const updateTagInputSchema = z
+  .object({
+    orgSlug: z.string().min(1).max(80),
+    tagId: z.string().guid(),
+    name: z.string().min(1).max(40).optional(),
+    color: z.string().regex(HEX_COLOR, "Cor deve ser #RRGGBB").optional(),
+  })
+  .refine((v) => v.name !== undefined || v.color !== undefined, {
+    message: "Forneça name ou color",
+  });
 
 export const tagIdInputSchema = z.object({
   orgSlug: z.string().min(1).max(80),

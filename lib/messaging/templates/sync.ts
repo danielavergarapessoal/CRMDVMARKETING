@@ -46,9 +46,7 @@ export async function applyTemplateSync(opts: {
   }
 
   // 3. Determinar quais sumiram (existem local mas não vieram da Meta)
-  const incomingKeys = new Set(
-    opts.templates.map((t) => `${t.name}|${t.language}`),
-  );
+  const incomingKeys = new Set(opts.templates.map((t) => `${t.name}|${t.language}`));
   const removeIds = (existing ?? [])
     .filter((e) => !incomingKeys.has(`${e.name}|${e.language}`))
     .map((e) => (e as { id: string }).id);

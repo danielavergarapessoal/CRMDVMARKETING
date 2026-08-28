@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
 import {
   closestCenter,
   DndContext,
@@ -15,12 +14,8 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import {
-  GripVerticalIcon,
-  PlusIcon,
-  SettingsIcon,
-  Trash2Icon,
-} from "lucide-react";
+import { GripVerticalIcon, PlusIcon, SettingsIcon, Trash2Icon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { CompanyOption } from "@/lib/automations/action-fields";
@@ -122,13 +117,10 @@ export function ActionsSection({
     onChange(value.filter((_, i) => i !== idx));
   }
 
-  const grouped = actionDefs.reduce<Record<string, ActionDefLite[]>>(
-    (acc, a) => {
-      (acc[a.category] ??= []).push(a);
-      return acc;
-    },
-    {},
-  );
+  const grouped = actionDefs.reduce<Record<string, ActionDefLite[]>>((acc, a) => {
+    (acc[a.category] ??= []).push(a);
+    return acc;
+  }, {});
 
   return (
     <Card>
@@ -137,19 +129,10 @@ export function ActionsSection({
       </CardHeader>
       <CardContent className="space-y-2">
         {value.length === 0 && (
-          <p className="text-xs text-muted-foreground">
-            Adicione ao menos uma ação.
-          </p>
+          <p className="text-xs text-muted-foreground">Adicione ao menos uma ação.</p>
         )}
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={uids}
-            strategy={verticalListSortingStrategy}
-          >
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={uids} strategy={verticalListSortingStrategy}>
             {value.map((action, idx) => {
               const uid = uids[idx] ?? `fallback-${idx}`;
               return (
@@ -158,15 +141,11 @@ export function ActionsSection({
                   id={uid}
                   idx={idx}
                   action={action}
-                  label={
-                    actionDefs.find((d) => d.id === action.type)?.label ??
-                    action.type
-                  }
+                  label={actionDefs.find((d) => d.id === action.type)?.label ?? action.type}
                   onEdit={() => setEditIdx(idx)}
                   onToggleOnError={() =>
                     updateAction(idx, {
-                      on_error:
-                        action.on_error === "stop" ? "continue" : "stop",
+                      on_error: action.on_error === "stop" ? "continue" : "stop",
                     })
                   }
                   onRemove={() => removeAction(idx)}
@@ -178,11 +157,7 @@ export function ActionsSection({
         {value.length < 20 && (
           <div className="pt-2">
             {!addOpen ? (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setAddOpen(true)}
-              >
+              <Button variant="outline" size="sm" onClick={() => setAddOpen(true)}>
                 <PlusIcon className="h-4 w-4 mr-1" /> Adicionar ação
               </Button>
             ) : (
@@ -210,11 +185,7 @@ export function ActionsSection({
                     </div>
                   </div>
                 ))}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setAddOpen(false)}
-                >
+                <Button variant="ghost" size="sm" onClick={() => setAddOpen(false)}>
                   Cancelar
                 </Button>
               </div>
@@ -223,26 +194,24 @@ export function ActionsSection({
         )}
       </CardContent>
 
-      {editIdx !== null && value[editIdx] ? (
-        (() => {
-          const editing = value[editIdx];
-          return (
-            <ActionConfigDialog
-              action={editing}
-              actionDef={
-                actionDefs.find((d) => d.id === editing.type) ?? null
-              }
-              triggerType={triggerType}
-              companies={companies}
-              onSave={(updated) => {
-                updateAction(editIdx, updated);
-                setEditIdx(null);
-              }}
-              onClose={() => setEditIdx(null)}
-            />
-          );
-        })()
-      ) : null}
+      {editIdx !== null && value[editIdx]
+        ? (() => {
+            const editing = value[editIdx];
+            return (
+              <ActionConfigDialog
+                action={editing}
+                actionDef={actionDefs.find((d) => d.id === editing.type) ?? null}
+                triggerType={triggerType}
+                companies={companies}
+                onSave={(updated) => {
+                  updateAction(editIdx, updated);
+                  setEditIdx(null);
+                }}
+                onClose={() => setEditIdx(null)}
+              />
+            );
+          })()
+        : null}
     </Card>
   );
 }
@@ -264,8 +233,9 @@ function SortableActionRow({
   onToggleOnError: () => void;
   onRemove: () => void;
 }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id,
+  });
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -295,9 +265,7 @@ function SortableActionRow({
         type="button"
         onClick={onToggleOnError}
         className={`text-xs rounded px-2 py-0.5 ${
-          action.on_error === "stop"
-            ? "bg-destructive/10 text-destructive"
-            : "bg-secondary"
+          action.on_error === "stop" ? "bg-destructive/10 text-destructive" : "bg-secondary"
         }`}
         title="Clique pra alternar entre parar/continuar em erro"
       >

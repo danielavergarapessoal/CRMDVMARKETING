@@ -1,17 +1,3 @@
-import type { ActionDefinition, TriggerDefinition } from "./schemas";
-
-import { agentEscalatedTrigger } from "./triggers/agent-escalated";
-import { contactCreatedTrigger } from "./triggers/contact-created";
-import { contactTagAddedTrigger } from "./triggers/contact-tag-added";
-import { contactTagRemovedTrigger } from "./triggers/contact-tag-removed";
-import { conversationCreatedTrigger } from "./triggers/conversation-created";
-import { conversationTagAddedTrigger } from "./triggers/conversation-tag-added";
-import { dealCreatedTrigger } from "./triggers/deal-created";
-import { dealStageChangedTrigger } from "./triggers/deal-stage-changed";
-import { dealTagAddedTrigger } from "./triggers/deal-tag-added";
-import { messageReceivedTrigger } from "./triggers/message-received";
-import { taskCompletedTrigger } from "./triggers/task-completed";
-
 import { addTagToConversationAction } from "./actions/add-tag-to-conversation";
 import { applyTagToCompanyAction } from "./actions/apply-tag-to-company";
 import { applyTagToContactAction } from "./actions/apply-tag-to-contact";
@@ -33,6 +19,18 @@ import { sendWhatsappTemplateAction } from "./actions/send-whatsapp-template";
 import { updateContactAction } from "./actions/update-contact";
 import { updateDealFieldsAction } from "./actions/update-deal-fields";
 import { updateDealStageAction } from "./actions/update-deal-stage";
+import type { ActionDefinition, TriggerDefinition } from "./schemas";
+import { agentEscalatedTrigger } from "./triggers/agent-escalated";
+import { contactCreatedTrigger } from "./triggers/contact-created";
+import { contactTagAddedTrigger } from "./triggers/contact-tag-added";
+import { contactTagRemovedTrigger } from "./triggers/contact-tag-removed";
+import { conversationCreatedTrigger } from "./triggers/conversation-created";
+import { conversationTagAddedTrigger } from "./triggers/conversation-tag-added";
+import { dealCreatedTrigger } from "./triggers/deal-created";
+import { dealStageChangedTrigger } from "./triggers/deal-stage-changed";
+import { dealTagAddedTrigger } from "./triggers/deal-tag-added";
+import { messageReceivedTrigger } from "./triggers/message-received";
+import { taskCompletedTrigger } from "./triggers/task-completed";
 
 // ============================================================
 // Registry — fonte única dos triggers e actions do MVP
@@ -65,24 +63,18 @@ export const ACTIONS: Record<string, ActionDefinition> = {
   update_deal_fields: updateDealFieldsAction as unknown as ActionDefinition,
   create_task: createTaskAction as unknown as ActionDefinition,
   send_whatsapp_message: sendWhatsappMessageAction as unknown as ActionDefinition,
-  send_whatsapp_template:
-    sendWhatsappTemplateAction as unknown as ActionDefinition,
+  send_whatsapp_template: sendWhatsappTemplateAction as unknown as ActionDefinition,
   send_email: sendEmailAction as unknown as ActionDefinition,
   assign_owner: assignOwnerAction as unknown as ActionDefinition,
-  add_tag_to_conversation:
-    addTagToConversationAction as unknown as ActionDefinition,
+  add_tag_to_conversation: addTagToConversationAction as unknown as ActionDefinition,
   apply_tag_to_contact: applyTagToContactAction as unknown as ActionDefinition,
   apply_tag_to_company: applyTagToCompanyAction as unknown as ActionDefinition,
   apply_tag_to_deal: applyTagToDealAction as unknown as ActionDefinition,
-  remove_tag_from_conversation:
-    removeTagFromConversationAction as unknown as ActionDefinition,
-  remove_tag_from_contact:
-    removeTagFromContactAction as unknown as ActionDefinition,
-  remove_tag_from_company:
-    removeTagFromCompanyAction as unknown as ActionDefinition,
+  remove_tag_from_conversation: removeTagFromConversationAction as unknown as ActionDefinition,
+  remove_tag_from_contact: removeTagFromContactAction as unknown as ActionDefinition,
+  remove_tag_from_company: removeTagFromCompanyAction as unknown as ActionDefinition,
   remove_tag_from_deal: removeTagFromDealAction as unknown as ActionDefinition,
-  pause_agent_on_conversation:
-    pauseAgentOnConversationAction as unknown as ActionDefinition,
+  pause_agent_on_conversation: pauseAgentOnConversationAction as unknown as ActionDefinition,
   escalate_to_human: escalateToHumanAction as unknown as ActionDefinition,
   call_webhook: callWebhookAction as unknown as ActionDefinition,
 };

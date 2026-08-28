@@ -20,8 +20,12 @@ export const dealCreatedTrigger: TriggerDefinition = {
     only_stage: z.string().optional(),
   }),
   variables: [
-    "{{deal.id}}", "{{deal.name}}", "{{deal.stage}}", "{{deal.value}}",
-    "{{org.name}}", "{{now.iso}}",
+    "{{deal.id}}",
+    "{{deal.name}}",
+    "{{deal.stage}}",
+    "{{deal.value}}",
+    "{{org.name}}",
+    "{{now.iso}}",
   ],
   variableLabels: {
     "deal.id": { label: "ID do deal" },
@@ -32,8 +36,16 @@ export const dealCreatedTrigger: TriggerDefinition = {
   sampleContext: {
     deal: {
       id: "00000000-0000-4000-8000-000000000020",
-      name: "Novo Lead", stage: "new", value: null, owner_id: null, company_id: null,
+      name: "Novo Lead",
+      stage: "new",
+      value: null,
+      owner_id: null,
+      company_id: null,
     },
-    org: { id: "00000000-0000-4000-8000-000000000003", name: "Minha Empresa", slug: "minha-empresa" },
+    org: {
+      id: "00000000-0000-4000-8000-000000000003",
+      name: "Minha Empresa",
+      slug: "minha-empresa",
+    },
   },
 };

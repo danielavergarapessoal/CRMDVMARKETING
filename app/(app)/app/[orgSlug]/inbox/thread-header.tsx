@@ -1,17 +1,25 @@
 "use client";
 
-import { ArrowLeftIcon, BotIcon, CheckCircleIcon, InfoIcon, RotateCcwIcon, UserIcon, UserRoundIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  BotIcon,
+  CheckCircleIcon,
+  InfoIcon,
+  RotateCcwIcon,
+  UserIcon,
+  UserRoundIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { resolveConversationAction } from "@/lib/messaging/conversations/actions";
 import {
   pauseAgentForConversationAction,
   resumeAgentForConversationAction,
 } from "@/lib/agent/conversation-actions";
+import { resolveConversationAction } from "@/lib/messaging/conversations/actions";
 import { resolveConversationDisplay } from "./contact-display";
 
 interface Props {

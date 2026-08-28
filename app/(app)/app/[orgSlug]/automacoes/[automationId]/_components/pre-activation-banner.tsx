@@ -26,22 +26,17 @@ export function PreActivationBanner({
           <ul className="list-disc list-inside text-amber-100/90 space-y-0.5">
             {hits.map((h) => (
               <li key={`${h.actionIndex}-${h.key}`}>
-                <span className="font-medium">
-                  {FIELD_LABELS[h.key] ?? h.key}
-                </span>{" "}
-                em{" "}
+                <span className="font-medium">{FIELD_LABELS[h.key] ?? h.key}</span> em{" "}
                 <span className="font-medium">
                   Ação {h.actionIndex + 1}
-                  {actionLabels[h.actionIndex]
-                    ? ` (${actionLabels[h.actionIndex]})`
-                    : ""}
+                  {actionLabels[h.actionIndex] ? ` (${actionLabels[h.actionIndex]})` : ""}
                 </span>
               </li>
             ))}
           </ul>
           <p className="text-xs text-amber-100/70">
-            Clique na ação abaixo pra editar. Enquanto tiver placeholder, o
-            botão "Ativa" não funciona.
+            Clique na ação abaixo pra editar. Enquanto tiver placeholder, o botão "Ativa" não
+            funciona.
           </p>
         </div>
       </div>

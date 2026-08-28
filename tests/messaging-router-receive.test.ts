@@ -324,7 +324,10 @@ describe("processInboundMessage lookup por phone_number_id", () => {
             eq: () => ({
               maybeSingle: async () => {
                 if (table === "channels") {
-                  return { data: { id: CHANNEL_ID, type: "whatsapp_cloud", organization_id: ORG_ID }, error: null };
+                  return {
+                    data: { id: CHANNEL_ID, type: "whatsapp_cloud", organization_id: ORG_ID },
+                    error: null,
+                  };
                 }
                 if (table === "conversations") return { data: null, error: null };
                 if (table === "contacts") return { data: null, error: null };
@@ -333,7 +336,10 @@ describe("processInboundMessage lookup por phone_number_id", () => {
             }),
             maybeSingle: async () => {
               if (table === "channels") {
-                return { data: { id: CHANNEL_ID, type: "whatsapp_cloud", organization_id: ORG_ID }, error: null };
+                return {
+                  data: { id: CHANNEL_ID, type: "whatsapp_cloud", organization_id: ORG_ID },
+                  error: null,
+                };
               }
               if (table === "conversations") return { data: { unread_count: 0 }, error: null };
               return { data: null, error: null };
@@ -422,14 +428,22 @@ describe("processInboundMessage media fetch", () => {
           eq: () => ({
             eq: () => ({
               maybeSingle: async () => {
-                if (table === "channels") return { data: { id: CHANNEL_ID, type: "mock", organization_id: ORG_ID }, error: null };
+                if (table === "channels")
+                  return {
+                    data: { id: CHANNEL_ID, type: "mock", organization_id: ORG_ID },
+                    error: null,
+                  };
                 if (table === "conversations") return { data: null, error: null };
                 if (table === "contacts") return { data: null, error: null };
                 return { data: null, error: null };
               },
             }),
             maybeSingle: async () => {
-              if (table === "channels") return { data: { id: CHANNEL_ID, type: "mock", organization_id: ORG_ID }, error: null };
+              if (table === "channels")
+                return {
+                  data: { id: CHANNEL_ID, type: "mock", organization_id: ORG_ID },
+                  error: null,
+                };
               if (table === "conversations") return { data: { unread_count: 0 }, error: null };
               return { data: null, error: null };
             },

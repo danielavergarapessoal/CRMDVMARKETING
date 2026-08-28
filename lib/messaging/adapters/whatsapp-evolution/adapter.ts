@@ -7,7 +7,7 @@ import type {
 import { postJson } from "./client";
 import { extractFilename, mimeToMediaType, stripPlus } from "./extract-message";
 import { parseWebhook } from "./parse-webhook";
-import { evolutionConfigSchema, type EvolutionConfig } from "./schema";
+import { type EvolutionConfig, evolutionConfigSchema } from "./schema";
 import { verifyBearer } from "./verify-webhook";
 
 function parseCfg(config: unknown): EvolutionConfig {
@@ -49,9 +49,7 @@ export const evolutionAdapter: MessagingAdapter = {
         {
           number: to,
           text: opts.body ?? "",
-          ...(opts.replyToExternalId
-            ? { quoted: { key: { id: opts.replyToExternalId } } }
-            : {}),
+          ...(opts.replyToExternalId ? { quoted: { key: { id: opts.replyToExternalId } } } : {}),
         },
       );
       return { externalId: res.key.id };

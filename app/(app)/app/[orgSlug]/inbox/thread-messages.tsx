@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { formatDay } from "@/lib/messaging/format/time";
 import { groupMessagesByDay } from "@/lib/messaging/format/group";
+import { formatDay } from "@/lib/messaging/format/time";
 import { MessageBubble } from "./message-bubble";
 
 interface Msg {

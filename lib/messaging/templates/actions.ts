@@ -3,13 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { requireOrgRole } from "@/lib/auth/guards";
 import { logError } from "@/lib/logger";
-import { translateError } from "@/lib/messaging/errors";
-import { getChannelConfig } from "@/lib/messaging/channel-config";
 import { whatsappCloudAdapter } from "@/lib/messaging/adapters/whatsapp-cloud/adapter";
-import {
-  syncTemplatesInputSchema,
-  type SyncTemplatesInput,
-} from "./schemas";
+import { getChannelConfig } from "@/lib/messaging/channel-config";
+import { translateError } from "@/lib/messaging/errors";
+import { type SyncTemplatesInput, syncTemplatesInputSchema } from "./schemas";
 import { applyTemplateSync } from "./sync";
 
 type ActionResult<T = void> = { ok: true; data?: T } | { ok: false; error: string };
@@ -41,7 +38,9 @@ export async function syncTemplatesAction(
       channelId: parsed.data.channelId,
       templates,
     });
-    revalidatePath(`/app/${parsed.data.orgSlug}/settings/channels/whatsapp-cloud/${parsed.data.channelId}`);
+    revalidatePath(
+      `/app/${parsed.data.orgSlug}/settings/channels/whatsapp-cloud/${parsed.data.channelId}`,
+    );
     return { ok: true, data: result };
   } catch (err) {
     logError("templates.sync.action", err);

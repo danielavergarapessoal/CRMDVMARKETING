@@ -4,10 +4,7 @@ import { useId, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import type {
-  ActionFieldMeta,
-  CompanyOption,
-} from "@/lib/automations/action-fields";
+import type { ActionFieldMeta, CompanyOption } from "@/lib/automations/action-fields";
 import { VariableInserter } from "./variable-inserter";
 
 const PRIORITY_OPTIONS = [
@@ -73,14 +70,10 @@ function FieldRow({
           {field.label}
           {field.required && <span className="text-destructive ml-0.5">*</span>}
         </Label>
-        {supportsVar && (
-          <VariableInserter triggerType={triggerType} onPick={appendVariable} />
-        )}
+        {supportsVar && <VariableInserter triggerType={triggerType} onPick={appendVariable} />}
       </div>
       {renderControl(field, id, rawValue, companies, onChange)}
-      {field.hint && (
-        <p className="mt-1 text-xs text-muted-foreground">{field.hint}</p>
-      )}
+      {field.hint && <p className="mt-1 text-xs text-muted-foreground">{field.hint}</p>}
     </div>
   );
 }
@@ -110,8 +103,7 @@ function renderControl(
     );
   }
   if (field.type === "select" || field.type === "priority") {
-    const options =
-      field.type === "priority" ? PRIORITY_OPTIONS : (field.options ?? []);
+    const options = field.type === "priority" ? PRIORITY_OPTIONS : (field.options ?? []);
     return (
       <select
         id={id}
@@ -141,12 +133,7 @@ function renderControl(
   }
   if (field.type === "json") {
     return (
-      <JsonField
-        id={id}
-        value={rawValue}
-        onChange={onChange}
-        placeholder={field.placeholder}
-      />
+      <JsonField id={id} value={rawValue} onChange={onChange} placeholder={field.placeholder} />
     );
   }
   if (field.type === "number") {
@@ -154,9 +141,7 @@ function renderControl(
       <Input
         id={id}
         type="number"
-        value={
-          rawValue === null || rawValue === undefined ? "" : String(rawValue)
-        }
+        value={rawValue === null || rawValue === undefined ? "" : String(rawValue)}
         onChange={(e) => {
           const v = e.target.value;
           if (v === "") onChange(null);

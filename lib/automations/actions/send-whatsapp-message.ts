@@ -10,10 +10,7 @@ const inputSchema = z.object({
 });
 type Input = z.infer<typeof inputSchema>;
 
-export const sendWhatsappMessageAction: ActionDefinition<
-  Input,
-  { message_id: string }
-> = {
+export const sendWhatsappMessageAction: ActionDefinition<Input, { message_id: string }> = {
   id: "send_whatsapp_message",
   label: "Enviar mensagem no WhatsApp",
   description:

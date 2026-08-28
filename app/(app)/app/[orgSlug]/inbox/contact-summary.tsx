@@ -12,8 +12,7 @@ interface Props {
 
 export function ContactSummary({ conversation }: Props) {
   const display = resolveConversationDisplay(conversation);
-  const subtitle =
-    conversation.contact?.phone ?? conversation.external_thread_id;
+  const subtitle = conversation.contact?.phone ?? conversation.external_thread_id;
   return (
     <div className="space-y-2 p-4 text-center">
       <Avatar className="mx-auto h-16 w-16">

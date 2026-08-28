@@ -1,9 +1,9 @@
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { TagsSection } from "@/components/app/tags-section";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TagsSection } from "@/components/app/tags-section";
 import { requireOrgMember } from "@/lib/auth/guards";
 import { getCompanies } from "@/lib/companies/queries";
 import { getContacts } from "@/lib/contacts/queries";
@@ -74,12 +74,7 @@ export default async function DealDetailPage({ params }: Props) {
 
       <Card>
         <CardContent className="p-4">
-          <TagsSection
-            orgId={org.id}
-            orgSlug={orgSlug}
-            entityType="deal"
-            entityId={deal.id}
-          />
+          <TagsSection orgId={org.id} orgSlug={orgSlug} entityType="deal" entityId={deal.id} />
         </CardContent>
       </Card>
 

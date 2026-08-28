@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
 import { BracesIcon } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { listVariablesForTrigger } from "@/lib/automations/variable-labels";
 
@@ -15,12 +15,7 @@ export function VariablesHelper({
   const entries = listVariablesForTrigger(triggerType);
   return (
     <div className="relative">
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => setOpen((o) => !o)}
-        title="Inserir variável"
-      >
+      <Button variant="ghost" size="sm" onClick={() => setOpen((o) => !o)} title="Inserir variável">
         <BracesIcon className="h-4 w-4 mr-1" />
         Inserir variável
       </Button>

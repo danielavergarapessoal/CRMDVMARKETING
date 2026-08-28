@@ -1,9 +1,6 @@
 import crypto from "node:crypto";
 
-export function verifyBearer(
-  authHeader: string | string[] | undefined,
-  secret: string,
-): boolean {
+export function verifyBearer(authHeader: string | string[] | undefined, secret: string): boolean {
   if (!secret || secret.length === 0) return false;
   let token: string | undefined;
   if (Array.isArray(authHeader)) token = authHeader[0];

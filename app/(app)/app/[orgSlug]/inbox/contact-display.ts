@@ -42,7 +42,9 @@ export function resolveConversationDisplay(c: DisplayInput): DisplayResult {
   // Só temos o telefone — devolve sem iniciais pra UI decidir mostrar ícone.
   return {
     name: c.external_thread_id,
-    initials: looksLikePhone(c.external_thread_id) ? null : c.external_thread_id.slice(0, 2).toUpperCase(),
+    initials: looksLikePhone(c.external_thread_id)
+      ? null
+      : c.external_thread_id.slice(0, 2).toUpperCase(),
     hasRealName: false,
   };
 }

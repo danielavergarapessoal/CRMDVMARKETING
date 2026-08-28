@@ -7,13 +7,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { disconnectEvolutionChannelAction } from "@/lib/messaging/adapters/whatsapp-evolution/actions";
 
-export function DisconnectButton({
-  orgSlug,
-  channelId,
-}: {
-  orgSlug: string;
-  channelId: string;
-}) {
+export function DisconnectButton({ orgSlug, channelId }: { orgSlug: string; channelId: string }) {
   const router = useRouter();
   const [pending, start] = useTransition();
   function onClick() {

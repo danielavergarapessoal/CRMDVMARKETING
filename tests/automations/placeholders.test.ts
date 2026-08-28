@@ -34,14 +34,22 @@ describe("findPlaceholderPaths", () => {
 
   it("retorna array vazio quando não tem placeholder", () => {
     const actions = [
-      { type: "create_task", config: { title: "Ligar pro cliente", priority: "medium" }, on_error: "continue" },
+      {
+        type: "create_task",
+        config: { title: "Ligar pro cliente", priority: "medium" },
+        on_error: "continue",
+      },
     ];
     expect(findPlaceholderPaths(actions)).toEqual([]);
   });
 
   it("ignora valores que não são string", () => {
     const actions = [
-      { type: "create_deal", config: { name: "X", stage: "new", value: 100, company_id: "uuid-real" }, on_error: "stop" },
+      {
+        type: "create_deal",
+        config: { name: "X", stage: "new", value: 100, company_id: "uuid-real" },
+        on_error: "stop",
+      },
     ];
     expect(findPlaceholderPaths(actions)).toEqual([]);
   });

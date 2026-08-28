@@ -67,7 +67,11 @@ export async function listAgentsForDashboard(orgId: string): Promise<AgentListRo
     ]);
 
   const agents = (agentsData ?? []) as Agent[];
-  const channels = (channelsData ?? []) as Array<{ id: string; name: string; agent_id: string | null }>;
+  const channels = (channelsData ?? []) as Array<{
+    id: string;
+    name: string;
+    agent_id: string | null;
+  }>;
   const usageMap = new Map<string, { tokens: number; responses: number }>();
   for (const u of usageData ?? []) {
     usageMap.set(u.agent_id, { tokens: u.tokens_used, responses: u.responses });
@@ -79,9 +83,7 @@ export async function listAgentsForDashboard(orgId: string): Promise<AgentListRo
 
   return agents.map((a) => ({
     ...a,
-    channels: channels
-      .filter((c) => c.agent_id === a.id)
-      .map((c) => ({ id: c.id, name: c.name })),
+    channels: channels.filter((c) => c.agent_id === a.id).map((c) => ({ id: c.id, name: c.name })),
     usage_today: usageMap.get(a.id) ?? { tokens: 0, responses: 0 },
     last_run_at: lastRunMap.get(a.id) ?? null,
   }));

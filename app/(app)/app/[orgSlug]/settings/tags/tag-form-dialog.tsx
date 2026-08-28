@@ -43,7 +43,8 @@ type Props = (CreateMode | EditMode | PromoteMode) & {
 
 export function TagFormDialog(props: Props) {
   const { orgSlug, onClose } = props;
-  const initialName = props.mode === "edit" ? props.tag.name : props.mode === "promote" ? props.suggestion.name : "";
+  const initialName =
+    props.mode === "edit" ? props.tag.name : props.mode === "promote" ? props.suggestion.name : "";
   const initialColor = props.mode === "edit" ? props.tag.color : TAG_COLOR_PALETTE[0];
   const initialScopes: TagScope[] = props.mode === "edit" ? props.tag.appliesTo : [...ALL_SCOPES];
 
@@ -88,7 +89,11 @@ export function TagFormDialog(props: Props) {
   };
 
   const title =
-    props.mode === "create" ? "Nova tag" : props.mode === "edit" ? "Editar tag" : "Promover sugestão";
+    props.mode === "create"
+      ? "Nova tag"
+      : props.mode === "edit"
+        ? "Editar tag"
+        : "Promover sugestão";
   const nameReadOnly = props.mode === "promote";
 
   return (
@@ -140,18 +145,15 @@ export function TagFormDialog(props: Props) {
                     checked={scopes.includes(scope)}
                     onCheckedChange={() => toggleScope(scope)}
                   />
-                  <Label
-                    htmlFor={`scope-${scope}`}
-                    className="cursor-pointer text-sm font-normal"
-                  >
+                  <Label htmlFor={`scope-${scope}`} className="cursor-pointer text-sm font-normal">
                     {SCOPE_LABELS[scope]}
                   </Label>
                 </div>
               ))}
             </div>
             <p className="text-muted-foreground text-xs">
-              Tags de segmentação (VIP, Comprou X): deixa tudo marcado.
-              Tags só pra conversa (Aguardando retorno): deixa só "Conversa".
+              Tags de segmentação (VIP, Comprou X): deixa tudo marcado. Tags só pra conversa
+              (Aguardando retorno): deixa só "Conversa".
             </p>
           </div>
 
@@ -164,7 +166,11 @@ export function TagFormDialog(props: Props) {
               disabled={isPending || scopes.length === 0 || name.trim().length === 0}
             >
               {isPending && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
-              {props.mode === "create" ? "Criar tag" : props.mode === "edit" ? "Salvar" : "Promover"}
+              {props.mode === "create"
+                ? "Criar tag"
+                : props.mode === "edit"
+                  ? "Salvar"
+                  : "Promover"}
             </Button>
           </DialogFooter>
         </form>

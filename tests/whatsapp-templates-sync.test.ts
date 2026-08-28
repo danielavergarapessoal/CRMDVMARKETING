@@ -1,9 +1,9 @@
-import { describe, expect, test, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
 vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
 
-import { createClient } from "@/lib/supabase/server";
 import { applyTemplateSync } from "@/lib/messaging/templates/sync";
+import { createClient } from "@/lib/supabase/server";
 
 const mockedCreate = createClient as unknown as ReturnType<typeof vi.fn>;
 const ORG_ID = "11111111-1111-1111-1111-111111111111";

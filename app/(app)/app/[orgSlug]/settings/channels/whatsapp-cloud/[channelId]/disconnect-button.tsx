@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Loader2Icon, Trash2Icon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,16 +14,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { toast } from "sonner";
 import { disconnectWhatsappChannelAction } from "@/lib/messaging/adapters/whatsapp-cloud/actions";
 
-export function DisconnectButton({
-  orgSlug,
-  channelId,
-}: {
-  orgSlug: string;
-  channelId: string;
-}) {
+export function DisconnectButton({ orgSlug, channelId }: { orgSlug: string; channelId: string }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [open, setOpen] = useState(false);
@@ -50,11 +44,14 @@ export function DisconnectButton({
         <DialogHeader>
           <DialogTitle>Desconectar canal?</DialogTitle>
           <DialogDescription>
-            Isso vai remover o canal e todas as conversas/mensagens associadas. Essa ação não pode ser desfeita.
+            Isso vai remover o canal e todas as conversas/mensagens associadas. Essa ação não pode
+            ser desfeita.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="ghost" onClick={() => setOpen(false)}>Cancelar</Button>
+          <Button variant="ghost" onClick={() => setOpen(false)}>
+            Cancelar
+          </Button>
           <Button variant="destructive" onClick={confirm} disabled={submitting}>
             {submitting && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
             Sim, desconectar

@@ -63,9 +63,7 @@ export default async function AppLayout({ children, params }: Props) {
         {/* que páginas longas (form de automação, settings) tenham scroll */}
         {/* natural — inbox/kanban usam scroll interno próprio em h-full */}
         {/* então a barra do main não duplica. */}
-        <main className="flex min-h-0 flex-1 flex-col overflow-y-auto p-6 pb-24">
-          {children}
-        </main>
+        <main className="flex min-h-0 flex-1 flex-col overflow-y-auto p-6 pb-24">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

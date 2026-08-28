@@ -62,7 +62,10 @@ export function getAgentColumns(orgSlug: string): ColumnDef<AgentListRow>[] {
       id: "usage",
       header: "Uso hoje",
       cell: ({ row }) => {
-        const pct = Math.min(100, (row.original.usage_today.tokens / row.original.daily_token_cap) * 100);
+        const pct = Math.min(
+          100,
+          (row.original.usage_today.tokens / row.original.daily_token_cap) * 100,
+        );
         return (
           <div className="space-y-1">
             <div className="text-xs">
@@ -80,7 +83,9 @@ export function getAgentColumns(orgSlug: string): ColumnDef<AgentListRow>[] {
       id: "last_run",
       header: "Última atividade",
       cell: ({ row }) => (
-        <span className="text-muted-foreground text-sm">{relativeTime(row.original.last_run_at)}</span>
+        <span className="text-muted-foreground text-sm">
+          {relativeTime(row.original.last_run_at)}
+        </span>
       ),
     },
     {

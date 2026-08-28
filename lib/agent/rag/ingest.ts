@@ -1,5 +1,5 @@
-import { createServiceClient } from "@/lib/supabase/service";
 import { logError } from "@/lib/logger";
+import { createServiceClient } from "@/lib/supabase/service";
 import { chunkDocument } from "./chunk";
 import { embedMany_ } from "./embed";
 
@@ -64,9 +64,7 @@ export async function processDocument(documentId: string): Promise<void> {
         content,
         embedding: embeddings[idx] as unknown as string,
       }));
-      const { error: insErr } = await supabase
-        .from("agent_document_chunks")
-        .insert(rows);
+      const { error: insErr } = await supabase.from("agent_document_chunks").insert(rows);
       if (insErr) throw new Error(`Insert chunks falhou: ${insErr.message}`);
     }
 

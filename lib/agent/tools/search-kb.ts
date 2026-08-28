@@ -1,7 +1,7 @@
 import { tool } from "ai";
 import { z } from "zod";
-import { logError } from "@/lib/logger";
 import { retrieveContext } from "@/lib/agent/rag/retrieve";
+import { logError } from "@/lib/logger";
 import type { ToolContext } from "./index";
 
 export function makeSearchKbTool(ctx: ToolContext) {

@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Loader2Icon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,7 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
 import { sendTemplateAction } from "@/lib/messaging/actions";
 
 interface Template {
@@ -31,7 +31,13 @@ interface Props {
   onOpenChange: (open: boolean) => void;
 }
 
-export function TemplatePickerDialog({ orgSlug, conversationId, templates, open, onOpenChange }: Props) {
+export function TemplatePickerDialog({
+  orgSlug,
+  conversationId,
+  templates,
+  open,
+  onOpenChange,
+}: Props) {
   const [selectedId, setSelectedId] = useState(templates[0]?.id ?? "");
   const [params, setParams] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
@@ -111,7 +117,9 @@ export function TemplatePickerDialog({ orgSlug, conversationId, templates, open,
           )}
         </div>
         <DialogFooter>
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancelar</Button>
+          <Button variant="ghost" onClick={() => onOpenChange(false)}>
+            Cancelar
+          </Button>
           <Button onClick={send} disabled={busy || !selected}>
             {busy && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
             Enviar

@@ -71,7 +71,11 @@ export async function processSendOutbound(messageId: string): Promise<void> {
   }
 
   try {
-    const tpl = (msg.provider_metadata as { template?: { name: string; language: string; params: Record<string, string> } } | null)?.template;
+    const tpl = (
+      msg.provider_metadata as {
+        template?: { name: string; language: string; params: Record<string, string> };
+      } | null
+    )?.template;
 
     let externalId: string;
     if (tpl) {
@@ -139,7 +143,11 @@ export async function processInboundMessage(
   // bearer secret específico do channel antes desta função rodar.
   const supabase = createServiceClient();
 
-  const raw = (event.raw ?? {}) as { channelId?: string; phoneNumberId?: string; instanceName?: string };
+  const raw = (event.raw ?? {}) as {
+    channelId?: string;
+    phoneNumberId?: string;
+    instanceName?: string;
+  };
   type ChannelLite = {
     id: string;
     type: string;
@@ -488,9 +496,7 @@ export async function sendMessageToConversation(params: {
     .select("id")
     .single();
   if (error || !data) {
-    throw new Error(
-      `sendMessageToConversation: ${error?.message ?? "no row"}`,
-    );
+    throw new Error(`sendMessageToConversation: ${error?.message ?? "no row"}`);
   }
   await supabase
     .from("conversations")
@@ -498,9 +504,7 @@ export async function sendMessageToConversation(params: {
     .eq("id", params.conversationId)
     .eq("organization_id", params.orgId);
   after(() =>
-    processSendOutbound(data.id).catch((err) =>
-      logError("automation.send-outbound", err),
-    ),
+    processSendOutbound(data.id).catch((err) => logError("automation.send-outbound", err)),
   );
   return { messageId: data.id };
 }
@@ -538,9 +542,7 @@ export async function sendTemplateToConversation(params: {
     .select("id")
     .single();
   if (error || !data) {
-    throw new Error(
-      `sendTemplateToConversation: ${error?.message ?? "no row"}`,
-    );
+    throw new Error(`sendTemplateToConversation: ${error?.message ?? "no row"}`);
   }
   await supabase
     .from("conversations")
@@ -548,9 +550,7 @@ export async function sendTemplateToConversation(params: {
     .eq("id", params.conversationId)
     .eq("organization_id", params.orgId);
   after(() =>
-    processSendOutbound(data.id).catch((err) =>
-      logError("automation.send-template-outbound", err),
-    ),
+    processSendOutbound(data.id).catch((err) => logError("automation.send-template-outbound", err)),
   );
   return { messageId: data.id };
 }

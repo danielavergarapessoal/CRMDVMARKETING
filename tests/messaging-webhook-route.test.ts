@@ -60,11 +60,11 @@ describe("webhook POST handler", () => {
 describe("webhook GET handler (Meta verification handshake)", () => {
   test("mock: echo do hub.challenge sem verificação", async () => {
     const { GET } = await import("@/app/api/webhooks/messaging/[provider]/route");
-    const url = "https://x.local/api/webhooks/messaging/mock?hub.mode=subscribe&hub.challenge=abc&hub.verify_token=anything";
-    const res = await GET(
-      { url } as unknown as Request,
-      { params: Promise.resolve({ provider: "mock" }) },
-    );
+    const url =
+      "https://x.local/api/webhooks/messaging/mock?hub.mode=subscribe&hub.challenge=abc&hub.verify_token=anything";
+    const res = await GET({ url } as unknown as Request, {
+      params: Promise.resolve({ provider: "mock" }),
+    });
     expect(res.status).toBe(200);
     expect(await res.text()).toBe("abc");
   });
@@ -86,11 +86,11 @@ describe("webhook GET handler (Meta verification handshake)", () => {
     vi.resetModules();
 
     const { GET } = await import("@/app/api/webhooks/messaging/[provider]/route");
-    const url = "https://x.local/api/webhooks/messaging/whatsapp_cloud?hub.mode=subscribe&hub.challenge=abc&hub.verify_token=wrong";
-    const res = await GET(
-      { url } as unknown as Request,
-      { params: Promise.resolve({ provider: "whatsapp_cloud" }) },
-    );
+    const url =
+      "https://x.local/api/webhooks/messaging/whatsapp_cloud?hub.mode=subscribe&hub.challenge=abc&hub.verify_token=wrong";
+    const res = await GET({ url } as unknown as Request, {
+      params: Promise.resolve({ provider: "whatsapp_cloud" }),
+    });
     expect(res.status).toBe(401);
 
     vi.doUnmock("@/lib/supabase/service");

@@ -1,10 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import { ChevronDownIcon, ChevronRightIcon } from "lucide-react";
+import { useState } from "react";
 import { buildSystemPrompt, type PromptSettings } from "@/lib/agent/prompts/build";
 
-export function SystemPromptPreview({ settings }: { settings: Omit<PromptSettings, "company_name"> & { company_name: string | null | undefined } }) {
+export function SystemPromptPreview({
+  settings,
+}: {
+  settings: Omit<PromptSettings, "company_name"> & { company_name: string | null | undefined };
+}) {
   const [open, setOpen] = useState(false);
 
   const normalized: PromptSettings = {

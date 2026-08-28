@@ -23,23 +23,14 @@ export const assignOwnerAction: ActionDefinition<Input, { assigned_to: string }>
   async execute(input, ctx) {
     const supabase = createServiceClient();
     // Sub-H C-2: valida que a conversa pertence à org antes de qualquer escrita
-    await assertOrgOwns(
-      supabase,
-      "conversations",
-      input.target_id,
-      ctx.orgId,
-      "assign_owner",
-    );
+    await assertOrgOwns(supabase, "conversations", input.target_id, ctx.orgId, "assign_owner");
     let assigneeId: string = input.assignee;
     if (assigneeId === "round_robin") {
       const { data: members } = await supabase
         .from("memberships")
         .select("user_id")
         .eq("organization_id", ctx.orgId)
-        .in(
-          "role",
-          ["owner", "admin"] as Database["public"]["Enums"]["org_role"][],
-        );
+        .in("role", ["owner", "admin"] as Database["public"]["Enums"]["org_role"][]);
       if (!members || members.length === 0) {
         throw new Error("assign_owner: nenhum admin/owner na org");
       }
@@ -60,10 +51,7 @@ export const assignOwnerAction: ActionDefinition<Input, { assigned_to: string }>
   },
   async simulate(input) {
     return {
-      assigned_to:
-        input.assignee === "round_robin"
-          ? "DRY-RUN-random-member"
-          : input.assignee,
+      assigned_to: input.assignee === "round_robin" ? "DRY-RUN-random-member" : input.assignee,
     };
   },
 };

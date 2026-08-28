@@ -26,36 +26,20 @@ export const createTaskAction: ActionDefinition<Input, { task_id: string }> = {
     const supabase = createServiceClient();
     // Sub-H C-2: org isolation pra cada FK opcional
     if (input.contact_id) {
-      await assertOrgOwns(
-        supabase,
-        "contacts",
-        input.contact_id,
-        ctx.orgId,
-        "create_task",
-      );
+      await assertOrgOwns(supabase, "contacts", input.contact_id, ctx.orgId, "create_task");
     }
     if (input.deal_id) {
-      await assertOrgOwns(
-        supabase,
-        "deals",
-        input.deal_id,
-        ctx.orgId,
-        "create_task",
-      );
+      await assertOrgOwns(supabase, "deals", input.deal_id, ctx.orgId, "create_task");
     }
     if (input.assigned_to) {
       // Sub-H C-1: assignee precisa ser membro da org
-      await assertOrgMember(
-        supabase,
-        input.assigned_to,
-        ctx.orgId,
-        "create_task",
-      );
+      await assertOrgMember(supabase, input.assigned_to, ctx.orgId, "create_task");
     }
     // `tasks.due_date` é DATE (tipo string 'YYYY-MM-DD'), não timestamptz — slice(0,10).
-    const dueDate = input.due_in_days != null
-      ? new Date(Date.now() + input.due_in_days * 86_400_000).toISOString().slice(0, 10)
-      : null;
+    const dueDate =
+      input.due_in_days != null
+        ? new Date(Date.now() + input.due_in_days * 86_400_000).toISOString().slice(0, 10)
+        : null;
     const { data, error } = await supabase
       .from("tasks")
       .insert({

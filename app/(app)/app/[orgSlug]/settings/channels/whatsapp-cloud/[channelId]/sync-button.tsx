@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { Loader2Icon, RefreshCwIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { syncTemplatesAction } from "@/lib/messaging/templates/actions";
 
 export function SyncButton({ orgSlug, channelId }: { orgSlug: string; channelId: string }) {

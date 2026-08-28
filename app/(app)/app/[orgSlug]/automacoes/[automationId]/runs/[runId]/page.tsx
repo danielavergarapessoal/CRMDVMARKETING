@@ -37,13 +37,9 @@ export default async function RunDetailPage({
         "skipped_queue_full",
         "skipped_payload_too_large",
         "failed",
-      ].includes(run.status) && (
-        <RunStatusExplainer status={run.status} error={run.error} />
-      )}
+      ].includes(run.status) && <RunStatusExplainer status={run.status} error={run.error} />}
       {steps.length === 0 ? (
-        <p className="text-sm text-muted-foreground">
-          A run não chegou a executar nenhum step.
-        </p>
+        <p className="text-sm text-muted-foreground">A run não chegou a executar nenhum step.</p>
       ) : (
         <ol className="space-y-2">
           {steps.map((s) => (
@@ -54,13 +50,9 @@ export default async function RunDetailPage({
                 </span>
                 <StatusBadge status={s.status} />
               </div>
-              {s.error && (
-                <p className="mt-1 text-xs text-destructive">{s.error}</p>
-              )}
+              {s.error && <p className="mt-1 text-xs text-destructive">{s.error}</p>}
               <details className="mt-2 text-xs">
-                <summary className="cursor-pointer text-muted-foreground">
-                  Input / Output
-                </summary>
+                <summary className="cursor-pointer text-muted-foreground">Input / Output</summary>
                 <p className="mt-1 text-muted-foreground">Input:</p>
                 <pre className="overflow-x-auto rounded bg-muted p-2 mt-1">
                   {JSON.stringify(s.input, null, 2)}

@@ -63,7 +63,7 @@ export async function getAutomationMetrics(orgId: string, automationId: string) 
     .order("created_at", { ascending: false });
   const total = rows?.length ?? 0;
   const completed = rows?.filter((r) => r.status === "completed").length ?? 0;
-  const lastRun = rows && rows.length > 0 ? rows[0]?.created_at ?? null : null;
+  const lastRun = rows && rows.length > 0 ? (rows[0]?.created_at ?? null) : null;
   return {
     total7d: total,
     successRate: total ? Math.round((completed / total) * 100) : 0,

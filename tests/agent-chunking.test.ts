@@ -1,9 +1,7 @@
 import { describe, expect, test, vi } from "vitest";
 
 vi.mock("@/lib/agent/rag/embed", () => ({
-  embedMany_: vi.fn(async (texts: string[]) =>
-    texts.map(() => new Array(1536).fill(0.001)),
-  ),
+  embedMany_: vi.fn(async (texts: string[]) => texts.map(() => new Array(1536).fill(0.001))),
   embedText: vi.fn(),
 }));
 

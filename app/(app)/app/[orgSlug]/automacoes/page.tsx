@@ -2,23 +2,16 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireOrgRole } from "@/lib/auth/guards";
-import {
-  getAutomationMetrics,
-  listAutomations,
-} from "@/lib/automations/queries";
-import { TEMPLATES } from "@/lib/automations/templates";
+import { getAutomationMetrics, listAutomations } from "@/lib/automations/queries";
 import { TRIGGERS } from "@/lib/automations/registry";
+import { TEMPLATES } from "@/lib/automations/templates";
 import { AutomationCard } from "./_components/automation-card";
-import { TemplateCard } from "./_components/template-card";
 import { EmptyState } from "./_components/empty-state";
+import { TemplateCard } from "./_components/template-card";
 
 export const metadata = { title: "Automações" };
 
-export default async function AutomacoesPage({
-  params,
-}: {
-  params: Promise<{ orgSlug: string }>;
-}) {
+export default async function AutomacoesPage({ params }: { params: Promise<{ orgSlug: string }> }) {
   const { orgSlug } = await params;
   const { org } = await requireOrgRole({ orgSlug, roles: ["owner", "admin"] });
   const automations = await listAutomations(org.id);
@@ -39,8 +32,8 @@ export default async function AutomacoesPage({
           <span className="label-mono">/ automações</span>
           <h1 className="font-semibold text-3xl tracking-tight">Automações</h1>
           <p className="text-muted-foreground text-sm">
-            Crie regras automáticas pro CRM agir sozinho — capture leads, mande follow-ups,
-            integre com outros sistemas.
+            Crie regras automáticas pro CRM agir sozinho — capture leads, mande follow-ups, integre
+            com outros sistemas.
           </p>
         </div>
         <Button render={<Link href={`/app/${orgSlug}/automacoes/nova`} />} nativeButton={false}>
