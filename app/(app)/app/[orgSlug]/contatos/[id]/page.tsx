@@ -1,9 +1,9 @@
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { TagsSection } from "@/components/app/tags-section";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TagsSection } from "@/components/app/tags-section";
 import { requireOrgMember } from "@/lib/auth/guards";
 import { getCompanies } from "@/lib/companies/queries";
 import { getContact, getContactDeals, getContactTasks } from "@/lib/contacts/queries";
@@ -80,6 +80,14 @@ export default async function ContactDetailPage({ params }: Props) {
                   phone: contact.phone,
                   title: contact.title,
                   companyId: contact.company_id,
+                  linkedinUrl: contact.linkedin_url,
+                  instagramHandle: contact.instagram_handle,
+                  city: contact.city,
+                  state: contact.state,
+                  specialty: contact.specialty,
+                  icpScore: contact.icp_score,
+                  prospectStatus: contact.prospect_status,
+                  listSource: contact.list_source,
                 }}
               />
             </CardContent>

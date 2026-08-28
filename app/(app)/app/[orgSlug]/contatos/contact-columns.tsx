@@ -2,6 +2,9 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
+import { TagChip } from "@/components/app/tag-chip";
+import { Badge } from "@/components/ui/badge";
+import { PROSPECT_STATUS_LABELS } from "@/lib/contacts/prospect";
 import type { ContactWithCompany } from "@/lib/contacts/queries";
 
 export function getContactColumns(orgSlug: string): ColumnDef<ContactWithCompany>[] {
@@ -20,13 +23,43 @@ export function getContactColumns(orgSlug: string): ColumnDef<ContactWithCompany
     },
     {
       accessorKey: "title",
-      header: "Cargo",
-      cell: ({ row }) => <span className="text-sm">{row.original.title ?? "—"}</span>,
+      header: "Cargo / Especialidade",
+      cell: ({ row }) => (
+        <span className="text-sm">{row.original.title ?? row.original.specialty ?? "—"}</span>
+      ),
     },
     {
       accessorKey: "companyName",
       header: "Empresa",
       cell: ({ row }) => <span className="text-sm">{row.original.companyName ?? "—"}</span>,
+    },
+    {
+      id: "tags",
+      header: "Etiquetas",
+      cell: ({ row }) => {
+        const tags = row.original.tags;
+        if (tags.length === 0) return <span className="text-muted-foreground text-sm">—</span>;
+        return (
+          <div className="flex max-w-[260px] flex-wrap gap-1">
+            {tags.map((t) => (
+              <TagChip key={t.name} name={t.name} color={t.color} />
+            ))}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "prospect_status",
+      header: "Prospecção",
+      cell: ({ row }) => {
+        const status = row.original.prospect_status;
+        if (!status) return <span className="text-muted-foreground text-sm">—</span>;
+        return (
+          <Badge variant={status === "reuniao_marcada" ? "default" : "outline"}>
+            {PROSPECT_STATUS_LABELS[status]}
+          </Badge>
+        );
+      },
     },
     {
       accessorKey: "phone",

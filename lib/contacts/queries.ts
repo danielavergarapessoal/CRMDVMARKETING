@@ -2,7 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/types/supabase";
 
 export type Contact = Database["public"]["Tables"]["contacts"]["Row"];
-export type ContactWithCompany = Contact & { companyName: string | null };
+export type ContactTag = { name: string; color: string };
+export type ContactWithCompany = Contact & { companyName: string | null; tags: ContactTag[] };
 
 export async function getContacts(orgId: string): Promise<Contact[]> {
   const supabase = await createClient();
@@ -19,13 +20,23 @@ export async function getContactsWithCompany(orgId: string): Promise<ContactWith
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("contacts")
-    .select("*, company:companies(name)")
+    .select("*, company:companies(name), tag_links:contact_tag_links(tag:tags(name, color))")
     .eq("organization_id", orgId)
     .order("name", { ascending: true });
   if (error) throw error;
   return (data ?? []).map((row) => {
-    const { company, ...rest } = row as Contact & { company: { name: string } | null };
-    return { ...rest, companyName: company?.name ?? null };
+    const { company, tag_links, ...rest } = row as Contact & {
+      company: { name: string } | null;
+      tag_links: { tag: ContactTag | null }[] | null;
+    };
+    return {
+      ...rest,
+      companyName: company?.name ?? null,
+      tags: (tag_links ?? [])
+        .map((l) => l.tag)
+        .filter((t): t is ContactTag => t !== null)
+        .sort((a, b) => a.name.localeCompare(b.name)),
+    };
   });
 }
 

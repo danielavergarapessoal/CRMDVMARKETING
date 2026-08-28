@@ -52,6 +52,91 @@ describe("createContactSchema", () => {
   });
 });
 
+describe("createContactSchema — campos de prospecção", () => {
+  test("accepts full prospect input", () => {
+    const r = createContactSchema.safeParse({
+      orgSlug: "x",
+      name: "Dra. Ana",
+      linkedinUrl: "https://www.linkedin.com/in/dra-ana",
+      instagramHandle: "@dra.ana",
+      city: "São Paulo",
+      state: "SP",
+      specialty: "Cardiologia",
+      icpScore: 85,
+      prospectStatus: "a_abordar",
+      listSource: "LinkedIn Cardiologistas SP",
+    });
+    expect(r.success).toBe(true);
+  });
+
+  test("accepts empty prospect fields (inbound lead unchanged)", () => {
+    const r = createContactSchema.safeParse({
+      orgSlug: "x",
+      name: "João",
+      linkedinUrl: "",
+      instagramHandle: "",
+      state: "",
+      icpScore: null,
+      prospectStatus: null,
+    });
+    expect(r.success).toBe(true);
+  });
+
+  test("rejects linkedin url outside linkedin.com", () => {
+    const r = createContactSchema.safeParse({
+      orgSlug: "x",
+      name: "João",
+      linkedinUrl: "https://facebook.com/joao",
+    });
+    expect(r.success).toBe(false);
+  });
+
+  test("rejects invalid instagram handle", () => {
+    const r = createContactSchema.safeParse({
+      orgSlug: "x",
+      name: "João",
+      instagramHandle: "user name!",
+    });
+    expect(r.success).toBe(false);
+  });
+
+  test("rejects icpScore above 100", () => {
+    const r = createContactSchema.safeParse({
+      orgSlug: "x",
+      name: "João",
+      icpScore: 101,
+    });
+    expect(r.success).toBe(false);
+  });
+
+  test("rejects icpScore below 0", () => {
+    const r = createContactSchema.safeParse({
+      orgSlug: "x",
+      name: "João",
+      icpScore: -1,
+    });
+    expect(r.success).toBe(false);
+  });
+
+  test("rejects state with 3 letters", () => {
+    const r = createContactSchema.safeParse({
+      orgSlug: "x",
+      name: "João",
+      state: "SPP",
+    });
+    expect(r.success).toBe(false);
+  });
+
+  test("rejects unknown prospect status", () => {
+    const r = createContactSchema.safeParse({
+      orgSlug: "x",
+      name: "João",
+      prospectStatus: "aguardando",
+    });
+    expect(r.success).toBe(false);
+  });
+});
+
 describe("updateContactSchema", () => {
   test("requires id", () => {
     const r = updateContactSchema.safeParse({ orgSlug: "x", name: "Y" });

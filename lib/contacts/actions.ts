@@ -6,6 +6,7 @@ import { emitAfter } from "@/lib/automations/emit";
 import { logError } from "@/lib/logger";
 import { createClient } from "@/lib/supabase/server";
 import type { TablesUpdate } from "@/types/supabase";
+import { normalizeInstagramHandle } from "./prospect";
 import {
   type CreateContactInput,
   createContactSchema,
@@ -19,6 +20,16 @@ type ActionResult<T = void> = { ok: true; data?: T } | { ok: false; error: strin
 
 function emptyToNull(v: string | undefined): string | null {
   return v === undefined || v === "" ? null : v;
+}
+
+function instagramToNull(v: string | undefined): string | null {
+  const clean = emptyToNull(v);
+  return clean === null ? null : normalizeInstagramHandle(clean);
+}
+
+function stateToNull(v: string | undefined): string | null {
+  const clean = emptyToNull(v);
+  return clean === null ? null : clean.toUpperCase();
 }
 
 export async function createContactAction(
@@ -41,6 +52,14 @@ export async function createContactAction(
       title: emptyToNull(parsed.data.title),
       company_id: parsed.data.companyId ?? null,
       notes: emptyToNull(parsed.data.notes),
+      linkedin_url: emptyToNull(parsed.data.linkedinUrl),
+      instagram_handle: instagramToNull(parsed.data.instagramHandle),
+      city: emptyToNull(parsed.data.city),
+      state: stateToNull(parsed.data.state),
+      specialty: emptyToNull(parsed.data.specialty),
+      icp_score: parsed.data.icpScore ?? null,
+      prospect_status: parsed.data.prospectStatus ?? null,
+      list_source: emptyToNull(parsed.data.listSource),
       created_by: user.id,
     })
     .select("id")
@@ -99,6 +118,16 @@ export async function updateContactAction(input: UpdateContactInput): Promise<Ac
   if (parsed.data.title !== undefined) patch.title = emptyToNull(parsed.data.title);
   if (parsed.data.companyId !== undefined) patch.company_id = parsed.data.companyId;
   if (parsed.data.notes !== undefined) patch.notes = emptyToNull(parsed.data.notes);
+  if (parsed.data.linkedinUrl !== undefined)
+    patch.linkedin_url = emptyToNull(parsed.data.linkedinUrl);
+  if (parsed.data.instagramHandle !== undefined)
+    patch.instagram_handle = instagramToNull(parsed.data.instagramHandle);
+  if (parsed.data.city !== undefined) patch.city = emptyToNull(parsed.data.city);
+  if (parsed.data.state !== undefined) patch.state = stateToNull(parsed.data.state);
+  if (parsed.data.specialty !== undefined) patch.specialty = emptyToNull(parsed.data.specialty);
+  if (parsed.data.icpScore !== undefined) patch.icp_score = parsed.data.icpScore;
+  if (parsed.data.prospectStatus !== undefined) patch.prospect_status = parsed.data.prospectStatus;
+  if (parsed.data.listSource !== undefined) patch.list_source = emptyToNull(parsed.data.listSource);
 
   const { error } = await supabase
     .from("contacts")
