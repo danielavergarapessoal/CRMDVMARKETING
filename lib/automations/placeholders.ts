@@ -1,5 +1,3 @@
-import { randomBytes } from "node:crypto";
-
 /**
  * Regex de placeholders que bloqueiam ativação. Fonte da verdade — importada
  * por `setAutomationStatusAction` (lib/automations/actions.server.ts) e
@@ -82,7 +80,9 @@ export function applyTemplateAutoFill<T extends AutomationInputLike>(
       const isPlaceholder = PLACEHOLDER_PATTERNS.some((p) => p.test(value));
       if (!isPlaceholder) continue;
       if (key === "webhook_secret") {
-        action.config[key] = randomBytes(32).toString("hex");
+        action.config[key] = Array.from(crypto.getRandomValues(new Uint8Array(32)), (byte) =>
+          byte.toString(16).padStart(2, "0"),
+        ).join("");
       } else if (key === "company_id" && ctx.defaultCompanyId) {
         action.config[key] = ctx.defaultCompanyId;
       }

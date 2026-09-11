@@ -7,7 +7,8 @@ import { useTransition } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { CompanyCombobox, type CompanyOption } from "@/components/forms/company-combobox";
+import type { CompanyOption } from "@/components/forms/company-combobox";
+import { CompanyField } from "@/components/forms/company-field";
 import { TextField } from "@/components/forms/form-field";
 import { Button } from "@/components/ui/button";
 import { deleteContactAction, updateContactAction } from "@/lib/contacts/actions";
@@ -132,7 +133,7 @@ export function ContactForm({ orgSlug, canDelete, companies, contact }: Props) {
             name="companyId"
             control={form.control}
             render={({ field }) => (
-              <CompanyCombobox
+              <CompanyField orgSlug={orgSlug}
                 options={companies}
                 value={field.value}
                 onChange={field.onChange}

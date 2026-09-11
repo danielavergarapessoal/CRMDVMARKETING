@@ -4,13 +4,14 @@ import { getContactsWithCompany } from "@/lib/contacts/queries";
 import { ContactsTable } from "./contacts-table";
 import { NewContactDialog } from "./new-contact-dialog";
 
-type Props = { params: Promise<{ orgSlug: string }> };
+type Props = { params: Promise<{ orgSlug: string }>; searchParams: Promise<{ tag?: string }> };
 
 export const metadata = { title: "Contatos" };
 
-export default async function ContatosPage({ params }: Props) {
+export default async function ContatosPage({ params, searchParams }: Props) {
   const { orgSlug } = await params;
-  const { org } = await requireOrgMember({ orgSlug });
+  const initialDiagnosis = (await searchParams).tag === "diagnostico";
+  const { org, role } = await requireOrgMember({ orgSlug });
 
   const [contacts, companies] = await Promise.all([
     getContactsWithCompany(org.id),
@@ -32,7 +33,12 @@ export default async function ContatosPage({ params }: Props) {
         <NewContactDialog orgSlug={orgSlug} companies={companyOptions} />
       </div>
 
-      <ContactsTable orgSlug={orgSlug} contacts={contacts} />
+      <ContactsTable
+        initialDiagnosis={initialDiagnosis}
+        orgSlug={orgSlug}
+        contacts={contacts}
+        canDelete={role === "owner" || role === "admin"}
+      />
     </div>
   );
 }

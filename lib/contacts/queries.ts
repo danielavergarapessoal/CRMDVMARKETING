@@ -18,12 +18,24 @@ export async function getContacts(orgId: string): Promise<Contact[]> {
 
 export async function getContactsWithCompany(orgId: string): Promise<ContactWithCompany[]> {
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("contacts")
-    .select("*, company:companies(name), tag_links:contact_tag_links(tag:tags(name, color))")
-    .eq("organization_id", orgId)
-    .order("name", { ascending: true });
-  if (error) throw error;
+  type Joined = Contact & {
+    company: { name: string } | null;
+    tag_links: { tag: ContactTag | null }[] | null;
+  };
+  const data: Joined[] = [];
+  const pageSize = 500;
+  for (let offset = 0; ; offset += pageSize) {
+    const { data: page, error } = await supabase
+      .from("contacts")
+      .select("*, company:companies(name), tag_links:contact_tag_links(tag:tags(name, color))")
+      .eq("organization_id", orgId)
+      .order("id", { ascending: true })
+      .range(offset, offset + pageSize - 1);
+    if (error) throw error;
+    data.push(...((page ?? []) as Joined[]));
+    if (!page || page.length < pageSize) break;
+  }
+  data.sort((a, b) => a.name.localeCompare(b.name));
   return (data ?? []).map((row) => {
     const { company, tag_links, ...rest } = row as Contact & {
       company: { name: string } | null;

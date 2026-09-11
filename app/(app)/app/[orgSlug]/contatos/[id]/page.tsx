@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireOrgMember } from "@/lib/auth/guards";
 import { getCompanies } from "@/lib/companies/queries";
 import { getContact, getContactDeals, getContactTasks } from "@/lib/contacts/queries";
+import { NewDealDialog } from "../../deals/new-deal-dialog";
 import { ContactDealsPanel } from "./contact-deals-panel";
 import { ContactForm } from "./contact-form";
 import { ContactNotes } from "./contact-notes";
@@ -113,7 +114,16 @@ export default async function ContactDetailPage({ params }: Props) {
               <CardTitle className="label-mono text-[10px]">/ deals deste contato</CardTitle>
             </CardHeader>
             <CardContent className="p-6">
-              <ContactDealsPanel orgSlug={orgSlug} deals={deals} />
+              <div className="space-y-4">
+                <ContactDealsPanel orgSlug={orgSlug} deals={deals} />
+                <NewDealDialog
+                  orgSlug={orgSlug}
+                  contactId={contact.id}
+                  contactName={contact.name}
+                  defaultCompanyId={contact.company_id ?? undefined}
+                  companies={companies.map((c) => ({ id: c.id, name: c.name }))}
+                />
+              </div>
             </CardContent>
           </Card>
 

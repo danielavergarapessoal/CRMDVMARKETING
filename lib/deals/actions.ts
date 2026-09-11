@@ -36,19 +36,31 @@ export async function createDealAction(
   const { user, org } = await requireOrgMember({ orgSlug: parsed.data.orgSlug });
   const supabase = await createClient();
 
-  const { data, error } = await supabase
-    .from("deals")
-    .insert({
-      organization_id: org.id,
-      company_id: parsed.data.companyId,
-      name: parsed.data.name,
-      stage: parsed.data.stage ?? "new",
-      value: parsed.data.value ?? null,
-      expected_close_date: emptyToNull(parsed.data.expectedCloseDate ?? undefined),
-      created_by: user.id,
-    })
-    .select("id")
-    .single();
+  const result = parsed.data.contactId
+    ? await supabase.rpc("create_contact_deal", {
+        p_org_id: org.id,
+        p_contact_id: parsed.data.contactId,
+        p_company_id: parsed.data.companyId,
+        p_name: parsed.data.name,
+        p_stage: parsed.data.stage ?? "new",
+        p_value: parsed.data.value ?? null,
+        p_expected_close_date: emptyToNull(parsed.data.expectedCloseDate ?? undefined),
+      })
+    : await supabase
+        .from("deals")
+        .insert({
+          organization_id: org.id,
+          company_id: parsed.data.companyId,
+          name: parsed.data.name,
+          stage: parsed.data.stage ?? "new",
+          value: parsed.data.value ?? null,
+          expected_close_date: emptyToNull(parsed.data.expectedCloseDate ?? undefined),
+          created_by: user.id,
+        })
+        .select("id")
+        .single();
+  const error = result.error;
+  const data = typeof result.data === "string" ? { id: result.data } : result.data;
 
   if (error || !data) {
     logError("deals.create", error);

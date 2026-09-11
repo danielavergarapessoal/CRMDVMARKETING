@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { CompanyCombobox, type CompanyOption } from "@/components/forms/company-combobox";
+import type { CompanyOption } from "@/components/forms/company-combobox";
+import { CompanyField } from "@/components/forms/company-field";
 import { TextField } from "@/components/forms/form-field";
 import { Button } from "@/components/ui/button";
 import {
@@ -96,7 +97,7 @@ export function NewContactDialog({ orgSlug, companies }: Props) {
                 name="companyId"
                 control={form.control}
                 render={({ field }) => (
-                  <CompanyCombobox
+                  <CompanyField orgSlug={orgSlug}
                     options={companies}
                     value={field.value ?? null}
                     onChange={field.onChange}

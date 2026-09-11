@@ -16,6 +16,7 @@ const optionalValue = z.number().nonnegative("Valor inválido").nullable().optio
 export const createDealSchema = z.object({
   orgSlug: z.string(),
   companyId: z.guid(),
+  contactId: z.guid().optional(),
   name: z.string().min(1, "Nome obrigatório").max(200, "Nome muito longo"),
   stage: dealStageEnum.optional(),
   value: optionalValue,

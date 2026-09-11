@@ -1,95 +1,92 @@
-import { DemoBanner } from "@/components/app/demo-banner";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 import { requireOrgMember } from "@/lib/auth/guards";
-import { chartMock, kpisMock } from "@/lib/mock/dashboard";
-import { createClient } from "@/lib/supabase/server";
-import { DashboardChart } from "./dashboard-chart";
-import { KpiCard } from "./kpi-card";
-
-type Props = { params: Promise<{ orgSlug: string }> };
-
+import { getDashboard } from "@/lib/dashboard/queries";
+import { STAGE_LABELS } from "@/lib/deals/stages";
 export const metadata = { title: "Início" };
-
-export default async function DashboardPage({ params }: Props) {
+export default async function DashboardPage({ params }: { params: Promise<{ orgSlug: string }> }) {
   const { orgSlug } = await params;
-  const { user, org } = await requireOrgMember({ orgSlug });
-
-  const supabase = await createClient();
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("full_name")
-    .eq("id", user.id)
-    .maybeSingle();
-  const displayName = profile?.full_name ?? user.email ?? "";
-
+  const { org } = await requireOrgMember({ orgSlug });
+  const d = await getDashboard(org.id);
+  const cards = [
+    ["Contatos cadastrados", String(d.contacts), "contatos"],
+    ["Diagnóstico de Maturidade", String(d.diagnosis), "contatos?tag=diagnostico"],
+    ["Tarefas pendentes", String(d.pending), "tarefas"],
+    ["Tarefas atrasadas", String(d.overdue), "tarefas"],
+  ];
   return (
     <div className="space-y-8">
-      <DemoBanner>
-        KPIs e gráfico abaixo são <strong className="text-foreground/80">dados de exemplo</strong>{" "}
-        (mocks em <code className="font-mono">lib/mock/dashboard.ts</code>). Troque por queries
-        reais quando construir seu produto.
-      </DemoBanner>
-
-      {/* Header */}
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div className="space-y-1.5">
-          <div className="label-mono">/ overview</div>
-          <h1 className="font-semibold text-3xl tracking-tight">Bem-vindo, {displayName}</h1>
-          <p className="text-muted-foreground text-sm">
-            Workspace <span className="text-foreground/80">{org.name}</span>
-          </p>
-        </div>
-        <div className="flex items-center gap-2 rounded-full border border-border/60 bg-card/60 px-3 py-1.5">
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 pulse-soft" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
-          </span>
-          <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider">
-            últimos 30 dias
-          </span>
-        </div>
+      <div>
+        <span className="label-mono">/ acompanhamento comercial</span>
+        <h1 className="text-3xl font-semibold">Seu dia no CRM</h1>
+        <p className="text-sm text-muted-foreground">
+          {org.name} · Dados dos cadastros atuais, atualizados ao abrir esta página.
+        </p>
       </div>
-
-      {/* KPIs */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {kpisMock.map((kpi) => (
-          <KpiCard key={kpi.label} kpi={kpi} />
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {cards.map(([label, value, path]) => (
+          <Link
+            key={label}
+            href={`/app/${orgSlug}/${path}`}
+            className="rounded-xl border bg-card p-5 hover:border-primary"
+          >
+            <p className="text-sm text-muted-foreground">{label}</p>
+            <p className="mt-2 text-3xl font-semibold">{value}</p>
+          </Link>
         ))}
       </div>
-
-      {/* Chart */}
-      <Card className="overflow-hidden">
-        <CardHeader className="flex flex-row items-center justify-between border-b border-border/60 bg-card/40 py-3">
-          <CardTitle className="flex items-center gap-2 font-medium text-sm">
-            <span className="label-mono">/ performance</span>
-          </CardTitle>
-          <div className="flex items-center gap-1.5 font-mono text-[10px] text-muted-foreground">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-            real-time
-          </div>
-        </CardHeader>
-        <CardContent className="p-5">
-          <DashboardChart data={chartMock} />
-        </CardContent>
-      </Card>
-
-      {/* Helper hint */}
-      <div className="rounded-xl border border-dashed border-border bg-card/30 p-5">
-        <div className="flex items-start gap-3">
-          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-primary/10 font-mono text-primary text-xs">
-            $
-          </span>
-          <div className="space-y-1.5">
-            <p className="font-mono text-[11px] text-muted-foreground uppercase tracking-wider">
-              próximo passo
-            </p>
-            <p className="text-sm leading-relaxed">
-              Troque estes mocks por dados reais. Abra o Claude Code e descreva em português o que
-              você quer construir.
-            </p>
-          </div>
+      <section className="space-y-4 rounded-xl border bg-card p-5">
+        <h2 className="text-lg font-semibold">Negociações</h2>
+        <p>
+          Valor das oportunidades abertas:{" "}
+          <strong>
+            {d.pipeline.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+          </strong>
+        </p>
+        <p className="text-sm text-muted-foreground">
+          Previsão comercial; não representa receita recebida.
+        </p>
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+          {Object.entries(d.stages).map(([stage, count]) => (
+            <div key={stage} className="rounded-lg border p-3">
+              <p className="text-sm">{STAGE_LABELS[stage as keyof typeof STAGE_LABELS]}</p>
+              <strong className="text-xl">{count}</strong>
+            </div>
+          ))}
         </div>
-      </div>
+        <Link className="text-primary underline" href={`/app/${orgSlug}/deals`}>
+          Abrir negociações
+        </Link>
+      </section>
+      <section className="space-y-3 rounded-xl border bg-card p-5">
+        <h2 className="text-lg font-semibold">Próximas ações</h2>
+        {d.tasks.length === 0 ? (
+          <p className="text-muted-foreground">
+            Nenhuma tarefa pendente. Abra um contato para agendar o próximo retorno.
+          </p>
+        ) : (
+          <ul className="space-y-2">
+            {d.tasks.map((t) => (
+              <li key={t.id}>
+                <Link
+                  className="flex justify-between gap-4 rounded-lg border p-3 hover:border-primary"
+                  href={`/app/${orgSlug}/tarefas/${t.id}`}
+                >
+                  <span>{t.title}</span>
+                  <span>
+                    {t.due_date
+                      ? t.due_date.slice(0, 10).split("-").reverse().join("/")
+                      : "Sem data"}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+      <p className="text-sm text-muted-foreground">
+        Rotina: abra o contato, complete a empresa, adicione a proposta e agende uma tarefa com o
+        próximo retorno.
+      </p>
     </div>
   );
 }

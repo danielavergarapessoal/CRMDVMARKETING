@@ -4,7 +4,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.17";
+    PostgrestVersion: "14.5";
   };
   public: {
     Tables: {
@@ -1236,6 +1236,7 @@ export type Database = {
           id: string;
           logo_url: string | null;
           name: string;
+          prospect_followup_days: number;
           slug: string;
           updated_at: string;
         };
@@ -1245,6 +1246,7 @@ export type Database = {
           id?: string;
           logo_url?: string | null;
           name: string;
+          prospect_followup_days?: number;
           slug: string;
           updated_at?: string;
         };
@@ -1254,6 +1256,7 @@ export type Database = {
           id?: string;
           logo_url?: string | null;
           name?: string;
+          prospect_followup_days?: number;
           slug?: string;
           updated_at?: string;
         };
@@ -1282,6 +1285,60 @@ export type Database = {
           updated_at?: string;
         };
         Relationships: [];
+      };
+      prospect_touches: {
+        Row: {
+          channel: string;
+          contact_id: string;
+          created_at: string;
+          created_by: string | null;
+          direction: string;
+          id: string;
+          message_variant: string | null;
+          note: string | null;
+          organization_id: string;
+          touched_at: string;
+        };
+        Insert: {
+          channel: string;
+          contact_id: string;
+          created_at?: string;
+          created_by?: string | null;
+          direction: string;
+          id?: string;
+          message_variant?: string | null;
+          note?: string | null;
+          organization_id: string;
+          touched_at?: string;
+        };
+        Update: {
+          channel?: string;
+          contact_id?: string;
+          created_at?: string;
+          created_by?: string | null;
+          direction?: string;
+          id?: string;
+          message_variant?: string | null;
+          note?: string | null;
+          organization_id?: string;
+          touched_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "prospect_touches_contact_id_fkey";
+            columns: ["contact_id"];
+            isOneToOne: false;
+            referencedRelation: "contacts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "prospect_touches_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       tag_suggestions: {
         Row: {
@@ -1516,6 +1573,18 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      create_contact_deal: {
+        Args: {
+          p_org_id: string;
+          p_contact_id: string;
+          p_company_id: string;
+          p_name: string;
+          p_stage: Database["public"]["Enums"]["deal_stage"];
+          p_value: number | null;
+          p_expected_close_date: string | null;
+        };
+        Returns: string;
+      };
       accept_invitation: {
         Args: { _token: string };
         Returns: {

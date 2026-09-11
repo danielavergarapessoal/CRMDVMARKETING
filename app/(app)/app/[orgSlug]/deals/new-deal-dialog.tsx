@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { CompanyCombobox, type CompanyOption } from "@/components/forms/company-combobox";
+import type { CompanyOption } from "@/components/forms/company-combobox";
+import { CompanyField } from "@/components/forms/company-field";
 import { TextField } from "@/components/forms/form-field";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,14 +19,23 @@ import {
 } from "@/components/ui/dialog";
 import { createDealAction } from "@/lib/deals/actions";
 import { type CreateDealInput, createDealSchema } from "@/lib/deals/schemas";
+import { STAGE_LABELS } from "@/lib/deals/stages";
 
 type Props = {
   orgSlug: string;
   companies: CompanyOption[];
   defaultCompanyId?: string;
+  contactId?: string;
+  contactName?: string;
 };
 
-export function NewDealDialog({ orgSlug, companies, defaultCompanyId }: Props) {
+export function NewDealDialog({
+  orgSlug,
+  companies,
+  defaultCompanyId,
+  contactId,
+  contactName,
+}: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
@@ -35,7 +45,9 @@ export function NewDealDialog({ orgSlug, companies, defaultCompanyId }: Props) {
     defaultValues: {
       orgSlug,
       companyId: defaultCompanyId ?? "",
-      name: "",
+      name: contactName ? `Proposta — ${contactName}` : "",
+      contactId,
+      stage: contactId ? "proposal_sent" : "new",
       value: null,
       expectedCloseDate: null,
     },
@@ -43,16 +55,26 @@ export function NewDealDialog({ orgSlug, companies, defaultCompanyId }: Props) {
 
   function onSubmit(values: CreateDealInput) {
     startTransition(async () => {
-      const r = await createDealAction(values);
+      let r: Awaited<ReturnType<typeof createDealAction>>;
+      try {
+        r = await createDealAction({ ...values, contactId });
+      } catch {
+        toast.error(
+          "Não foi possível confirmar a criação. Confira as negociações antes de tentar novamente.",
+        );
+        return;
+      }
       if (!r.ok) {
         toast.error(r.error);
         return;
       }
-      toast.success("Deal criado");
+      toast.success("Negociação criada");
       form.reset({
         orgSlug,
         companyId: defaultCompanyId ?? "",
-        name: "",
+        name: contactName ? `Proposta — ${contactName}` : "",
+        contactId,
+        stage: contactId ? "proposal_sent" : "new",
         value: null,
         expectedCloseDate: null,
       });
@@ -64,34 +86,42 @@ export function NewDealDialog({ orgSlug, companies, defaultCompanyId }: Props) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(v) => {
+        if (pending) return;
+        if (v && defaultCompanyId) form.setValue("companyId", defaultCompanyId);
+        setOpen(v);
+      }}
+    >
       <DialogTrigger
         render={
           <Button size="sm" className="gap-1.5">
             <PlusIcon className="h-3.5 w-3.5" />
-            Novo deal
+            {contactId ? "Adicionar proposta" : "Nova negociação"}
           </Button>
         }
       />
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Novo deal</DialogTitle>
+          <DialogTitle>{contactId ? "Adicionar proposta" : "Nova negociação"}</DialogTitle>
         </DialogHeader>
         <FormProvider {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <TextField
               name="name"
               control={form.control}
-              label="Nome do deal"
+              label="Nome da negociação"
               inputProps={{ placeholder: "Ex: Reestruturação financeira 2026" }}
             />
             <div className="space-y-1.5">
-              <label className="font-medium text-sm">Empresa *</label>
+              <span className="font-medium text-sm">Empresa *</span>
               <Controller
                 name="companyId"
                 control={form.control}
                 render={({ field }) => (
-                  <CompanyCombobox
+                  <CompanyField
+                    orgSlug={orgSlug}
                     options={companies}
                     value={field.value || null}
                     onChange={(v) => field.onChange(v ?? "")}
@@ -101,6 +131,20 @@ export function NewDealDialog({ orgSlug, companies, defaultCompanyId }: Props) {
                 )}
               />
             </div>
+            <label htmlFor="new-deal-stage" className="block text-sm">
+              Etapa
+            </label>
+            <select
+              id="new-deal-stage"
+              className="h-9 w-full rounded-md border bg-background px-2"
+              {...form.register("stage")}
+            >
+              {Object.entries(STAGE_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
             <Controller
               name="value"
               control={form.control}
@@ -133,7 +177,7 @@ export function NewDealDialog({ orgSlug, companies, defaultCompanyId }: Props) {
               inputProps={{ type: "date" }}
             />
             <Button type="submit" disabled={pending} className="w-full">
-              {pending ? "Criando..." : "Criar deal"}
+              {pending ? "Criando..." : "Criar negociação"}
             </Button>
           </form>
         </FormProvider>
