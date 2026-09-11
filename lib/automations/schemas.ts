@@ -30,6 +30,7 @@ export interface ActionContext {
   depth: number;
   /** ID da run (pra logs e re-dispatch) */
   runId: string;
+  stepIndex?: number;
 }
 
 export interface ActionDefinition<TInput = unknown, TOutput = unknown> {

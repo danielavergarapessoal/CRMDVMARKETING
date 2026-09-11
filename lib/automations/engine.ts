@@ -1,3 +1,4 @@
+import { isCrmEventCurrent } from "@/lib/notifications/current-event";
 import { logError } from "@/lib/logger";
 import { createServiceClient } from "@/lib/supabase/service";
 import type { Database, Json } from "@/types/supabase";
@@ -71,6 +72,32 @@ export async function runAutomation(runId: string): Promise<void> {
   const triggerPayload = (run.trigger_payload ?? {}) as TriggerPayload;
   const isDryRun = triggerPayload._meta?.dry_run === true;
 
+  if (!isDryRun && automation.trigger_type.startsWith("crm.")) {
+    const internalActions = (automation.actions ?? []) as AutomationAction[];
+    if (internalActions.some((a) => !["create_task", "send_email"].includes(a.type))) {
+      await finishRun(
+        supabase,
+        run.id,
+        "failed",
+        "Avisos internos permitem apenas criar tarefa e enviar e-mail.",
+      );
+      return;
+    }
+    const def = TRIGGERS[automation.trigger_type];
+    if (!def || !def.contextSchema.safeParse(triggerPayload).success) {
+      await finishRun(supabase, run.id, "failed", "Dados do aviso inválidos");
+      return;
+    }
+    if (!(await isCrmEventCurrent(automation.trigger_type, run.organization_id, triggerPayload))) {
+      await finishRun(
+        supabase,
+        run.id,
+        "skipped_conditions",
+        "Cadastro excluído, tarefa concluída/reagendada ou proposta em outra etapa",
+      );
+      return;
+    }
+  }
   // Sub-H Round-2 #3: valida payload contra contextSchema do trigger (warning-only).
   // Não falha — alguns triggers (agent.escalated com channel vazio em tools) emitem
   // dados incompletos. Aluno vê warning nos logs server-side e algumas vars
@@ -178,6 +205,7 @@ export async function runAutomation(runId: string): Promise<void> {
             orgId: run.organization_id,
             depth: run.depth,
             runId: run.id,
+            stepIndex: i,
           });
       const result = await runWithTimeout(promise, AUTOMATION_LIMITS.STEP_TIMEOUT_MS);
       await markStep(

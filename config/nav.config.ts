@@ -61,7 +61,7 @@ export const navItems: NavItem[] = [
   // CRM — entidades de negócio
   { path: "/contatos", label: "Contatos", icon: UsersIcon, group: "crm" },
   { path: "/empresas", label: "Empresas", icon: BuildingIcon, group: "crm" },
-  { path: "/deals", label: "Deals", icon: BriefcaseIcon, group: "crm" },
+  { path: "/deals", label: "Negociações", icon: BriefcaseIcon, group: "crm" },
 
   // automação — features avançadas que admin configura
   {
@@ -86,6 +86,13 @@ export const navItems: NavItem[] = [
     roles: ["owner", "admin"],
   },
 
+  {
+    path: "/settings/notifications",
+    label: "Avisos por e-mail",
+    icon: InboxIcon,
+    group: "configuracoes",
+    roles: ["owner", "admin"],
+  },
   // configurações — workspace + pessoas + perfil
   {
     path: "/settings/organization",

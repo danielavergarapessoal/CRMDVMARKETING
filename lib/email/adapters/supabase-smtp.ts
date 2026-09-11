@@ -17,14 +17,14 @@ function maskEmail(email: string): string {
 
 export class ConsoleAdapter implements EmailProvider {
   async send(opts: SendEmailInput): Promise<SendEmailResult> {
+    if (process.env.NODE_ENV === "production")
+      return { ok: false, error: "Serviço de e-mail não configurado. Nenhum e-mail foi enviado." };
     // Render só para validar o template — não exibe.
     await render(opts.react, { plainText: true });
 
-    if (process.env.NODE_ENV !== "production") {
-      console.log(
-        `📧 [EMAIL FALLBACK] to=${maskEmail(opts.to)} subject="${opts.subject.slice(0, 80)}"`,
-      );
-    }
+    console.log(
+      `📧 [EMAIL FALLBACK] to=${maskEmail(opts.to)} subject="${opts.subject.slice(0, 80)}"`,
+    );
 
     return { ok: true, id: `console-${Date.now()}` };
   }

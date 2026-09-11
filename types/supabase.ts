@@ -1573,6 +1573,7 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      queue_crm_reminders: { Args: { p_now?: string }; Returns: number };
       create_contact_deal: {
         Args: {
           p_org_id: string;

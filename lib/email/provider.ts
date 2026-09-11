@@ -5,6 +5,7 @@ export type SendEmailInput = {
   subject: string;
   react: ReactElement;
   replyTo?: string;
+  idempotencyKey?: string;
 };
 
 export type SendEmailResult = { ok: true; id: string } | { ok: false; error: string };

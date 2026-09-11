@@ -5,6 +5,7 @@ import { assertOrgMember, assertOrgOwns } from "./_org-isolation";
 
 const inputSchema = z.object({
   title: z.string().min(1).max(200),
+  reuse_pending: z.boolean().optional(),
   description: z.string().optional().nullable(),
   /** Mapeia pra coluna `assigned_to` (user id) — nome no plano era `assignee_id`. */
   assigned_to: z.string().uuid().optional().nullable(),
@@ -35,10 +36,28 @@ export const createTaskAction: ActionDefinition<Input, { task_id: string }> = {
       // Sub-H C-1: assignee precisa ser membro da org
       await assertOrgMember(supabase, input.assigned_to, ctx.orgId, "create_task");
     }
+    if (input.reuse_pending && (input.deal_id || input.contact_id)) {
+      let query = supabase
+        .from("tasks")
+        .select("id")
+        .eq("organization_id", ctx.orgId)
+        .eq("title", input.title)
+        .neq("status", "done");
+      if (input.deal_id) query = query.eq("deal_id", input.deal_id);
+      if (input.contact_id) query = query.eq("contact_id", input.contact_id);
+      const { data: existing, error: existingError } = await query.limit(1).maybeSingle();
+      if (existingError) throw existingError;
+      if (existing) return { task_id: existing.id };
+    }
     // `tasks.due_date` é DATE (tipo string 'YYYY-MM-DD'), não timestamptz — slice(0,10).
     const dueDate =
       input.due_in_days != null
-        ? new Date(Date.now() + input.due_in_days * 86_400_000).toISOString().slice(0, 10)
+        ? new Intl.DateTimeFormat("en-CA", {
+            timeZone: "America/Sao_Paulo",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          }).format(new Date(Date.now() + input.due_in_days * 86_400_000))
         : null;
     const { data, error } = await supabase
       .from("tasks")

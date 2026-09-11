@@ -1,3 +1,4 @@
+import { queueCrmReminders } from "@/lib/notifications/scheduler";
 import { recoverStaleDocuments } from "@/lib/agent/rag/ingest";
 import { recoverStaleAgents } from "@/lib/agent/recovery";
 import { AUTOMATION_LIMITS } from "@/lib/automations/limits";
@@ -33,6 +34,11 @@ export function startBackgroundJobs(): void {
     return;
   }
   jobsStarted = true;
+  intervals.push(
+    setInterval(() => {
+      queueCrmReminders().catch((err) => console.error("[jobs/crm-reminders]", err));
+    }, 60_000),
+  );
 
   // Mensagens em 'sending' há > 60s → marca 'failed'
   intervals.push(
@@ -87,7 +93,7 @@ export function startBackgroundJobs(): void {
   );
 
   console.log(
-    "[jobs] started 5 background intervals (3 recoveries + automations worker + recovery)",
+    "[jobs] started 6 background intervals (3 recoveries + automations worker + recovery)",
   );
 
   // Sub-H H-3: SIGTERM com guard de duplicate registration (em vez de gating por NODE_ENV)

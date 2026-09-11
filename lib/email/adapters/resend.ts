@@ -15,14 +15,17 @@ export class ResendAdapter implements EmailProvider {
     try {
       const html = await render(opts.react);
       const text = await render(opts.react, { plainText: true });
-      const { data, error } = await this.client.emails.send({
-        from: this.from,
-        to: opts.to,
-        subject: opts.subject,
-        html,
-        text,
-        replyTo: opts.replyTo,
-      });
+      const { data, error } = await this.client.emails.send(
+        {
+          from: this.from,
+          to: opts.to,
+          subject: opts.subject,
+          html,
+          text,
+          replyTo: opts.replyTo,
+        },
+        opts.idempotencyKey ? { idempotencyKey: opts.idempotencyKey } : undefined,
+      );
       if (error) return { ok: false, error: error.message };
       return { ok: true, id: data?.id ?? "" };
     } catch (err) {

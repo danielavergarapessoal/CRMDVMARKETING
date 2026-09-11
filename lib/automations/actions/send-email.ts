@@ -16,13 +16,14 @@ type Input = z.infer<typeof inputSchema>;
 export const sendEmailAction: ActionDefinition<Input, { email_id: string }> = {
   id: "send_email",
   label: "Enviar email",
-  description: "Manda email via provider configurado (Resend em prod, Console em dev).",
+  description: "Manda email via provider configurado (Resend em produção).",
   category: "messaging",
   inputSchema,
-  async execute(input, _ctx) {
+  async execute(input, ctx) {
     const provider = getEmailProvider();
     const result = await provider.send({
       to: input.to,
+      idempotencyKey: `automation/${ctx.runId}/${ctx.stepIndex ?? 0}`,
       subject: input.subject,
       react: React.createElement(AutomationTextEmail, {
         preview: input.preview ?? input.subject,

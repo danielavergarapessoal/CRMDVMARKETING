@@ -4,6 +4,7 @@ import {
   Head,
   Heading,
   Html,
+  Link,
   Preview,
   Section,
   Text,
@@ -16,18 +17,18 @@ interface Props {
 }
 
 const main = {
-  background: "#0a0a0a",
-  color: "#d4d4d4",
+  background: "#f3f0ec",
+  color: "#344b40",
   fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 };
 const container = { maxWidth: "560px", margin: "0 auto", padding: "32px 24px" };
 const headingStyle = {
-  color: "#52d12f",
+  color: "#52705e",
   fontSize: "24px",
   margin: "0 0 16px 0",
 };
 const text = {
-  color: "#d4d4d4",
+  color: "#344b40",
   fontSize: "14px",
   lineHeight: "1.5",
   whiteSpace: "pre-wrap" as const,
@@ -42,7 +43,7 @@ export default function AutomationTextEmail({ preview, heading, body }: Props) {
         <Container style={container}>
           <Section>
             {heading && <Heading style={headingStyle}>{heading}</Heading>}
-            <Text style={text}>{body}</Text>
+            <Text style={text}>{body.split(/(https:\/\/[^\s]+)/g).map((part,index) => part.startsWith("https://") ? <Link key={`${index}-${part}`} href={part} style={{color:"#52705e",textDecoration:"underline"}}>{part}</Link> : part)}</Text>
           </Section>
         </Container>
       </Body>

@@ -36,6 +36,15 @@ export async function processNextRuns(
       await runAutomation(locked.id);
     } catch (err) {
       logError("automations.worker.run", err);
+      await supabase
+        .from("automation_runs")
+        .update({
+          status: "failed",
+          finished_at: new Date().toISOString(),
+          error: "Falha ao processar. Consulte o histórico antes de tentar novamente.",
+        })
+        .eq("id", locked.id)
+        .eq("status", "running");
     }
     processed += 1;
   }

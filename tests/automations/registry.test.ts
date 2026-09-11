@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import { ACTIONS, getAction, getTrigger, TRIGGERS } from "@/lib/automations/registry";
 
 describe("registry", () => {
-  test("contém os 11 triggers (7 MVP + 4 de tag)", () => {
+  test("inclui eventos do CRM e avisos internos", () => {
     expect(Object.keys(TRIGGERS).sort()).toEqual([
       "agent.escalated",
       "contact.created",
@@ -10,6 +10,10 @@ describe("registry", () => {
       "contact.tag_removed",
       "conversation.created",
       "conversation.tag_added",
+      "crm.lead_received",
+      "crm.overdue_digest",
+      "crm.proposal_sent",
+      "crm.task_due",
       "deal.created",
       "deal.stage_changed",
       "deal.tag_added",

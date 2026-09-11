@@ -1,3 +1,9 @@
+import {
+  crmLeadTrigger,
+  crmProposalTrigger,
+  crmTaskDueTrigger,
+  crmOverdueTrigger,
+} from "./triggers/crm-notifications";
 import { addTagToConversationAction } from "./actions/add-tag-to-conversation";
 import { applyTagToCompanyAction } from "./actions/apply-tag-to-company";
 import { applyTagToContactAction } from "./actions/apply-tag-to-contact";
@@ -37,6 +43,10 @@ import { taskCompletedTrigger } from "./triggers/task-completed";
 // ============================================================
 
 export const TRIGGERS: Record<string, TriggerDefinition> = {
+  "crm.lead_received": crmLeadTrigger,
+  "crm.proposal_sent": crmProposalTrigger,
+  "crm.task_due": crmTaskDueTrigger,
+  "crm.overdue_digest": crmOverdueTrigger,
   "conversation.created": conversationCreatedTrigger,
   "message.received": messageReceivedTrigger,
   "deal.created": dealCreatedTrigger,

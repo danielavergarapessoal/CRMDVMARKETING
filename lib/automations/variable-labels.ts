@@ -15,7 +15,13 @@ import { dealTagAddedTrigger } from "./triggers/deal-tag-added";
 import { messageReceivedTrigger } from "./triggers/message-received";
 import { taskCompletedTrigger } from "./triggers/task-completed";
 
+import { crmLeadTrigger, crmProposalTrigger, crmTaskDueTrigger, crmOverdueTrigger } from "./triggers/crm-notifications";
+
 const TRIGGERS: Record<string, TriggerDefinition> = {
+  "crm.lead_received": crmLeadTrigger,
+  "crm.proposal_sent": crmProposalTrigger,
+  "crm.task_due": crmTaskDueTrigger,
+  "crm.overdue_digest": crmOverdueTrigger,
   "conversation.created": conversationCreatedTrigger,
   "message.received": messageReceivedTrigger,
   "deal.created": dealCreatedTrigger,
