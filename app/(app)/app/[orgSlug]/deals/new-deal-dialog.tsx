@@ -8,6 +8,7 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { CompanyOption } from "@/components/forms/company-combobox";
 import { CompanyField } from "@/components/forms/company-field";
+import { CurrencyInput } from "@/components/forms/currency-input";
 import { TextField } from "@/components/forms/form-field";
 import { Button } from "@/components/ui/button";
 import {
@@ -153,17 +154,11 @@ export function NewDealDialog({
                   <label htmlFor="deal-value" className="font-medium text-sm">
                     Valor (R$)
                   </label>
-                  <input
+                  <CurrencyInput
                     id="deal-value"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value={field.value ?? ""}
-                    onChange={(e) =>
-                      field.onChange(e.target.value === "" ? null : Number(e.target.value))
-                    }
-                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs"
-                    placeholder="50000"
+                    value={field.value ?? null}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
                   />
                   <p className="text-muted-foreground text-xs">Opcional</p>
                 </div>
