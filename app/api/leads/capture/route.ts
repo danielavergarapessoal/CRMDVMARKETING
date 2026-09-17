@@ -1,6 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { normalizeInstagramHandle } from "@/lib/contacts/prospect";
 import { LEAD_CAPTURE_ORG_SLUG, LEAD_SOURCES, tagColorFor } from "@/lib/leads/sources";
+import { submissionSchema } from "@/lib/leads/submissions";
 import { logError } from "@/lib/logger";
 import { createServiceClient } from "@/lib/supabase/service";
 
@@ -17,6 +19,17 @@ const bodySchema = z.object({
   name: z.string().trim().max(120).optional(),
   email: z.string().trim().max(200).optional(),
   phone: z.string().trim().max(40).optional(),
+  // Dados que o diagnóstico já coleta — só preenchem campo vazio do contato.
+  specialty: z.string().trim().max(120).optional(),
+  city: z.string().trim().max(120).optional(),
+  instagram: z
+    .string()
+    .trim()
+    .max(60)
+    .regex(/^@?[A-Za-z0-9._]+$/)
+    .optional(),
+  // Laudo + respostas do diagnóstico/pesquisa (opcional).
+  submission: submissionSchema.optional(),
   // honeypot anti-bot: campo escondido que humano nunca preenche
   website: z.string().optional(),
 });
@@ -58,7 +71,14 @@ export async function POST(req: NextRequest) {
       { status: 400, headers: CORS },
     );
   }
-  const { source, name, email, phone, website } = parsed.data;
+  const { source, name, email, phone, website, submission } = parsed.data;
+  const enrich = {
+    specialty: parsed.data.specialty || null,
+    city: parsed.data.city || null,
+    instagram_handle: parsed.data.instagram
+      ? normalizeInstagramHandle(parsed.data.instagram)
+      : null,
+  };
 
   // Honeypot: bot preencheu o campo escondido → finge sucesso e descarta.
   if (website && website.trim().length > 0) {
@@ -106,11 +126,33 @@ export async function POST(req: NextRequest) {
     if (cleanEmail) {
       const { data: existing } = await supabase
         .from("contacts")
-        .select("id")
+        .select("id, phone, specialty, city, instagram_handle")
         .eq("organization_id", orgId)
         .ilike("email", cleanEmail)
         .maybeSingle();
       contactId = existing?.id ?? null;
+
+      // Contato já existia: completa só o que está vazio, nunca sobrescreve.
+      if (existing) {
+        const patch: {
+          phone?: string;
+          specialty?: string;
+          city?: string;
+          instagram_handle?: string;
+        } = {};
+        if (!existing.phone && cleanPhone) patch.phone = cleanPhone;
+        if (!existing.specialty && enrich.specialty) patch.specialty = enrich.specialty;
+        if (!existing.city && enrich.city) patch.city = enrich.city;
+        if (!existing.instagram_handle && enrich.instagram_handle)
+          patch.instagram_handle = enrich.instagram_handle;
+        if (Object.keys(patch).length > 0) {
+          const { error: pErr } = await supabase
+            .from("contacts")
+            .update(patch)
+            .eq("id", existing.id);
+          if (pErr) logError("leads.capture.enrich", pErr);
+        }
+      }
     }
     if (!contactId) {
       const { data: created, error: cErr } = await supabase
@@ -120,6 +162,7 @@ export async function POST(req: NextRequest) {
           name: contactName,
           email: cleanEmail,
           phone: cleanPhone,
+          ...enrich,
           notes: `Lead capturado via landing page: ${sourceCfg.label}`,
         })
         .select("id")
@@ -166,6 +209,45 @@ export async function POST(req: NextRequest) {
         { onConflict: "contact_id,tag_id", ignoreDuplicates: true },
       );
       if (linkErr) logError("leads.capture.link", linkErr);
+    }
+
+    // 4) Laudo/respostas — falha aqui não derruba o lead (contato já está salvo).
+    if (submission) {
+      const row = {
+        organization_id: orgId,
+        contact_id: contactId,
+        source,
+        source_label: sourceCfg.label,
+        external_id: submission.externalId || null,
+        stage: submission.stage || null,
+        score_total: submission.scoreTotal ?? null,
+        score_max: submission.scoreMax ?? null,
+        recommended_plan: submission.recommendedPlan || null,
+        priority: submission.priority || null,
+        summary: submission.summary || null,
+        dimensions: submission.dimensions ?? [],
+        answers: submission.answers ?? [],
+        extra: submission.extra ?? {},
+        notion_url: submission.notionUrl || null,
+        ...(submission.submittedAt ? { submitted_at: submission.submittedAt } : {}),
+      };
+
+      // Reenvio do mesmo diagnóstico (mesmo externalId) atualiza em vez de duplicar.
+      let existingSubmissionId: string | null = null;
+      if (row.external_id) {
+        const { data: prev } = await supabase
+          .from("lead_submissions")
+          .select("id")
+          .eq("organization_id", orgId)
+          .eq("source", source)
+          .eq("external_id", row.external_id)
+          .maybeSingle();
+        existingSubmissionId = prev?.id ?? null;
+      }
+      const { error: sErr } = existingSubmissionId
+        ? await supabase.from("lead_submissions").update(row).eq("id", existingSubmissionId)
+        : await supabase.from("lead_submissions").insert(row);
+      if (sErr) logError("leads.capture.submission", sErr);
     }
 
     return NextResponse.json({ ok: true }, { headers: CORS });

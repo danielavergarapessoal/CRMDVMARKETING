@@ -7,10 +7,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireOrgMember } from "@/lib/auth/guards";
 import { getCompanies } from "@/lib/companies/queries";
 import { getContact, getContactDeals, getContactTasks } from "@/lib/contacts/queries";
+import { getContactSubmissions } from "@/lib/leads/queries";
 import { NewDealDialog } from "../../deals/new-deal-dialog";
 import { ContactDealsPanel } from "./contact-deals-panel";
 import { ContactForm } from "./contact-form";
 import { ContactNotes } from "./contact-notes";
+import { ContactSubmissionsPanel } from "./contact-submissions-panel";
 import { ContactTasksPanel } from "./contact-tasks-panel";
 
 type Props = { params: Promise<{ orgSlug: string; id: string }> };
@@ -23,10 +25,11 @@ export default async function ContactDetailPage({ params }: Props) {
   const contact = await getContact(org.id, id);
   if (!contact) notFound();
 
-  const [deals, tasks, companies] = await Promise.all([
+  const [deals, tasks, companies, submissions] = await Promise.all([
     getContactDeals(org.id, id),
     getContactTasks(org.id, id),
     getCompanies(org.id),
+    getContactSubmissions(org.id, id),
   ]);
 
   const canDelete = role === "owner" || role === "admin";
@@ -62,6 +65,17 @@ export default async function ContactDetailPage({ params }: Props) {
           />
         </CardContent>
       </Card>
+
+      {submissions.length > 0 && (
+        <Card>
+          <CardHeader className="border-b border-border/60 bg-card/40 py-3">
+            <CardTitle className="label-mono text-[10px]">/ diagnósticos e pesquisas</CardTitle>
+          </CardHeader>
+          <CardContent className="p-6">
+            <ContactSubmissionsPanel submissions={submissions} />
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="space-y-6">

@@ -1090,6 +1090,84 @@ export type Database = {
           },
         ];
       };
+      lead_submissions: {
+        Row: {
+          answers: Json;
+          contact_id: string;
+          created_at: string;
+          dimensions: Json;
+          external_id: string | null;
+          extra: Json;
+          id: string;
+          notion_url: string | null;
+          organization_id: string;
+          priority: string | null;
+          recommended_plan: string | null;
+          score_max: number | null;
+          score_total: number | null;
+          source: string;
+          source_label: string;
+          stage: string | null;
+          submitted_at: string;
+          summary: string | null;
+        };
+        Insert: {
+          answers?: Json;
+          contact_id: string;
+          created_at?: string;
+          dimensions?: Json;
+          external_id?: string | null;
+          extra?: Json;
+          id?: string;
+          notion_url?: string | null;
+          organization_id: string;
+          priority?: string | null;
+          recommended_plan?: string | null;
+          score_max?: number | null;
+          score_total?: number | null;
+          source: string;
+          source_label: string;
+          stage?: string | null;
+          submitted_at?: string;
+          summary?: string | null;
+        };
+        Update: {
+          answers?: Json;
+          contact_id?: string;
+          created_at?: string;
+          dimensions?: Json;
+          external_id?: string | null;
+          extra?: Json;
+          id?: string;
+          notion_url?: string | null;
+          organization_id?: string;
+          priority?: string | null;
+          recommended_plan?: string | null;
+          score_max?: number | null;
+          score_total?: number | null;
+          source?: string;
+          source_label?: string;
+          stage?: string | null;
+          submitted_at?: string;
+          summary?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "lead_submissions_contact_id_fkey";
+            columns: ["contact_id"];
+            isOneToOne: false;
+            referencedRelation: "contacts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "lead_submissions_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       llm_usage: {
         Row: {
           day: string;
