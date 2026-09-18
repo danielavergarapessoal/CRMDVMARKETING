@@ -112,13 +112,19 @@ export function ContactForm({ orgSlug, canDelete, companies, contact }: Props) {
   function handleDelete() {
     if (!confirm("Apagar esse contato? Essa ação não pode ser desfeita.")) return;
     startDelete(async () => {
-      const r = await deleteContactAction({ orgSlug, id: contact.id });
-      if (!r.ok) {
-        toast.error(r.error);
-        return;
+      // try/catch: aba aberta de antes de uma implantação chama uma função que o
+      // servidor novo não conhece — o pedido falha sem resposta e a tela ficava muda.
+      try {
+        const r = await deleteContactAction({ orgSlug, id: contact.id });
+        if (!r.ok) {
+          toast.error(r.error);
+          return;
+        }
+        toast.success("Contato apagado");
+        router.push(`/app/${orgSlug}/contatos`);
+      } catch {
+        toast.error("Não consegui falar com o servidor. Atualize a página (F5) e tente de novo.");
       }
-      toast.success("Contato apagado");
-      router.push(`/app/${orgSlug}/contatos`);
     });
   }
 

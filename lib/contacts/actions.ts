@@ -157,15 +157,24 @@ export async function deleteContactAction(input: DeleteContactInput): Promise<Ac
   });
   const supabase = await createClient();
 
-  const { error } = await supabase
+  // `.select("id")` devolve as linhas apagadas: RLS que recusa DELETE não gera
+  // erro, só apaga zero linhas — sem conferir, a tela diria "apagado" à toa.
+  const { data, error } = await supabase
     .from("contacts")
     .delete()
     .eq("id", parsed.data.id)
-    .eq("organization_id", org.id);
+    .eq("organization_id", org.id)
+    .select("id");
 
   if (error) {
     logError("contacts.delete", error);
     return { ok: false, error: "Não consegui excluir. Tenta de novo." };
+  }
+  if (!data || data.length === 0) {
+    return {
+      ok: false,
+      error: "Esse contato não foi apagado. Atualize a página (F5) e tente de novo.",
+    };
   }
   revalidatePath(`/app/${parsed.data.orgSlug}/contatos`);
   return { ok: true };
