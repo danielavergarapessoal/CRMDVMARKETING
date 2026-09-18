@@ -1651,6 +1651,10 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      erase_contact_data: {
+        Args: { _org_id: string; _contact_id: string };
+        Returns: Json;
+      };
       queue_crm_reminders: { Args: { p_now?: string }; Returns: number };
       create_contact_deal: {
         Args: {

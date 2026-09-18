@@ -10,6 +10,7 @@ import { getContact, getContactDeals, getContactTasks } from "@/lib/contacts/que
 import { getContactSubmissions } from "@/lib/leads/queries";
 import { NewDealDialog } from "../../deals/new-deal-dialog";
 import { ContactDealsPanel } from "./contact-deals-panel";
+import { ContactEraseDialog } from "./contact-erase-dialog";
 import { ContactForm } from "./contact-form";
 import { ContactNotes } from "./contact-notes";
 import { ContactSubmissionsPanel } from "./contact-submissions-panel";
@@ -156,6 +157,25 @@ export default async function ContactDetailPage({ params }: Props) {
           </Card>
         </div>
       </div>
+
+      {canDelete && (
+        <Card>
+          <CardHeader className="border-b border-border/60 bg-card/40 py-3">
+            <CardTitle className="label-mono text-[10px]">/ privacidade (lgpd)</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-wrap items-center justify-between gap-3 p-6">
+            <p className="max-w-xl text-muted-foreground text-sm">
+              Se essa pessoa pedir a exclusão dos dados, use este botão: ele apaga também as
+              conversas e as tarefas, que a exclusão comum deixa para trás.
+            </p>
+            <ContactEraseDialog
+              orgSlug={orgSlug}
+              contactId={contact.id}
+              contactName={contact.name}
+            />
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

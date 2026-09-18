@@ -94,3 +94,13 @@ export const deleteContactSchema = z.object({
   id: z.guid(),
 });
 export type DeleteContactInput = z.infer<typeof deleteContactSchema>;
+
+/** Frase que o usuário digita para confirmar a exclusão definitiva (LGPD). */
+export const ERASE_CONFIRMATION = "EXCLUIR DADOS";
+
+export const eraseContactSchema = z.object({
+  orgSlug: z.string(),
+  id: z.guid(),
+  confirmation: z.literal(ERASE_CONFIRMATION),
+});
+export type EraseContactInput = z.infer<typeof eraseContactSchema>;
