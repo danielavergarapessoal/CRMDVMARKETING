@@ -53,6 +53,24 @@ export const LEAD_SOURCES: Record<string, LeadSourceConfig> = {
     tags: [ORIGIN, "10 Estratégias"],
   },
 
+  // ————— Ferramentas de diagnóstico (Edge Function lead-ferramentas) —————
+  "mapa-da-marca-medica": {
+    label: "Mapa da Marca Médica",
+    tags: [ORIGIN, "Mapa da Marca Médica"],
+  },
+  "diagnostico-marca-pessoal": {
+    label: "Marca Pessoal Médica",
+    tags: [ORIGIN, "Marca Pessoal Médica"],
+  },
+  "diagnostico-cfm-ia": {
+    label: "Fiscalização CFM por IA",
+    tags: [ORIGIN, "Fiscalização CFM por IA"],
+  },
+  "diagnostico-modelo-de-marketing": {
+    label: "Modelo de Marketing",
+    tags: [ORIGIN, "Modelo de Marketing"],
+  },
+
   // ————— DV Marketing Saúde (vertical Saúde/longevidade) —————
   "saude-diagnostico-maturidade": {
     label: "Diagnóstico de Maturidade — DV Saúde",
